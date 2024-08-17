@@ -1,4 +1,5 @@
 # 50 BEERS
+![banner](https://github.com/user-attachments/assets/4216a697-a9b7-4f8d-b725-a0a8456c93e7)
 
 ## The Challenge
 
