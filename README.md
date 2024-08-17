@@ -1,7 +1,6 @@
-# 50 BEERS
 ![banner](https://github.com/user-attachments/assets/4216a697-a9b7-4f8d-b725-a0a8456c93e7)
 
-## The Challenge
+# 50 BEERS: The Challenge
 
 In Onctober 2023 I traveled to Spain for 3 months to visit my sister, during this trip a good friend of mine challenged me to taste 50 different beers.
 
