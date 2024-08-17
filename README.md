@@ -1,4 +1,4 @@
-![banner](https://github.com/user-attachments/assets/4216a697-a9b7-4f8d-b725-a0a8456c93e7)
+![banner](https://github.com/user-attachments/assets/e74a2890-b9e9-471b-9a08-3bb0b3749dc0)
 
 # 50 BEERS: The Challenge
 
