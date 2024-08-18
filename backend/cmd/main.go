@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/rootspyro/50BEERS/config"
+	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/routes"
 )
 
@@ -39,6 +39,6 @@ func main() {
 	fmt.Printf("\n")
 
 	if err := app.ListenAndServe(); err != nil {
-		log.Println(err)
+		log.Error(err.Error())
 	}
 }
