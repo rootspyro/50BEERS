@@ -23,11 +23,11 @@ func Init() *http.ServeMux {
 	router.HandleFunc("/", middlewares.Logger(func(w http.ResponseWriter, r *http.Request) {
 
 		parser.JSON(w, parser.ErrorResponse{
-			Status: "error",
+			Status: parser.Status.Error,
 			StatusCode: http.StatusNotFound,
 			Error: parser.Error{
-				Code: parser.ERRORS.PATH_NOT_FOUND.Code,
-				Message: parser.ERRORS.PATH_NOT_FOUND.Message,
+				Code: parser.Errors.PATH_NOT_FOUND.Code,
+				Message: parser.Errors.PATH_NOT_FOUND.Message,
 				Details: fmt.Sprintf("the resource %s was not found", r.RequestURI),
 				Timestamp: time.Now().Local(),	
 				Path: r.RequestURI,

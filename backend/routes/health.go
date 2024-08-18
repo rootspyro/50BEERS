@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/rootspyro/50BEERS/config/parser"
+	handler "github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/middlewares"
 )
 
@@ -13,13 +13,7 @@ var HealthRouter Router = Router{
 		{
 			Path: "",
 			Method: http.MethodGet,
-			Handler: func(w http.ResponseWriter, r *http.Request) {
-				parser.JSON(w, parser.SuccessResponse{
-					Status: "success",
-					StatusCode: http.StatusOK,
-					Data: "Server is up!",
-				})
-			},
+			Handler: handler.ServerStatus,
 			Middlewares: []Middleware{
 				middlewares.Example1,
 				middlewares.Example2,

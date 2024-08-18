@@ -33,12 +33,22 @@ type CommonError struct {
 	Message string
 }
 
-type ErrorList struct {
+type statusList struct {
+	Success string
+	Error   string
+}
+
+var Status statusList = statusList{
+	Success: "success",
+	Error: "error",
+}
+
+type errorList struct {
 	PATH_NOT_FOUND        CommonError
 	INTERNAL_SERVER_ERROR CommonError
 }
 
-var ERRORS ErrorList = ErrorList{
+var Errors errorList = errorList{
 	PATH_NOT_FOUND: CommonError{
 		Code:    "PATH_NOT_FOUND",
 		Message: "path was not found",
@@ -50,7 +60,6 @@ var ERRORS ErrorList = ErrorList{
 }
 
 func JSON(w http.ResponseWriter, response interface{}) {
-
 	// Define Content-Type for JSON
 	w.Header().Set("Content-Type", "application/json")
 
@@ -63,10 +72,10 @@ func JSON(w http.ResponseWriter, response interface{}) {
 			Status:     "error",
 			StatusCode: http.StatusInternalServerError,
 			Error: Error{
-				Code:    ERRORS.INTERNAL_SERVER_ERROR.Code,
-				Message: ERRORS.INTERNAL_SERVER_ERROR.Message,
-				Details: "error trying to build json response",
-				Timestamp:    time.Now(),
+				Code:      Errors.INTERNAL_SERVER_ERROR.Code,
+				Message:   Errors.INTERNAL_SERVER_ERROR.Message,
+				Details:   "error trying to build json response",
+				Timestamp: time.Now(),
 			},
 		}
 
@@ -79,11 +88,8 @@ func JSON(w http.ResponseWriter, response interface{}) {
 	statusCodeValue := data.FieldByName("StatusCode")
 
 	if !statusCodeValue.IsValid() || statusCodeValue.Kind() != reflect.Int {
-
 		status = 200
-
 	} else {
-
 		status = int(statusCodeValue.Int())
 	}
 
