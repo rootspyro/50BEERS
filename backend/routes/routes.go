@@ -15,6 +15,7 @@ func Init() *http.ServeMux {
 
 	var childRouters []Router = []Router{
 		HealthRouter,
+		DrinksRouter,
 	}
 
 	BuildRoutes(childRouters, "/api/v1", &router)
