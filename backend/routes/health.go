@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/rootspyro/50BEERS/config/parser"
+	"github.com/rootspyro/50BEERS/middlewares"
 )
 
 var HealthRouter Router = Router{
@@ -19,7 +20,10 @@ var HealthRouter Router = Router{
 					Data: "Server is up!",
 				})
 			},
-			Middlewares: []Middleware{},
+			Middlewares: []Middleware{
+				middlewares.Example1,
+				middlewares.Example2,
+			},
 		},
 	},
 }

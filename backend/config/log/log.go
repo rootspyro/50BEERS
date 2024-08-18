@@ -63,7 +63,7 @@ func message(data string, logType string) {
 	}
 
 	fmt.Printf(
-		"\n %s | %s | %s\n",
+		" %s | %s | %s\n",
 		time.Now().Local(),
 		typeMessage,
 		data,
