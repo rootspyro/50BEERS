@@ -46,11 +46,22 @@ func BuildRoutes(routers []Router, basepath string, api *http.ServeMux) {
 		for _, route := range router.Routes {
 			api.HandleFunc(
 				ParseRoutePatter(route.Method, basepath + router.Basepath, route.Path), 
-				middlewares.Logger(route.Handler),
+				middlewares.Logger(BuildHandler(route.Handler, route.Middlewares)),
 			)
 		}
 	}
 
+}
+
+func BuildHandler(handler http.HandlerFunc, middlewares []Middleware) http.HandlerFunc {
+	
+	newHandler := handler
+
+	for i := len(middlewares); i > 0; i-- {
+		newHandler = middlewares[i-1](newHandler)
+	} 
+
+	return newHandler
 }
 
 func ParseRoutePatter(method, basepath, path string) string {
@@ -73,4 +84,7 @@ type Route struct {
 	Path    string
 	Method  string
 	Handler http.HandlerFunc
+	Middlewares []Middleware
 }
+
+type Middleware func(next http.HandlerFunc) http.HandlerFunc

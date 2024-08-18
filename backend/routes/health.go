@@ -19,6 +19,7 @@ var HealthRouter Router = Router{
 					Data: "Server is up!",
 				})
 			},
+			Middlewares: []Middleware{},
 		},
 	},
 }

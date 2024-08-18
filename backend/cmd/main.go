@@ -29,13 +29,14 @@ func main() {
  |     |
  |_____|   By %s %s %s
 
-
 `, 
  	sysConf.Server.Socket,
 	config.Colors.Cyan,
 	sysConf.Author.Name,
 	config.Colors.Reset,
  )
+
+	fmt.Printf("\n")
 
 	if err := app.ListenAndServe(); err != nil {
 		log.Println(err)

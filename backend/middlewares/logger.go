@@ -24,7 +24,7 @@ func Logger(next http.HandlerFunc) http.HandlerFunc {
 		duration := time.Since(start)
 
 		fmt.Printf(
-			"\n%s | %s | %s | %s | %s - %s",
+			" %s | %s | %s | %s | %s - %s\n",
 			start.Local(),
 			r.RemoteAddr,
 			parseCode(recorder.StatusCode),
@@ -76,7 +76,7 @@ func parseCode(code int) string {
 
 	switch firstNum {
 		case "2": // HTTP - 2xx 
-			codeColor = config.Colors.Cyan
+			codeColor = config.Colors.Green
 			break
 
 		case "3": // HTTP - 3xx
