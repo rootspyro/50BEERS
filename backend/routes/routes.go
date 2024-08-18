@@ -21,6 +21,7 @@ func Init() *http.ServeMux {
 
 	// 404 - PATH NOT FOUND
 	router.HandleFunc("/", middlewares.Logger(func(w http.ResponseWriter, r *http.Request) {
+
 		parser.JSON(w, parser.ErrorResponse{
 			Status: "error",
 			StatusCode: http.StatusNotFound,
@@ -32,6 +33,7 @@ func Init() *http.ServeMux {
 				Path: r.RequestURI,
 			},
 		})
+
 	}) )
 
 	return &router
