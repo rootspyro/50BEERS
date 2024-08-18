@@ -3,6 +3,8 @@ package routes
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/rootspyro/50BEERS/middlewares"
 )
 
 func Init() *http.ServeMux {
@@ -27,7 +29,7 @@ func BuildRoutes(routers []Router, basepath string) *http.ServeMux {
 		for _, route := range router.Routes {
 			api.HandleFunc(
 				ParseRoutePatter(route.Method, basepath + router.Basepath, route.Path), 
-				route.Handler,
+				middlewares.Logger(route.Handler),
 			)
 		}
 	}

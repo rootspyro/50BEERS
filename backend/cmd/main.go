@@ -12,7 +12,6 @@ import (
 func main() {
 
 	config := config.Init()
-
 	routes := routes.Init()
 
 	app := http.Server{
@@ -20,20 +19,18 @@ func main() {
 		Addr: config.Server.Socket,
 	}
 
-	log.Println("server is starting...")
-
 	fmt.Printf(`
    ...
    | |
-   | |
-  /   \
- |     |   50 BEERS API
+   | |     
+  /   \    50 BEERS API
  |     |   Listening on %s...
+ |     |   
  |     |
  |_____|   By %s.
 
 
- `, 
+`, 
  	config.Server.Socket,
 	config.Author.Name,
  )
