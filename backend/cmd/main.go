@@ -11,12 +11,12 @@ import (
 
 func main() {
 
-	config := config.Init()
+	sysConf := config.Init()
 	routes := routes.Init()
 
 	app := http.Server{
 		Handler: routes,
-		Addr: config.Server.Socket,
+		Addr: sysConf.Server.Socket,
 	}
 
 	fmt.Printf(`
@@ -27,12 +27,14 @@ func main() {
  |     |   Listening on %s...
  |     |   
  |     |
- |_____|   By %s.
+ |_____|   By %s %s %s
 
 
 `, 
- 	config.Server.Socket,
-	config.Author.Name,
+ 	sysConf.Server.Socket,
+	config.Colors.Cyan,
+	sysConf.Author.Name,
+	config.Colors.Reset,
  )
 
 	if err := app.ListenAndServe(); err != nil {

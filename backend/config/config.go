@@ -8,7 +8,7 @@ import (
 
 type App struct {
 	Author struct {
-		Name  string
+		Name string
 	}
 	Server struct {
 		Port   string
@@ -18,7 +18,6 @@ type App struct {
 }
 
 func Init() App {
-
 	godotenv.Load()
 
 	var app App
