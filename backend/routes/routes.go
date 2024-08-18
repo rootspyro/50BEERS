@@ -3,7 +3,9 @@ package routes
 import (
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/middlewares"
 )
 
@@ -15,15 +17,28 @@ func Init() *http.ServeMux {
 		HealthRouter,
 	}
 
-	apiV1 := BuildRoutes(childRouters, "/api/v1")
-	router.Handle("/", apiV1)
+	BuildRoutes(childRouters, "/api/v1", &router)
+
+	// 404 - PATH NOT FOUND
+	router.HandleFunc("/", middlewares.Logger(func(w http.ResponseWriter, r *http.Request) {
+		parser.JSON(w, parser.ErrorResponse{
+			Status: "error",
+			StatusCode: http.StatusNotFound,
+			Error: parser.Error{
+				Code: parser.ERRORS.PATH_NOT_FOUND.Code,
+				Message: parser.ERRORS.PATH_NOT_FOUND.Message,
+				Details: fmt.Sprintf("the resource %s was not found", r.RequestURI),
+				Timestamp: time.Now().Local(),	
+				Path: r.RequestURI,
+			},
+		})
+	}) )
 
 	return &router
 
 }
 
-func BuildRoutes(routers []Router, basepath string) *http.ServeMux {
-	api := http.ServeMux{}
+func BuildRoutes(routers []Router, basepath string, api *http.ServeMux) {
 
 	for _, router := range routers {
 		for _, route := range router.Routes {
@@ -34,7 +49,6 @@ func BuildRoutes(routers []Router, basepath string) *http.ServeMux {
 		}
 	}
 
-	return &api
 }
 
 func ParseRoutePatter(method, basepath, path string) string {
