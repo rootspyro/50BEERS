@@ -1,9 +1,5 @@
 package drinks
 
-import (
-	srv "github.com/rootspyro/50BEERS/services/drinks"
-)
-
 type Drink struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
@@ -12,5 +8,5 @@ type Drink struct {
 
 type DrinksResponse struct {
 	ItemsFound int         `json:"itemsFound"`
-	Items      []srv.Drink `json:"items"`
+	Items      []string `json:"items"`
 }
