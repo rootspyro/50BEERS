@@ -28,7 +28,7 @@ type app struct {
 	}
 }
 
-func Init() {
+func init() {
 	godotenv.Load()
 
 	// AUTHOR

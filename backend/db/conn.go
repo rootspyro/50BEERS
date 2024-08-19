@@ -2,24 +2,32 @@ package db
 
 import (
 	"context"
+	"os"
 
 	"github.com/rootspyro/50BEERS/config"
+	"github.com/rootspyro/50BEERS/config/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func New() (*mongo.Client, error) {
+var DBClient *mongo.Client
+
+func init() {
 	clientOptions := options.Client().ApplyURI(config.App.Database.URL)
 
-	client, err := mongo.Connect(context.TODO(), clientOptions)
+	DBClient, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		return nil, err
+		log.Error(err.Error())
+		os.Exit(1)
 	}
 
-	err = client.Ping(context.TODO(), nil)
+	err = DBClient.Ping(context.TODO(), nil)
 	if err != nil {
-		return nil, err
+		log.Error(err.Error())
+		os.Exit(1)
 	}
 
-	return client, nil
+	defer DBClient.Disconnect(context.TODO())
+
+	log.Info("Database connected successfully")
 }

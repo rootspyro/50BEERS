@@ -9,19 +9,19 @@ import (
 	"github.com/rootspyro/50BEERS/middlewares"
 )
 
-func Init() *http.ServeMux {
+var AppRouter http.ServeMux = http.ServeMux{}
 
-	var router http.ServeMux = http.ServeMux{}
+func init() {
 
 	var childRouters []Router = []Router{
 		HealthRouter,
 		DrinksRouter,
 	}
 
-	BuildRoutes(childRouters, "/api/v1", &router)
+	BuildRoutes(childRouters, "/api/v1", &AppRouter)
 
 	// 404 - PATH NOT FOUND
-	router.HandleFunc("/", middlewares.Logger(func(w http.ResponseWriter, r *http.Request) {
+	AppRouter.HandleFunc("/", middlewares.Logger(func(w http.ResponseWriter, r *http.Request) {
 
 		parser.JSON(w, parser.ErrorResponse{
 			Status: parser.Status.Error,
@@ -36,8 +36,6 @@ func Init() *http.ServeMux {
 		})
 
 	}) )
-
-	return &router
 
 }
 
