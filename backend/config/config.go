@@ -15,6 +15,14 @@ type App struct {
 		Host   string
 		Socket string
 	}
+	Database struct {
+		Name     string
+		Host     string
+		Port     string
+		Username string
+		Password string
+		URL      string
+	}
 }
 
 func Init() App {
@@ -41,6 +49,14 @@ func Init() App {
 
 	// SOCKET = localhost:3000
 	app.Server.Socket = app.Server.Host + ":" + app.Server.Port
+
+
+	// MONGODB
+	app.Database.Host = os.Getenv("DB_HOST")
+	app.Database.Port = os.Getenv("DB_PORT")
+	app.Database.Username = os.Getenv("DB_USERNAME")
+	app.Database.Password = os.Getenv("DB_PASSWORD")
+	app.Database.Name = os.Getenv("DB_NAME")
 
 	return app
 }
