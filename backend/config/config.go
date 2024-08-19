@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -57,6 +58,14 @@ func Init() App {
 	app.Database.Username = os.Getenv("DB_USERNAME")
 	app.Database.Password = os.Getenv("DB_PASSWORD")
 	app.Database.Name = os.Getenv("DB_NAME")
+	app.Database.URL = fmt.Sprintf(
+		"mongodb://%s:%s@%s:%s/%s",
+		app.Database.Username,
+		app.Database.Password,
+		app.Database.Host,
+		app.Database.Port,
+		app.Database.Name,
+	)
 
 	return app
 }
