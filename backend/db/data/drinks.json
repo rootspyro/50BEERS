@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Turia",
+    "type": "Marzen",
+    "abv": 5.4,
+    "country_id": "66c37517fbf1e6f92d119f94",
+    "date": "2023-11-27",
+    "challenge_number": 36,
+    "stars": 4,
+    "picture_url": "",
+    "location": {
+      "name": "Mercadona",
+      "url": ""
+    },
+    "tag_ids": ["66c3754efbf1e6f92d119f98", "66c3754efbf1e6f92d119f99"],
+    "created_at": "",
+    "updated_at": "",
+    "status": "public"
+  },
+  {
+    "name": "Steam Brew",
+    "type": "Wheat Pale Ale",
+    "abv": 5.6,
+    "country_id": "66c37517fbf1e6f92d119f94",
+    "date": "2023-11-27",
+    "challenge_number": 47,
+    "stars": 3,
+    "picture_url": "",
+    "location": {
+      "name": "Lidl",
+      "url": ""
+    },
+    "tag_ids": ["66c3754efbf1e6f92d119f98", "66c3754efbf1e6f92d119f99"],
+    "created_at": "",
+    "updated_at": "",
+    "status": "public"
+  },
+  {
+    "name": "Jack Daniels Nro.7",
+    "type": "Tenesse Whisky",
+    "abv": 5.6,
+    "country_id": "66c37517fbf1e6f92d119f95",
+    "date": "2023-12-14",
+    "challenge_number": 0,
+    "stars": 3,
+    "picture_url": "",
+    "location": {
+      "name": "La Whiskeria",
+      "url": ""
+    },
+    "tag_ids": ["66c3754efbf1e6f92d119f9d"],
+    "created_at": "",
+    "updated_at": "",
+    "status": "public"
+  }
+]

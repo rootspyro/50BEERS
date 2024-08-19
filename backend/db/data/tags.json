@@ -1,0 +1,37 @@
+[
+  {
+    "name": "beer",
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "name": "challenge",
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "name": "licours",
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "name": "others",
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "name": "rum",
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "name": "whisky",
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "name": "wine",
+    "created_at": "",
+    "updated_at": ""
+  }
+]
