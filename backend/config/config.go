@@ -7,7 +7,9 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type App struct {
+var App app = app{}
+
+type app struct {
 	Author struct {
 		Name string
 	}
@@ -26,46 +28,43 @@ type App struct {
 	}
 }
 
-func Init() App {
+func Init() {
 	godotenv.Load()
 
-	var app App
-
 	// AUTHOR
-	app.Author.Name = os.Getenv("AUTHOR_NAME")
-	if app.Author.Name == "" {
-		app.Author.Name = "anonymous"
+	App.Author.Name = os.Getenv("AUTHOR_NAME")
+	if App.Author.Name == "" {
+		App.Author.Name = "anonymous"
 	}
 
 	// SERVER
-	app.Server.Host = "localhost"
+	App.Server.Host = "localhost"
 	if os.Getenv("HOST") != "" {
-		app.Server.Host = os.Getenv("HOST")
+		App.Server.Host = os.Getenv("HOST")
 	}
 
-	app.Server.Port = "3000"
+	App.Server.Port = "3000"
 	if os.Getenv("PORT") != "" {
-		app.Server.Port = os.Getenv("PORT")
+		App.Server.Port = os.Getenv("PORT")
 	}
 
 	// SOCKET = localhost:3000
-	app.Server.Socket = app.Server.Host + ":" + app.Server.Port
+	App.Server.Socket = App.Server.Host + ":" + App.Server.Port
 
 
 	// MONGODB
-	app.Database.Host = os.Getenv("DB_HOST")
-	app.Database.Port = os.Getenv("DB_PORT")
-	app.Database.Username = os.Getenv("DB_USERNAME")
-	app.Database.Password = os.Getenv("DB_PASSWORD")
-	app.Database.Name = os.Getenv("DB_NAME")
-	app.Database.URL = fmt.Sprintf(
+	App.Database.Host = os.Getenv("DB_HOST")
+	App.Database.Port = os.Getenv("DB_PORT")
+	App.Database.Username = os.Getenv("DB_USER")
+	App.Database.Password = os.Getenv("DB_PASSWORD")
+	App.Database.Name = os.Getenv("DB_NAME")
+	App.Database.URL = fmt.Sprintf(
 		"mongodb://%s:%s@%s:%s/%s",
-		app.Database.Username,
-		app.Database.Password,
-		app.Database.Host,
-		app.Database.Port,
-		app.Database.Name,
+		App.Database.Username,
+		App.Database.Password,
+		App.Database.Host,
+		App.Database.Port,
+		App.Database.Name,
 	)
 
-	return app
 }

@@ -1,22 +1,39 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/rootspyro/50BEERS/config"
 	"github.com/rootspyro/50BEERS/config/log"
+	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/routes"
 )
 
 func main() {
 
-	sysConf := config.Init()
+	// configuration
+	config.Init()
+
+	// database connection
+	DBClient, err := db.New()
+
+	if err != nil {
+		log.Error(err.Error())
+		os.Exit(1)
+	}
+
+	log.Info("Connected to database...")
+	defer DBClient.Disconnect(context.TODO())
+
+	// routes
 	routes := routes.Init()
 
 	app := http.Server{
 		Handler: routes,
-		Addr: sysConf.Server.Socket,
+		Addr: config.App.Server.Socket,
 	}
 
 	fmt.Printf(`
@@ -30,9 +47,9 @@ func main() {
  |_____|   By %s %s %s
 
 `, 
- 	sysConf.Server.Socket,
+ 	config.App.Server.Socket,
 	config.Colors.Cyan,
-	sysConf.Author.Name,
+	config.App.Author.Name,
 	config.Colors.Reset,
  )
 
