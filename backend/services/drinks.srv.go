@@ -3,7 +3,6 @@ package services
 import (
 	"fmt"
 
-	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"go.mongodb.org/mongo-driver/bson"
