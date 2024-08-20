@@ -100,7 +100,7 @@ type Drink struct {
 	ChallengeNum float64  `json:"challeng_number"`
 	Stars        float64  `json:"stars"`
 	PictureURL   string   `json:"picture_url"`
-	LocationId   string   `json:"location"`
+	LocationId   string   `json:"location_id"`
 	Tags       	 []string `json:"tags"`
 	CreatedAt    string   `json:"created_at"`
 	UpdatedAt    string   `json:"updated_at"`
