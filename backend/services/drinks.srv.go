@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 
+	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -42,7 +43,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 	return drinks, err
 }
 
-func parseDrink(data repositories.Drink) Drink {
+func parseDrink(data models.Drink) Drink {
 	newDrink := Drink{
 		ID: data.ID.Hex(),
 		Name: data.Name,
