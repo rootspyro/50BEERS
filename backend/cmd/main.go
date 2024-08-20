@@ -10,6 +10,8 @@ import (
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/models"
+	"github.com/rootspyro/50BEERS/handlers/drinks"
+	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/routes"
 	"github.com/rootspyro/50BEERS/services"
 )
@@ -34,17 +36,19 @@ func main() {
 	// services
 	drinkSrv := services.NewDrinkSrv(&drinkModel)
 
-	test, err := drinkSrv.GetAllDrinks()
-	if err != nil {
-		log.Error(err.Error())
-		os.Exit(1)
-	}
+	// handlers 
+	healthHandler := health.NewHealthHandler()
+	drinkHandler := drinks.NewDrinkHandler(drinkSrv)
 
-	fmt.Println(test)
-
+	// routes
+	routes := routes.New(
+		healthHandler,
+		drinkHandler,
+	)
+	
 	// Configurate server
 	app := http.Server{
-		Handler: &routes.AppRouter,
+		Handler: routes,
 		Addr: config.App.Server.Socket,
 	}
 

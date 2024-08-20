@@ -4,9 +4,20 @@ import (
 	"net/http"
 
 	"github.com/rootspyro/50BEERS/config/parser"
+	"github.com/rootspyro/50BEERS/services"
 )
 
-func ListDrinksForBlog(w http.ResponseWriter, r *http.Request) {
+type DrinkHandler struct {
+	srv *services.DrinkSrv
+}
+
+func NewDrinkHandler(drinkSrv *services.DrinkSrv) *DrinkHandler {
+	return &DrinkHandler{
+		srv: drinkSrv,
+	}
+}
+
+func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) {
 
 	data := []string{}
 
