@@ -19,8 +19,7 @@ func NewDrinkModel(collection *mongo.Collection) DrinkModel {
 	}
 }
 
-func (m DrinkModel) GetAllDrinks() ([]Drink, error) {
-	filters := bson.D{}
+func (m DrinkModel) GetAllDrinks(filters bson.D) ([]Drink, error) {
 
 	// make query
 	cursor, err := m.Collection.Find(context.TODO(), filters)

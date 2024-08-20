@@ -1,6 +1,12 @@
 package services
 
-import "github.com/rootspyro/50BEERS/db/models"
+import (
+	"fmt"
+
+	"github.com/rootspyro/50BEERS/db/models"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type DrinkSrv struct {
 	model *models.DrinkModel
@@ -12,9 +18,20 @@ func NewDrinkSrv(model *models.DrinkModel) *DrinkSrv {
 	}
 }
 
-func (s *DrinkSrv) GetAllDrinks() ([]Drink, error) {
+func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 
-	response, err := s.model.GetAllDrinks()
+	nameRegex := fmt.Sprintf(".*%s.*", filters.Name)
+
+	response, err := s.model.GetAllDrinks(
+		bson.D{
+				{"$or",
+						bson.A{
+								bson.D{{"name", primitive.Regex{Pattern: nameRegex}}},
+								bson.D{{"type", primitive.Regex{Pattern: nameRegex}}},
+						},
+				},
+		},
+	)
 
 	var drinks []Drink
 
@@ -69,4 +86,8 @@ type Drink struct {
 type DrinkLocation struct {
 	Name string `json:"name"`
 	URL  string `json:"url"`
+}
+
+type DrinkSearchFilters struct {
+	Name string
 }

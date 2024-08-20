@@ -2,6 +2,7 @@ package drinks
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/rootspyro/50BEERS/config/log"
@@ -21,7 +22,14 @@ func NewDrinkHandler(drinkSrv *services.DrinkSrv) *DrinkHandler {
 
 func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) {
 
-	data, err := h.srv.GetAllDrinks()
+	// Get Filters
+	queries := r.URL.Query()
+	name := strings.ToLower(queries.Get("name"))
+
+	data, err := h.srv.GetAllDrinks(services.DrinkSearchFilters{
+		Name: name,
+	})
+
 	if err != nil {
 
 		log.Error(err.Error())
