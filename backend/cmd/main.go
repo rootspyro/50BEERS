@@ -31,10 +31,11 @@ func main() {
 	database := dbclient.Database(config.App.Database.Name)
 
 	// models
+	countriesRepo := repositories.NewCountriesRepo(database.Collection("country"))
 	drinksRepo := repositories.NewDrinksRepo(database.Collection("drink"))
 
 	// services
-	drinkSrv := services.NewDrinkSrv(drinksRepo)
+	drinkSrv := services.NewDrinkSrv(countriesRepo,drinksRepo)
 
 	// handlers 
 	healthHandler := health.NewHealthHandler()

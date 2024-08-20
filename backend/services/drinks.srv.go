@@ -3,34 +3,58 @@ package services
 import (
 	"fmt"
 
+	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type DrinkSrv struct {
-	repo *repositories.DrinksRepo
+	countryRepo *repositories.CountriesRepo
+	repo        *repositories.DrinksRepo
 }
 
-func NewDrinkSrv(repo *repositories.DrinksRepo) *DrinkSrv {
+func NewDrinkSrv(countryRepo *repositories.CountriesRepo, repo *repositories.DrinksRepo) *DrinkSrv {
 	return &DrinkSrv{
-		repo: repo,
+		countryRepo: countryRepo,
+		repo:        repo,
 	}
 }
 
 func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
-
 	nameRegex := fmt.Sprintf(".*%s.*", filters.Name)
+
+	// Get Country Id
+	var countryId string
+
+	country, err := s.countryRepo.FindByName(filters.Country)
+
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			countryId = ""
+		} else {
+			return nil, err
+		}	
+	} else {
+		countryId = country.ID.Hex()
+	}
 
 	response, err := s.repo.GetAllDrinks(
 		bson.D{
-				{"$or",
+			{
+				"$and",
+				bson.A{
+					bson.D{{"country_id", countryId}},
+					bson.D{{
+						"$or",
 						bson.A{
-								bson.D{{"name", primitive.Regex{Pattern: nameRegex}}},
-								bson.D{{"type", primitive.Regex{Pattern: nameRegex}}},
+							bson.D{{"name", bson.D{{"$regex", nameRegex}}}},
+							bson.D{{"type", bson.D{{"$regex", nameRegex}}}},
 						},
+					}},
 				},
+			},
 		},
 	)
 
@@ -45,23 +69,23 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 
 func parseDrink(data models.Drink) Drink {
 	newDrink := Drink{
-		ID: data.ID.Hex(),
-		Name: data.Name,
-		Type: data.Type,
-		ABV: data.ABV,
-		CountryID: data.CountryID.Hex(),
-		Date: data.Date,
+		ID:           data.ID.Hex(),
+		Name:         data.Name,
+		Type:         data.Type,
+		ABV:          data.ABV,
+		CountryID:    data.CountryID.Hex(),
+		Date:         data.Date,
 		ChallengeNum: data.ChallengeNum,
-		Stars: data.Stars,
-		PictureURL: data.PictureURL,
-		Location: DrinkLocation(data.Location),
-		CreatedAt: data.CreatedAt,
-		UpdatedAt: data.UpdatedAt,
-		Status: data.Status,
+		Stars:        data.Stars,
+		PictureURL:   data.PictureURL,
+		Location:     DrinkLocation(data.Location),
+		CreatedAt:    data.CreatedAt,
+		UpdatedAt:    data.UpdatedAt,
+		Status:       data.Status,
 	}
 
 	for _, tagId := range data.TagIds {
-		newDrink.TagIds = append(newDrink.TagIds, tagId.Hex())	
+		newDrink.TagIds = append(newDrink.TagIds, tagId.Hex())
 	}
 
 	return newDrink
@@ -90,5 +114,6 @@ type DrinkLocation struct {
 }
 
 type DrinkSearchFilters struct {
-	Name string
+	Name    string
+	Country string
 }

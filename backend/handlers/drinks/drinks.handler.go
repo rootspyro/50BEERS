@@ -25,9 +25,11 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 	// Get Filters
 	queries := r.URL.Query()
 	name := strings.ToLower(queries.Get("name"))
+	country := queries.Get("country")
 
 	data, err := h.srv.GetAllDrinks(services.DrinkSearchFilters{
 		Name: name,
+		Country: country,
 	})
 
 	if err != nil {
