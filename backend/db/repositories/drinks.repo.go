@@ -1,4 +1,4 @@
-package models
+package repositories 
 
 import (
 	"context"
@@ -9,17 +9,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type DrinkModel struct {
+type DrinksRepo struct {
 	Collection *mongo.Collection
 }
 
-func NewDrinkModel(collection *mongo.Collection) DrinkModel {
-	return DrinkModel{
+func NewDrinksRepo(collection *mongo.Collection) *DrinksRepo {
+	return &DrinksRepo{
 		Collection: collection,
 	}
 }
 
-func (m DrinkModel) GetAllDrinks(filters bson.D) ([]Drink, error) {
+func (m DrinksRepo) GetAllDrinks(filters bson.D) ([]Drink, error) {
 
 	// make query
 	cursor, err := m.Collection.Find(context.TODO(), filters)

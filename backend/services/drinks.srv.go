@@ -3,18 +3,18 @@ package services
 import (
 	"fmt"
 
-	"github.com/rootspyro/50BEERS/db/models"
+	"github.com/rootspyro/50BEERS/db/repositories"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type DrinkSrv struct {
-	model *models.DrinkModel
+	repo *repositories.DrinksRepo
 }
 
-func NewDrinkSrv(model *models.DrinkModel) *DrinkSrv {
+func NewDrinkSrv(repo *repositories.DrinksRepo) *DrinkSrv {
 	return &DrinkSrv{
-		model: model,
+		repo: repo,
 	}
 }
 
@@ -22,7 +22,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 
 	nameRegex := fmt.Sprintf(".*%s.*", filters.Name)
 
-	response, err := s.model.GetAllDrinks(
+	response, err := s.repo.GetAllDrinks(
 		bson.D{
 				{"$or",
 						bson.A{
@@ -42,7 +42,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 	return drinks, err
 }
 
-func parseDrink(data models.Drink) Drink {
+func parseDrink(data repositories.Drink) Drink {
 	newDrink := Drink{
 		ID: data.ID.Hex(),
 		Name: data.Name,

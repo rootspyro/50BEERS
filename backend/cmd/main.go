@@ -9,7 +9,7 @@ import (
 	"github.com/rootspyro/50BEERS/config"
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db"
-	"github.com/rootspyro/50BEERS/db/models"
+	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/routes"
@@ -31,10 +31,10 @@ func main() {
 	database := dbclient.Database(config.App.Database.Name)
 
 	// models
-	drinkModel := models.NewDrinkModel(database.Collection("drink"))
+	drinksRepo := repositories.NewDrinksRepo(database.Collection("drink"))
 
 	// services
-	drinkSrv := services.NewDrinkSrv(&drinkModel)
+	drinkSrv := services.NewDrinkSrv(drinksRepo)
 
 	// handlers 
 	healthHandler := health.NewHealthHandler()
