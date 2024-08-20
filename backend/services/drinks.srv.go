@@ -34,7 +34,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 			countryId = ""
 		} else {
 			return nil, err
-		}	
+		}
 	} else {
 		countryId = country.ID.Hex()
 	}
@@ -44,7 +44,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 			{
 				"$and",
 				bson.A{
-					bson.D{{"country_id", countryId}},
+					bson.D{{"country_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", countryId)}}}},
 					bson.D{{
 						"$or",
 						bson.A{
@@ -72,39 +72,39 @@ func parseDrink(data models.Drink) Drink {
 		Name:         data.Name,
 		Type:         data.Type,
 		ABV:          data.ABV,
-		CountryID:    data.CountryID.Hex(),
+		CountryID:    data.CountryID,
 		Date:         data.Date,
 		ChallengeNum: data.ChallengeNum,
 		Stars:        data.Stars,
 		PictureURL:   data.PictureURL,
-		Location:     DrinkLocation(data.Location),
+		LocationId:   data.LocationId,
 		CreatedAt:    data.CreatedAt,
 		UpdatedAt:    data.UpdatedAt,
 		Status:       data.Status,
 	}
 
-	for _, tagId := range data.TagIds {
-		newDrink.TagIds = append(newDrink.TagIds, tagId.Hex())
+	for _, tag := range data.Tags {
+		newDrink.Tags = append(newDrink.Tags, tag)
 	}
 
 	return newDrink
 }
 
 type Drink struct {
-	ID           string        `json:"id"`
-	Name         string        `json:"name"`
-	Type         string        `json:"type"`
-	ABV          float64       `json:"abv"`
-	CountryID    string        `json:"country_id"`
-	Date         string        `json:"date"`
-	ChallengeNum float64       `json:"challeng_number"`
-	Stars        float64       `json:"stars"`
-	PictureURL   string        `json:"picture_url"`
-	Location     DrinkLocation `json:"location"`
-	TagIds       []string      `json:"tag_ids"`
-	CreatedAt    string        `json:"created_at"`
-	UpdatedAt    string        `json:"updated_at"`
-	Status       string        `json:"status"`
+	ID           string   `json:"id"`
+	Name         string   `json:"name"`
+	Type         string   `json:"type"`
+	ABV          float64  `json:"abv"`
+	CountryID    string   `json:"country_id"`
+	Date         string   `json:"date"`
+	ChallengeNum float64  `json:"challeng_number"`
+	Stars        float64  `json:"stars"`
+	PictureURL   string   `json:"picture_url"`
+	LocationId   string   `json:"location"`
+	Tags       	 []string `json:"tags"`
+	CreatedAt    string   `json:"created_at"`
+	UpdatedAt    string   `json:"updated_at"`
+	Status       string   `json:"status"`
 }
 
 type DrinkLocation struct {
