@@ -72,7 +72,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 		locationId = location.ID.Hex()
 	}
 
-	// build filters
+	// build search filter 
 	searchFilter := bson.D{
 		{
 			"$and",
@@ -91,6 +91,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 		},
 	}
 
+	// build sort filter
 	var direction int = -1
 	var field string = defaultSortField
 
@@ -116,9 +117,11 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 		log.Warning(fmt.Sprintf("invalid sort direction: %s", filters.Direction))
 	}
 
+	skip := (filters.Page - 1) * filters.Limit
+
 	sortFilter := options.Find().SetSort(bson.D{
 		{Key: field, Value: direction}, 
-	})
+	}).SetSkip(int64(skip)).SetLimit(int64(filters.Limit))
 
 	response, err := s.repo.GetAllDrinks(searchFilter, sortFilter)
 
@@ -230,4 +233,6 @@ type DrinkSearchFilters struct {
 	Location  string
 	SortBy    string
 	Direction string
+	Page      int
+	Limit     int
 }

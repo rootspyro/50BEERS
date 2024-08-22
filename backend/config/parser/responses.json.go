@@ -40,17 +40,22 @@ type statusList struct {
 
 var Status statusList = statusList{
 	Success: "success",
-	Error: "error",
+	Error:   "error",
 }
 
 type errorList struct {
+	BAD_REQUEST_QUERY     CommonError
 	PATH_NOT_FOUND        CommonError
 	INTERNAL_SERVER_ERROR CommonError
 }
 
 var Errors errorList = errorList{
+	BAD_REQUEST_QUERY: CommonError{
+		Code:    "BAD_REQUEST",
+		Message: "invalid format for request query",
+	},
 	PATH_NOT_FOUND: CommonError{
-		Code:    "PATH_NOT_FOUND",
+		Code:    "NOT_FOUND",
 		Message: "path was not found",
 	},
 	INTERNAL_SERVER_ERROR: CommonError{

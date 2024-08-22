@@ -2,6 +2,7 @@ package drinks
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -29,6 +30,11 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 	location := strings.ToLower(queries.Get("location"))
 	sortBy := strings.ToLower(queries.Get("sortBy"))
 	direction := strings.ToLower(queries.Get("direction"))
+	page := queries.Get("page")
+	limit := queries.Get("limit")
+
+	parsedPage, _ := strconv.Atoi(page)
+	parsedLimit, _ := strconv.Atoi(limit)
 
 	data, err := h.srv.GetAllDrinks(services.DrinkSearchFilters{
 		Name: name,
@@ -36,6 +42,8 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 		Location: location,
 		SortBy: sortBy,
 		Direction: direction,
+		Page: parsedPage,
+		Limit: parsedLimit,
 	})
 
 	if err != nil {
