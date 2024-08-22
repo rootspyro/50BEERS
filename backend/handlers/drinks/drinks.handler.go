@@ -36,6 +36,14 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 	parsedPage, _ := strconv.Atoi(page)
 	parsedLimit, _ := strconv.Atoi(limit)
 
+	if parsedPage == 0 {
+		parsedPage = 1
+	}
+
+	if parsedLimit == 0 {
+		parsedLimit = 10
+	}
+
 	data, err := h.srv.GetAllDrinks(services.DrinkSearchFilters{
 		Name: name,
 		Country: country,
@@ -70,6 +78,10 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 		Data: DrinksResponse{
 			ItemsFound: len(data),
 			Items: data,
+			Pagination: Pagination{
+				Page: parsedPage,
+				PageSize: parsedLimit,
+			},
 			FiltersAllowed: []string{"name", "country", "location", "sortBy", "direction"},
 			FiltersApplied: Filters{
 				Name: name,

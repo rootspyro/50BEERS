@@ -5,6 +5,7 @@ import "github.com/rootspyro/50BEERS/services"
 type DrinksResponse struct {
 	ItemsFound     int                    `json:"itemsFound"`
 	Items          []services.DrinkResume `json:"items"`
+	Pagination     Pagination             `json:"pagination"`
 	FiltersAllowed []string               `json:"filtersAllowed"`
 	FiltersApplied Filters                `json:"filtersApplied"`
 }
@@ -15,4 +16,10 @@ type Filters struct {
 	Location  string `json:"location,omitempty"`
 	SortBy    string `json:"sortBy,omitempty"`
 	Direction string `json:"direction,omitempty"`
+}
+
+type Pagination struct {
+	Pages      int `json:"pages,omitempty"`
+	Page       int `json:"page,omitempty"`
+	PageSize   int `json:"pageSize,omitempty"`
 }
