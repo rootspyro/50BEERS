@@ -4,11 +4,22 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+var (
+	defaultSortDirection string = "desc"
+	allowedDirections           = []string{"asc", "desc"}
+)
+
+var (
+	defaultSortField  string = "created_at"
+	allowedSortFields        = []string{"name", "date", "stars", "abv"}
 )
 
 type DrinkSrv struct {
@@ -78,10 +89,35 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 				bson.D{{"status", "public"}},
 			},
 		},
-	} 
+	}
+
+	var direction int = -1
+	var field string = defaultSortField
+
+	if fieldIsValid(filters.SortBy) {
+
+		field = filters.SortBy
+
+	} else if filters.SortBy != ""{
+
+		log.Warning(fmt.Sprintf("invalid sort field: %s", filters.SortBy))
+	}
+
+	if filters.Direction == "asc" {
+
+		direction = 1
+
+	} else if filters.Direction == "desc" {
+
+		direction = -1
+
+	} else if filters.Direction != ""{
+
+		log.Warning(fmt.Sprintf("invalid sort direction: %s", filters.Direction))
+	}
 
 	sortFilter := options.Find().SetSort(bson.D{
-		{Key: "date", Value: -1}, // ASC
+		{Key: field, Value: direction}, 
 	})
 
 	response, err := s.repo.GetAllDrinks(searchFilter, sortFilter)
@@ -136,6 +172,19 @@ func parseResumeDrink(data models.Drink) DrinkResume {
 	return newDrink
 }
 
+func fieldIsValid(field string) bool {
+	var valid bool = false
+
+	for _, allowedField := range allowedSortFields {
+		if field == allowedField {
+			valid = true
+			break
+		}
+	}
+
+	return valid
+}
+
 func parseDrinkId(name string) string {
 	return strings.ReplaceAll(name, " ", "_")
 }
@@ -158,16 +207,16 @@ type Drink struct {
 }
 
 type DrinkResume struct {
-	ID           string   `json:"id"`
-	Name         string   `json:"name"`
-	Type         string   `json:"type"`
-	ABV          float64  `json:"abv"`
-	Date         string   `json:"date"`
-	ChallengeNum float64  `json:"challeng_number"`
-	Stars        float64  `json:"stars"`
-	PictureURL   string   `json:"picture_url"`
-	CreatedAt    string   `json:"created_at"`
-	UpdatedAt    string   `json:"updated_at"`
+	ID           string  `json:"id"`
+	Name         string  `json:"name"`
+	Type         string  `json:"type"`
+	ABV          float64 `json:"abv"`
+	Date         string  `json:"date"`
+	ChallengeNum float64 `json:"challeng_number"`
+	Stars        float64 `json:"stars"`
+	PictureURL   string  `json:"picture_url"`
+	CreatedAt    string  `json:"created_at"`
+	UpdatedAt    string  `json:"updated_at"`
 }
 
 type DrinkLocation struct {
@@ -176,7 +225,9 @@ type DrinkLocation struct {
 }
 
 type DrinkSearchFilters struct {
-	Name     string
-	Country  string
-	Location string
+	Name      string
+	Country   string
+	Location  string
+	SortBy    string
+	Direction string
 }

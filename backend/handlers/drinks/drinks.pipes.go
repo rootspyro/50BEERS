@@ -10,7 +10,9 @@ type DrinksResponse struct {
 }
 
 type Filters struct {
-	Name     string `json:"name,omitempty"`
-	Country  string `json:"country,omitempty"`
-	Location string `json:"location,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Country   string `json:"country,omitempty"`
+	Location  string `json:"location,omitempty"`
+	SortBy    string `json:"sortBy,omitempty"`
+	Direction string `json:"direction,omitempty"`
 }
