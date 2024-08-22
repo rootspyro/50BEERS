@@ -72,16 +72,41 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	// build pagination response 
+	pages, err := h.srv.CalculatePages(parsedLimit)
+
+	if err != nil {
+		log.Error(err.Error())
+
+		parser.JSON(w, parser.ErrorResponse{
+			Status: parser.Status.Error,
+			StatusCode: http.StatusInternalServerError,
+			Error: parser.Error{
+				Code: parser.Errors.INTERNAL_SERVER_ERROR.Code,
+				Message: parser.Errors.INTERNAL_SERVER_ERROR.Message,
+				Details: "error calculating pagination",
+				Timestamp: time.Now().Local(),
+				Path: r.RequestURI,
+			},
+		})
+
+		return
+	}
+
+	pagination := Pagination{
+		Pages: pages,
+		Page: parsedPage,
+		PageSize: parsedLimit,
+	}
+
+	// final response
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,
 		StatusCode: http.StatusOK,
 		Data: DrinksResponse{
 			ItemsFound: len(data),
 			Items: data,
-			Pagination: Pagination{
-				Page: parsedPage,
-				PageSize: parsedLimit,
-			},
+			Pagination: pagination,
 			FiltersAllowed: []string{"name", "country", "location", "sortBy", "direction"},
 			FiltersApplied: Filters{
 				Name: name,

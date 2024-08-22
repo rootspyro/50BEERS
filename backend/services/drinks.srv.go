@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/rootspyro/50BEERS/config/log"
@@ -39,6 +40,20 @@ func NewDrinkSrv(
 		repo:         repo,
 	}
 }
+
+func(s *DrinkSrv) CalculatePages(limit int) (int, error) {
+
+	count, err := s.repo.CountAllDrinks()
+	if err != nil {
+		return 0, err
+	}
+
+	var pagesCalc float64 = float64(count) / float64(limit) 
+
+	pages := math.Ceil(pagesCalc)
+
+	return int(pages), nil
+} 
 
 func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, error) {
 	nameRegex := fmt.Sprintf(".*%s.*", filters.Name)
