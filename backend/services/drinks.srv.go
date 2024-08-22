@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
@@ -27,7 +28,7 @@ func NewDrinkSrv(
 	}
 }
 
-func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
+func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, error) {
 	nameRegex := fmt.Sprintf(".*%s.*", filters.Name)
 
 	// Get Country Id
@@ -78,10 +79,10 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 		},
 	)
 
-	var drinks []Drink
+	var drinks []DrinkResume
 
 	for _, drink := range response {
-		drinks = append(drinks, parseDrink(drink))
+		drinks = append(drinks, parseResumeDrink(drink))
 	}
 
 	return drinks, err
@@ -111,6 +112,28 @@ func parseDrink(data models.Drink) Drink {
 	return newDrink
 }
 
+func parseResumeDrink(data models.Drink) DrinkResume {
+	newDrink := DrinkResume{
+		ID:           parseDrinkId(data.Name),
+		Name:         data.Name,
+		Type:         data.Type,
+		ABV:          data.ABV,
+		Date:         data.Date,
+		ChallengeNum: data.ChallengeNum,
+		Stars:        data.Stars,
+		PictureURL:   data.PictureURL,
+		CreatedAt:    data.CreatedAt,
+		UpdatedAt:    data.UpdatedAt,
+		Status:       data.Status,
+	}
+
+	return newDrink
+}
+
+func parseDrinkId(name string) string {
+	return strings.ReplaceAll(name, " ", "_")
+}
+
 type Drink struct {
 	ID           string   `json:"id"`
 	Name         string   `json:"name"`
@@ -123,6 +146,20 @@ type Drink struct {
 	PictureURL   string   `json:"picture_url"`
 	LocationId   string   `json:"location_id"`
 	Tags         []string `json:"tags"`
+	CreatedAt    string   `json:"created_at"`
+	UpdatedAt    string   `json:"updated_at"`
+	Status       string   `json:"status"`
+}
+
+type DrinkResume struct {
+	ID           string   `json:"id"`
+	Name         string   `json:"name"`
+	Type         string   `json:"type"`
+	ABV          float64  `json:"abv"`
+	Date         string   `json:"date"`
+	ChallengeNum float64  `json:"challeng_number"`
+	Stars        float64  `json:"stars"`
+	PictureURL   string   `json:"picture_url"`
 	CreatedAt    string   `json:"created_at"`
 	UpdatedAt    string   `json:"updated_at"`
 	Status       string   `json:"status"`

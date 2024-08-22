@@ -58,10 +58,11 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 		Data: DrinksResponse{
 			ItemsFound: len(data),
 			Items: data,
-			FiltersAllowed: []string{"name", "country"},
+			FiltersAllowed: []string{"name", "country", "location"},
 			FiltersApplied: Filters{
 				Name: name,
 				Country: country,
+				Location: location,
 			},
 		},
 	})	
