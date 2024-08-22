@@ -32,10 +32,11 @@ func main() {
 
 	// models
 	countriesRepo := repositories.NewCountriesRepo(database.Collection("country"))
+	locationRepo := repositories.NewLocationRepo(database.Collection("location"))
 	drinksRepo := repositories.NewDrinksRepo(database.Collection("drink"))
 
 	// services
-	drinkSrv := services.NewDrinkSrv(countriesRepo,drinksRepo)
+	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 
 	// handlers 
 	healthHandler := health.NewHealthHandler()
