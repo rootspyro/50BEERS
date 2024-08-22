@@ -10,14 +10,20 @@ import (
 )
 
 type DrinkSrv struct {
-	countryRepo *repositories.CountriesRepo
-	repo        *repositories.DrinksRepo
+	countryRepo  *repositories.CountriesRepo
+	locationRepo *repositories.LocationRepo
+	repo         *repositories.DrinksRepo
 }
 
-func NewDrinkSrv(countryRepo *repositories.CountriesRepo, repo *repositories.DrinksRepo) *DrinkSrv {
+func NewDrinkSrv(
+	countryRepo *repositories.CountriesRepo,
+	locationRepo *repositories.LocationRepo,
+	repo *repositories.DrinksRepo,
+) *DrinkSrv {
 	return &DrinkSrv{
-		countryRepo: countryRepo,
-		repo:        repo,
+		countryRepo:  countryRepo,
+		locationRepo: locationRepo,
+		repo:         repo,
 	}
 }
 
@@ -39,6 +45,20 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 		countryId = country.ID.Hex()
 	}
 
+	// Get location Id
+	var locationId string
+
+	location, err := s.locationRepo.FindByName(filters.Location)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			locationId = ""
+		} else {
+			return nil, err
+		}
+	} else {
+		locationId = location.ID.Hex()
+	}
+
 	response, err := s.repo.GetAllDrinks(
 		bson.D{
 			{
@@ -52,6 +72,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]Drink, error) {
 							bson.D{{"type", bson.D{{"$regex", nameRegex}}}},
 						},
 					}},
+					bson.D{{"location_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", locationId)}}}},
 				},
 			},
 		},
@@ -101,7 +122,7 @@ type Drink struct {
 	Stars        float64  `json:"stars"`
 	PictureURL   string   `json:"picture_url"`
 	LocationId   string   `json:"location_id"`
-	Tags       	 []string `json:"tags"`
+	Tags         []string `json:"tags"`
 	CreatedAt    string   `json:"created_at"`
 	UpdatedAt    string   `json:"updated_at"`
 	Status       string   `json:"status"`
@@ -113,6 +134,7 @@ type DrinkLocation struct {
 }
 
 type DrinkSearchFilters struct {
-	Name    string
-	Country string
+	Name     string
+	Country  string
+	Location string
 }
