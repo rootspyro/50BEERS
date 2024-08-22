@@ -7,6 +7,7 @@ import (
 	"github.com/rootspyro/50BEERS/db/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type DrinksRepo struct {
@@ -19,10 +20,10 @@ func NewDrinksRepo(collection *mongo.Collection) *DrinksRepo {
 	}
 }
 
-func (m DrinksRepo) GetAllDrinks(filters bson.D) ([]models.Drink, error) {
+func (m DrinksRepo) GetAllDrinks(searchFilters bson.D, sortFilters *options.FindOptions) ([]models.Drink, error) {
 
 	// make query
-	cursor, err := m.Collection.Find(context.TODO(), filters)
+	cursor, err := m.Collection.Find(context.TODO(), searchFilters, sortFilters)
 	if err != nil {
 		log.Error(err.Error())
 		return nil, err

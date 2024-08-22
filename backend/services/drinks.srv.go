@@ -8,6 +8,7 @@ import (
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type DrinkSrv struct {
@@ -60,24 +61,29 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 		locationId = location.ID.Hex()
 	}
 
-	response, err := s.repo.GetAllDrinks(
-		bson.D{
-			{
-				"$and",
-				bson.A{
-					bson.D{{"country_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", countryId)}}}},
-					bson.D{{
-						"$or",
-						bson.A{
-							bson.D{{"name", bson.D{{"$regex", nameRegex}}}},
-							bson.D{{"type", bson.D{{"$regex", nameRegex}}}},
-						},
-					}},
-					bson.D{{"location_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", locationId)}}}},
-				},
+	// build filters
+	searchFilter := bson.D{
+		{
+			"$and",
+			bson.A{
+				bson.D{{"country_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", countryId)}}}},
+				bson.D{{
+					"$or",
+					bson.A{
+						bson.D{{"name", bson.D{{"$regex", nameRegex}}}},
+						bson.D{{"type", bson.D{{"$regex", nameRegex}}}},
+					},
+				}},
+				bson.D{{"location_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", locationId)}}}},
 			},
 		},
-	)
+	} 
+
+	sortFilter := options.Find().SetSort(bson.D{
+		{Key: "date", Value: -1}, // ASC
+	})
+
+	response, err := s.repo.GetAllDrinks(searchFilter, sortFilter)
 
 	var drinks []DrinkResume
 
