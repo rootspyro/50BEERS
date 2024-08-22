@@ -75,6 +75,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 					},
 				}},
 				bson.D{{"location_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", locationId)}}}},
+				bson.D{{"status", "public"}},
 			},
 		},
 	} 
@@ -130,7 +131,6 @@ func parseResumeDrink(data models.Drink) DrinkResume {
 		PictureURL:   data.PictureURL,
 		CreatedAt:    data.CreatedAt,
 		UpdatedAt:    data.UpdatedAt,
-		Status:       data.Status,
 	}
 
 	return newDrink
@@ -168,7 +168,6 @@ type DrinkResume struct {
 	PictureURL   string   `json:"picture_url"`
 	CreatedAt    string   `json:"created_at"`
 	UpdatedAt    string   `json:"updated_at"`
-	Status       string   `json:"status"`
 }
 
 type DrinkLocation struct {
