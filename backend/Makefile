@@ -9,3 +9,6 @@ start:
 
 run:
 	go run $(MAIN_PATH)
+
+migrate:
+	go run $(MAIN_PATH) -migrate

@@ -10,6 +10,7 @@ import (
 	"github.com/rootspyro/50BEERS/config"
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db"
+	"github.com/rootspyro/50BEERS/db/migrations"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
@@ -43,6 +44,18 @@ func main() {
 	locationRepo := repositories.NewLocationRepo(database.Collection("location"))
 	drinksRepo := repositories.NewDrinksRepo(database.Collection("drink"))
 
+	if migrate {
+
+		migrationManager := migrations.NewMigrationManager(database)
+		migrationManager.Migrate()
+		return
+	}
+
+	if seed != "" {
+		log.Info(fmt.Sprintf("Running %s seeder", seed))
+		return
+	}
+
 	// services
 	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 
@@ -55,16 +68,6 @@ func main() {
 		healthHandler,
 		drinkHandler,
 	)
-
-	if migrate {
-		log.Info("Executing migrations...")
-		return
-	}
-
-	if seed != "" {
-		log.Info(fmt.Sprintf("Running %s seeder", seed))
-		return
-	}
 
 	// Configurate server
 	app := http.Server{
