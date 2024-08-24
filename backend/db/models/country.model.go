@@ -8,3 +8,9 @@ type Country struct {
 	CreatedAt string             `bson:"created_at"`
 	UpdatedAt string             `bson:"updated_at"`
 }
+
+type NewCountry struct {
+	Name      string             `bson:"name"`
+	CreatedAt string             `bson:"created_at"`
+	UpdatedAt string             `bson:"updated_at"`
+}

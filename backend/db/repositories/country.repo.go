@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"time"
 
 	"github.com/rootspyro/50BEERS/db/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -46,12 +47,21 @@ func(r *CountriesRepo) FindById(id primitive.ObjectID) (models.Country, error) {
 	return result, nil
 }
 
-func parseCountry(data models.Country) models.Country {
-	return models.Country{
-		ID: data.ID,
-		Name: data.Name,
-		CreatedAt: data.CreatedAt,
-		UpdatedAt: data.UpdatedAt,
-	}
-}
+func(r *CountriesRepo) InsertMany(data []models.NewCountry) (int, error) {
 
+	var documents []interface{}
+
+	//convert data model into interface
+	for _, doc := range data {
+		doc.CreatedAt = time.Now().Local().String()
+		doc.UpdatedAt = time.Now().Local().String()
+		documents = append(documents, doc)
+	}
+
+	insertResults, err := r.Collection.InsertMany(context.TODO(), documents)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(insertResults.InsertedIDs), nil 
+}

@@ -21,6 +21,12 @@ func SeedCollection(
 
 	switch collectionName {
 	case "country":
+
+		countrySeeder := NewCountrySeeder(countryRepo)
+		if err := countrySeeder.Seed(); err != nil {
+			return err
+		}
+
 		break;
 
 	default:

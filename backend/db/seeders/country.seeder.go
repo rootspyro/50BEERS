@@ -1,8 +1,12 @@
 package seeders
 
 import (
+	"fmt"
+
 	"github.com/rootspyro/50BEERS/config/log"
+	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	// "go.mongodb.org/mongo-driver/bson"
 )
 
 type CountrySeeder struct {
@@ -15,8 +19,44 @@ func NewCountrySeeder(repo *repositories.CountriesRepo) *CountrySeeder{
 	}
 }
 
-func Seed() error {
+func(s *CountrySeeder) Seed() error {
 
 	log.Info("Running country seeder...")
+
+	data := []models.NewCountry{
+		{
+			Name: "belgium",
+		},
+		{
+			Name: "germany",
+		},
+		{
+			Name: "ireland",
+		},
+		{
+			Name: "mexico",
+		},
+		{
+			Name: "scotland",
+		},
+		{
+			Name: "spain",
+		},
+		{
+			Name: "united_states",
+		},
+		{
+			Name: "venezuela",
+		},
+	}
+
+	docsCreated, err := s.repo.InsertMany(data)
+
+	if err != nil {
+		return err
+	}
+
+	log.Info(fmt.Sprintf("%d records successfully created", docsCreated))
+
 	return nil
 }
