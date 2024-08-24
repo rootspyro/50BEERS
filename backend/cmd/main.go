@@ -47,7 +47,10 @@ func main() {
 	if migrate {
 
 		migrationManager := migrations.NewMigrationManager(database)
-		migrationManager.Migrate()
+		if err := migrationManager.Migrate(); err != nil {
+			log.Error(err.Error())
+			os.Exit(1)
+		}
 		return
 	}
 

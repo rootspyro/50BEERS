@@ -63,7 +63,7 @@ $ go mod tidy
 $ cp .env.copy 
 ```
 
-2.3 - Insert the required data on the new .env file.
+2.3 - Insert the required data on the new .env file. MongoDB credentials are required for step 2.4 and 2.5.
 ```shell
 # AUTHOR
 AUTHOR_NAME=rootpsyro
@@ -83,12 +83,23 @@ DB_NAME=50BEERS
 
 __Important__: You can generate a new Secret key running the command `openssl rand -base64 32`
 
-2.4 - Create the mongodb database and also the required collections:
+2.4 - Run the migrations to create the required collection on the database. 
 
- - country
- - drink
- - location
- - tag
+```shell
+$ make migrate
+
+# go run cmd/main.go -migrate
+# 2024-08-24 01:23:48.373082598 -0400 -04 | INFO | Running Migrations...
+# 2024-08-24 01:23:48.373150584 -0400 -04 | INFO | Creating country collection...
+# 2024-08-24 01:23:48.373456774 -0400 -04 | INFO | The country collection was successfully created!
+# 2024-08-24 01:23:48.373467031 -0400 -04 | INFO | Creating drink collection...
+# 2024-08-24 01:23:48.373683265 -0400 -04 | INFO | The drink collection was successfully created!
+# 2024-08-24 01:23:48.373696216 -0400 -04 | INFO | Creating location collection...
+# 2024-08-24 01:23:48.373876648 -0400 -04 | INFO | The location collection was successfully created!
+# 2024-08-24 01:23:48.373883297 -0400 -04 | INFO | Creating tag collection...
+# 2024-08-24 01:23:48.374058152 -0400 -04 | INFO | The tag collection was successfully created!
+# 2024-08-24 01:23:48.374064311 -0400 -04 | INFO | All migrations where successfully executed!
+```
 
 2.5 - Feed the database with the json data in the [database](./backend/db/data) directory.
 

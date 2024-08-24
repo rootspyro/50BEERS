@@ -12,3 +12,6 @@ run:
 
 migrate:
 	go run $(MAIN_PATH) -migrate
+
+help:
+	go run $(MAIN_PATH) -help
