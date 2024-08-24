@@ -12,6 +12,7 @@ import (
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/migrations"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"github.com/rootspyro/50BEERS/db/seeders"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/routes"
@@ -55,7 +56,16 @@ func main() {
 	}
 
 	if seed != "" {
-		log.Info(fmt.Sprintf("Running %s seeder", seed))
+
+		if err := seeders.SeedCollection(
+			seed,
+			countriesRepo,
+			locationRepo,
+			drinksRepo,
+		); err != nil {
+			log.Error(err.Error())
+		}
+
 		return
 	}
 
