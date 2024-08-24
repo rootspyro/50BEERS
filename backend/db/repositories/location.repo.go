@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"time"
 
 	"github.com/rootspyro/50BEERS/db/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -32,3 +33,23 @@ func(r *LocationRepo) FindByName(name string) (models.Location, error) {
 
 	return location, nil
 } 
+
+func(r *LocationRepo) InsertMany(data []models.NewLocation) (int, error) {
+
+	var documents []interface{}
+
+	// convert locations into documents
+	for _, location := range data {
+		location.CreatedAt = time.Now().Local().String()
+		location.UpdatedAt = time.Now().Local().String()
+		documents = append(documents, location)
+	}
+
+	result, err := r.Collection.InsertMany(context.TODO(), documents)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return len(result.InsertedIDs), nil
+}

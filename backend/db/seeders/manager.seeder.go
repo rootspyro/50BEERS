@@ -14,7 +14,6 @@ func SeedCollection(
 	locationRepo *repositories.LocationRepo,
 	drinksRepo *repositories.DrinksRepo,
 ) error {
-
 	if !validCollection(collectionName) {
 		return errors.New("Collection was not found")
 	}
@@ -23,26 +22,36 @@ func SeedCollection(
 	case "country":
 
 		countrySeeder := NewCountrySeeder(countryRepo)
+
 		if err := countrySeeder.Seed(); err != nil {
 			return err
 		}
 
-		break;
+		break
+
+	case "location":
+
+		locationSeeder := NewLocationSeeder(locationRepo)
+
+		if err := locationSeeder.Seed(); err != nil {
+			return err
+		}
+
+		break
 
 	default:
 		return errors.New(fmt.Sprintf("%s collection currently has no seeder.", collectionName))
 	}
-	
+
 	return nil
 }
 
 func validCollection(collectionName string) bool {
-
 	for _, collection := range models.Collections {
 		if collection == collectionName {
 			return true
 		}
 	}
 
-	return false 
+	return false
 }
