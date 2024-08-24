@@ -44,6 +44,7 @@ func main() {
 	countriesRepo := repositories.NewCountriesRepo(database.Collection("country"))
 	locationRepo := repositories.NewLocationRepo(database.Collection("location"))
 	drinksRepo := repositories.NewDrinksRepo(database.Collection("drink"))
+	tagRepo := repositories.NewTagRepo(database.Collection("tag"))
 
 	if migrate {
 
@@ -61,7 +62,7 @@ func main() {
 			seed,
 			countriesRepo,
 			locationRepo,
-			drinksRepo,
+			tagRepo,
 		); err != nil {
 			log.Error(err.Error())
 		}

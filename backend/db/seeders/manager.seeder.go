@@ -12,7 +12,7 @@ func SeedCollection(
 	collectionName string,
 	countryRepo *repositories.CountriesRepo,
 	locationRepo *repositories.LocationRepo,
-	drinksRepo *repositories.DrinksRepo,
+	tagRepo *repositories.TagRepo,
 ) error {
 	if !validCollection(collectionName) {
 		return errors.New("Collection was not found")
@@ -34,6 +34,16 @@ func SeedCollection(
 		locationSeeder := NewLocationSeeder(locationRepo)
 
 		if err := locationSeeder.Seed(); err != nil {
+			return err
+		}
+
+		break
+
+	case "tag":
+
+		tagSeeder := NewTagSeeder(tagRepo)
+
+		if err := tagSeeder.Seed(); err != nil {
 			return err
 		}
 
