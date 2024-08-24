@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -17,10 +18,17 @@ import (
 )
 
 func main() {
+	// flags
+	var migrate bool
+	var seed string
+
+	flag.BoolVar(&migrate, "migrate", false, "Create the required collections on MongoDB")
+	flag.StringVar(&seed, "seed", "", "Insert default data on collection (go run main.go -seed [collection])")
+
+	flag.Parse()
 
 	// database
 	dbclient, err := db.New()
-
 	if err != nil {
 		log.Error(err.Error())
 		os.Exit(1)
@@ -38,7 +46,7 @@ func main() {
 	// services
 	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 
-	// handlers 
+	// handlers
 	healthHandler := health.NewHealthHandler()
 	drinkHandler := drinks.NewDrinkHandler(drinkSrv)
 
@@ -47,11 +55,21 @@ func main() {
 		healthHandler,
 		drinkHandler,
 	)
-	
+
+	if migrate {
+		log.Info("Executing migrations...")
+		return
+	}
+
+	if seed != "" {
+		log.Info(fmt.Sprintf("Running %s seeder", seed))
+		return
+	}
+
 	// Configurate server
 	app := http.Server{
 		Handler: routes,
-		Addr: config.App.Server.Socket,
+		Addr:    config.App.Server.Socket,
 	}
 
 	fmt.Printf(`
@@ -64,12 +82,12 @@ func main() {
  |     |
  |_____|   By %s %s %s
 
-`, 
- 	config.App.Server.Socket,
-	config.Colors.Cyan,
-	config.App.Author.Name,
-	config.Colors.Reset,
- )
+`,
+		config.App.Server.Socket,
+		config.Colors.Cyan,
+		config.App.Author.Name,
+		config.Colors.Reset,
+	)
 
 	fmt.Printf("\n")
 
