@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -10,6 +11,21 @@ import (
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/services"
 )
+
+var allowedSortFields = []string{"name", "date", "stars", "abv"}
+
+func fieldIsValid(field string) bool {
+	var valid bool = false
+
+	for _, allowedField := range allowedSortFields {
+		if field == allowedField {
+			valid = true
+			break
+		}
+	}
+
+	return valid
+}
 
 func ValidateDrinksBlogFilters(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -25,10 +41,69 @@ func ValidateDrinksBlogFilters(next http.HandlerFunc) http.HandlerFunc {
 		page := queries.Get("page")
 		limit := queries.Get("limit")
 
-		// validate page and limit are integers
+		// default values
+		var defDirection = "desc"
+		var defSort = "created_at"
 		var defPage int = 1	
 		var defLimit int = 10
 
+		// validate direction is valid
+		if direction != "" {
+
+			if direction != "asc" && direction != "desc" {
+
+				parser.JSON(w, parser.ErrorResponse{
+					Status: parser.Status.Error,
+					StatusCode: http.StatusBadRequest,
+					Error: parser.Error{
+						Code: parser.Errors.BAD_REQUEST_QUERY.Code,
+						Message: parser.Errors.BAD_REQUEST_QUERY.Message,
+						Details: "path query direction is invalid",
+						Suggestion: "use asc or desc",
+						Path: r.RequestURI,
+						Timestamp: time.Now().Local(),
+					},
+				})
+
+				return
+			}
+
+			defDirection = direction
+		}
+
+		// validate that sort field is valid
+		if sortBy != "" {
+
+			if !fieldIsValid(sortBy) {
+
+				var validOptionsStr string = ""
+
+				for index, field := range allowedSortFields {
+					validOptionsStr += field
+					if index < len(allowedSortFields) - 1 {
+						validOptionsStr += ", "
+					}
+				}
+
+				parser.JSON(w, parser.ErrorResponse{
+					Status: parser.Status.Error,
+					StatusCode: http.StatusBadRequest,
+					Error: parser.Error{
+						Code: parser.Errors.BAD_REQUEST_QUERY.Code,
+						Message: parser.Errors.BAD_REQUEST_QUERY.Message,
+						Details: "path query sortBy is invalid",
+						Suggestion: fmt.Sprintf("Use some of this options: %s", validOptionsStr),
+						Timestamp: time.Now().Local(),
+						Path: r.RequestURI,
+					},
+				})
+				return
+			}
+			
+			defSort = sortBy
+		}
+
+		// validate page and limit are integers
 		if page != "" {
 
 			intPage, err := strconv.Atoi(page)
@@ -107,8 +182,8 @@ func ValidateDrinksBlogFilters(next http.HandlerFunc) http.HandlerFunc {
 			Category: category,
 			Country: country,
 			Location: location,
-			SortBy: sortBy,
-			Direction: direction,
+			SortBy: defSort,
+			Direction: defDirection,
 			Page: defPage,
 			Limit: defLimit,
 		}

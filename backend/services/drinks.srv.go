@@ -13,16 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var (
-	defaultSortDirection string = "desc"
-	allowedDirections           = []string{"asc", "desc"}
-)
-
-var (
-	defaultSortField  string = "created_at"
-	allowedSortFields        = []string{"name", "date", "stars", "abv"}
-)
-
 type DrinkSrv struct {
 	countryRepo  *repositories.CountriesRepo
 	locationRepo *repositories.LocationRepo
@@ -109,16 +99,6 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 
 	// build sort filter
 	var direction int = -1
-	var field string = defaultSortField
-
-	if fieldIsValid(filters.SortBy) {
-
-		field = filters.SortBy
-
-	} else if filters.SortBy != ""{
-
-		log.Warning(fmt.Sprintf("invalid sort field: %s", filters.SortBy))
-	}
 
 	if filters.Direction == "asc" {
 
@@ -136,7 +116,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 	skip := (filters.Page - 1) * filters.Limit
 
 	sortFilter := options.Find().SetSort(bson.D{
-		{Key: field, Value: direction}, 
+		{Key: filters.SortBy, Value: direction}, 
 	}).SetSkip(int64(skip)).SetLimit(int64(filters.Limit))
 
 	response, err := s.repo.GetAllDrinks(searchFilter, sortFilter)
@@ -189,19 +169,6 @@ func parseResumeDrink(data models.Drink) DrinkResume {
 	}
 
 	return newDrink
-}
-
-func fieldIsValid(field string) bool {
-	var valid bool = false
-
-	for _, allowedField := range allowedSortFields {
-		if field == allowedField {
-			valid = true
-			break
-		}
-	}
-
-	return valid
 }
 
 func parseDrinkId(name string) string {

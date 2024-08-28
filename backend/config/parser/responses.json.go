@@ -21,11 +21,12 @@ type ErrorResponse struct {
 }
 
 type Error struct {
-	Code      string    `json:"code"`
-	Message   string    `json:"message"`
-	Details   string    `json:"details"`
-	Timestamp time.Time `json:"timestamp"`
-	Path      string    `json:"path"`
+	Code       string    `json:"code"`
+	Message    string    `json:"message"`
+	Details    string    `json:"details"`
+	Suggestion string    `json:"suggestion"`
+	Timestamp  time.Time `json:"timestamp"`
+	Path       string    `json:"path"`
 }
 
 type CommonError struct {
