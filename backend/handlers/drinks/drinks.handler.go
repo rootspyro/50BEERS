@@ -2,8 +2,6 @@ package drinks
 
 import (
 	"net/http"
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/rootspyro/50BEERS/config/log"
@@ -24,37 +22,9 @@ func NewDrinkHandler(drinkSrv *services.DrinkSrv) *DrinkHandler {
 func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) {
 
 	// Get Filters
-	queries := r.URL.Query()
-	name := strings.ToLower(queries.Get("name"))
-	category := strings.ToLower(queries.Get("category"))
-	country := strings.ToLower(queries.Get("country"))
-	location := strings.ToLower(queries.Get("location"))
-	sortBy := strings.ToLower(queries.Get("sortBy"))
-	direction := strings.ToLower(queries.Get("direction"))
-	page := queries.Get("page")
-	limit := queries.Get("limit")
+	var filters services.DrinkSearchFilters = r.Context().Value("filters").(services.DrinkSearchFilters)
 
-	parsedPage, _ := strconv.Atoi(page)
-	parsedLimit, _ := strconv.Atoi(limit)
-
-	if parsedPage == 0 {
-		parsedPage = 1
-	}
-
-	if parsedLimit == 0 {
-		parsedLimit = 10
-	}
-
-	data, err := h.srv.GetAllDrinks(services.DrinkSearchFilters{
-		Name: name,
-		Category: category,
-		Country: country,
-		Location: location,
-		SortBy: sortBy,
-		Direction: direction,
-		Page: parsedPage,
-		Limit: parsedLimit,
-	})
+	data, err := h.srv.GetAllDrinks(filters)
 
 	if err != nil {
 
@@ -75,7 +45,7 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// build pagination response 
-	pages, err := h.srv.CalculatePages(parsedLimit)
+	pages, err := h.srv.CalculatePages(filters.Limit)
 
 	if err != nil {
 		log.Error(err.Error())
@@ -97,8 +67,8 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 
 	pagination := Pagination{
 		Pages: pages,
-		Page: parsedPage,
-		PageSize: parsedLimit,
+		Page: filters.Page,
+		PageSize: filters.Limit,
 	}
 
 	// final response
@@ -111,11 +81,12 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 			Pagination: pagination,
 			FiltersAllowed: []string{"name", "category", "country", "location", "sortBy", "direction", "page", "limit"},
 			FiltersApplied: Filters{
-				Name: name,
-				Country: country,
-				Location: location,
-				SortBy: sortBy,
-				Direction: direction,
+				Name: filters.Name,
+				Category: filters.Category,
+				Country: filters.Country,
+				Location: filters.Location,
+				SortBy: filters.SortBy,
+				Direction: filters.SortBy,
 			},
 		},
 	})	
