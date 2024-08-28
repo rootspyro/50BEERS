@@ -10,6 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type DrinkSrv struct {
@@ -156,8 +158,8 @@ func parseDrink(data models.Drink) Drink {
 func parseResumeDrink(data models.Drink) DrinkResume {
 	newDrink := DrinkResume{
 		ID:           ParsePublicId(data.Name),
-		Name:         data.Name,
-		Type:         data.Type,
+		Name:         cases.Title(language.Und).String(data.Name),
+		Type:         cases.Title(language.Und).String(data.Type),
 		ABV:          data.ABV,
 		Date:         data.Date,
 		ChallengeNum: data.ChallengeNum,
