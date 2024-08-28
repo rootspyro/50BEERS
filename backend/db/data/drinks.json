@@ -3,16 +3,13 @@
     "name": "turia",
     "type": "marzen",
     "abv": 5.4,
-    "country_id": "66c37517fbf1e6f92d119f94",
+    "country_id": "",
     "date": "2023-11-27",
     "challenge_number": 36,
     "stars": 4,
     "picture_url": "",
-    "location": {
-      "name": "Mercadona",
-      "url": ""
-    },
-    "tag_ids": ["66c3754efbf1e6f92d119f98", "66c3754efbf1e6f92d119f99"],
+    "location_id": "", 
+    "tags": ["beer", "challenge"],
     "created_at": "",
     "updated_at": "",
     "status": "public"
@@ -21,16 +18,13 @@
     "name": "steam brew",
     "type": "wheat pale ale",
     "abv": 5.6,
-    "country_id": "66c37517fbf1e6f92d119f94",
+    "country_id": "",
     "date": "2023-11-27",
     "challenge_number": 47,
     "stars": 3,
     "picture_url": "",
-    "location": {
-      "name": "Lidl",
-      "url": ""
-    },
-    "tag_ids": ["66c3754efbf1e6f92d119f98", "66c3754efbf1e6f92d119f99"],
+    "location_id": "",
+    "tags": ["challenge", "beer"],
     "created_at": "",
     "updated_at": "",
     "status": "public"
@@ -39,16 +33,13 @@
     "name": "jack daniels nro.7",
     "type": "tenesse whisky",
     "abv": 5.6,
-    "country_id": "66c37517fbf1e6f92d119f95",
+    "country_id": "",
     "date": "2023-12-14",
     "challenge_number": 0,
     "stars": 3,
     "picture_url": "",
-    "location": {
-      "name": "La Whiskeria",
-      "url": ""
-    },
-    "tag_ids": ["66c3754efbf1e6f92d119f9d"],
+    "location_id": "",
+    "tags": ["whisky"],
     "created_at": "",
     "updated_at": "",
     "status": "public"

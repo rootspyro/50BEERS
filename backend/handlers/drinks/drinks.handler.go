@@ -26,6 +26,7 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 	// Get Filters
 	queries := r.URL.Query()
 	name := strings.ToLower(queries.Get("name"))
+	category := strings.ToLower(queries.Get("category"))
 	country := strings.ToLower(queries.Get("country"))
 	location := strings.ToLower(queries.Get("location"))
 	sortBy := strings.ToLower(queries.Get("sortBy"))
@@ -46,6 +47,7 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 
 	data, err := h.srv.GetAllDrinks(services.DrinkSearchFilters{
 		Name: name,
+		Category: category,
 		Country: country,
 		Location: location,
 		SortBy: sortBy,
@@ -107,7 +109,7 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 			ItemsFound: len(data),
 			Items: data,
 			Pagination: pagination,
-			FiltersAllowed: []string{"name", "country", "location", "sortBy", "direction"},
+			FiltersAllowed: []string{"name", "category", "country", "location", "sortBy", "direction", "page", "limit"},
 			FiltersApplied: Filters{
 				Name: name,
 				Country: country,

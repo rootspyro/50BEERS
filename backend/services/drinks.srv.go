@@ -92,6 +92,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 		{
 			"$and",
 			bson.A{
+				bson.D{{"tags", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Category)}}}},
 				bson.D{{"country_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", countryId)}}}},
 				bson.D{{
 					"$or",
@@ -244,6 +245,7 @@ type DrinkLocation struct {
 
 type DrinkSearchFilters struct {
 	Name      string
+	Category  string
 	Country   string
 	Location  string
 	SortBy    string

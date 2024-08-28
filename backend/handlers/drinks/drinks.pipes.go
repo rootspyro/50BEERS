@@ -16,6 +16,7 @@ type Filters struct {
 	Location  string `json:"location,omitempty"`
 	SortBy    string `json:"sortBy,omitempty"`
 	Direction string `json:"direction,omitempty"`
+	Category  string `json:"Category,omitempty"`
 }
 
 type Pagination struct {
