@@ -19,6 +19,33 @@ func NewLocationRepo(collection *mongo.Collection) *LocationRepo{
 	}
 }
 
+func(r *LocationRepo) GetAllLocations() ([]models.Location, error) {
+
+	// make query
+	cursor, err := r.Collection.Find(context.TODO(), bson.D{{}})
+	
+	if err != nil {
+		return nil, err
+	}
+
+	defer cursor.Close(context.TODO())
+
+	// iterate result
+	var locations []models.Location
+
+	for cursor.Next(context.TODO()) {
+		var location models.Location
+
+		if err := cursor.Decode(&location); err != nil {
+			return nil, err
+		}
+
+		locations = append(locations, location)
+	}
+
+	return locations, nil
+}
+
 func(r *LocationRepo) FindByName(name string) (models.Location, error) {
 
 	filter := bson.D{{"name", name}}

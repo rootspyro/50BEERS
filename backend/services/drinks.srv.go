@@ -175,15 +175,15 @@ type Drink struct {
 	Name         string   `json:"name"`
 	Type         string   `json:"type"`
 	ABV          float64  `json:"abv"`
-	CountryID    string   `json:"country_id"`
+	CountryID    string   `json:"countryId"`
 	Date         string   `json:"date"`
-	ChallengeNum float64  `json:"challeng_number"`
+	ChallengeNum float64  `json:"challengNumber"`
 	Stars        float64  `json:"stars"`
-	PictureURL   string   `json:"picture_url"`
-	LocationId   string   `json:"location_id"`
+	PictureURL   string   `json:"pictureUrl"`
+	LocationId   string   `json:"locationId"`
 	Tags         []string `json:"tags"`
-	CreatedAt    string   `json:"created_at"`
-	UpdatedAt    string   `json:"updated_at"`
+	CreatedAt    string   `json:"createdAt"`
+	UpdatedAt    string   `json:"updatedAt"`
 	Status       string   `json:"status"`
 }
 
@@ -193,11 +193,11 @@ type DrinkResume struct {
 	Type         string  `json:"type"`
 	ABV          float64 `json:"abv"`
 	Date         string  `json:"date"`
-	ChallengeNum float64 `json:"challeng_number"`
+	ChallengeNum float64 `json:"challengNumber"`
 	Stars        float64 `json:"stars"`
-	PictureURL   string  `json:"picture_url"`
-	CreatedAt    string  `json:"created_at"`
-	UpdatedAt    string  `json:"updated_at"`
+	PictureURL   string  `json:"pictureUrl"`
+	CreatedAt    string  `json:"createdAt"`
+	UpdatedAt    string  `json:"updatedAt"`
 }
 
 type DrinkLocation struct {
