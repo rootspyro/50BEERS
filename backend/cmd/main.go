@@ -17,6 +17,7 @@ import (
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/handlers/location"
+	"github.com/rootspyro/50BEERS/handlers/tag"
 	"github.com/rootspyro/50BEERS/routes"
 	"github.com/rootspyro/50BEERS/services"
 )
@@ -73,12 +74,14 @@ func main() {
 	}
 
 	// services
+	tagSrv := services.NewTagSrv(tagRepo)
 	countrySrv := services.NewCountrySrv(countriesRepo)
 	locationSrv := services.NewLocationSrv(locationRepo)
 	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 
 	// handlers
 	healthHandler := health.NewHealthHandler()
+	tagHandler := tag.NewTagHandler(tagSrv)
 	countryHandler := country.NewCountryHandler(countrySrv)
 	locationHandler := location.NewLocationHandler(locationSrv)
 	drinkHandler := drinks.NewDrinkHandler(drinkSrv)
@@ -86,6 +89,7 @@ func main() {
 	// routes
 	routes := routes.New(
 		healthHandler,
+		tagHandler,
 		countryHandler,
 		locationHandler,
 		drinkHandler,

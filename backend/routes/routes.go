@@ -10,11 +10,13 @@ import (
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/handlers/location"
+	"github.com/rootspyro/50BEERS/handlers/tag"
 	"github.com/rootspyro/50BEERS/middlewares"
 )
 
 func New(
 	healthHandler *health.HealthHandler,
+	tagHandler *tag.TagHandler,
 	countryHandler *country.CountryHandler,
 	locationHandler *location.LocationHandler,
 	drinkHandler *drinks.DrinkHandler,
@@ -26,6 +28,9 @@ func New(
 
 	// Health
 	router.HandleFunc("GET /api/v1/health", middlewares.Logger(healthHandler.ServerStatus))
+
+	// Tag
+	router.HandleFunc("GET /api/v1/tag/blog", middlewares.Logger(tagHandler.ListCategoriesForBlog))
 
 	//  Country
 	router.HandleFunc("GET /api/v1/country/blog", middlewares.Logger(countryHandler.ListCountriesForBlog))
