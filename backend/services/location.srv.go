@@ -3,6 +3,8 @@ package services
 import (
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type LocationSrv struct {
@@ -33,7 +35,7 @@ func (s *LocationSrv) GetAllLocations() ([]Location, error) {
 func parseLocation(data models.Location) Location {
 	return Location{
 		ID: ParsePublicId(data.Name),
-		Name: data.Name,
+		Name: cases.Title(language.Und).String(data.Name),
 		URL: data.URL,
 		Comments: data.Comments,
 		CreatedAt: data.CreatedAt,

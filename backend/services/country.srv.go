@@ -3,6 +3,8 @@ package services
 import (
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type CountrySrv struct {
@@ -35,7 +37,7 @@ func (s *CountrySrv) GetAllCountries() ([]Country, error) {
 func parseCountry(data models.Country) Country {
 	return Country{
 		ID: ParsePublicId(data.Name),
-		Name: data.Name,
+		Name: cases.Title(language.Und).String(data.Name),
 		CreatedAt: data.CreatedAt,
 		UpdatedAt: data.UpdatedAt,
 	}

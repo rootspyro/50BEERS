@@ -3,6 +3,8 @@ package services
 import (
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type TagSrv struct {
@@ -26,8 +28,7 @@ func(s *TagSrv) GetAllTags() ([]Tag, error) {
 	var tags []Tag
 
 	for _, tag := range data {
-		tags = append(tags, parseTag(tag))
-	}
+		tags = append(tags, parseTag(tag)) }
 
 	return tags, nil
 }
@@ -35,7 +36,7 @@ func(s *TagSrv) GetAllTags() ([]Tag, error) {
 func parseTag(data models.Tag) Tag {
 	return Tag{
 		ID: ParsePublicId(data.Name),
-		Name: data.Name,
+		Name: cases.Title(language.Und).String(data.Name),
 		CreatedAt: data.CreatedAt,
 		UpdatedAt: data.UpdatedAt,
 	}
