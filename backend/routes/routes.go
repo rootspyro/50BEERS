@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/rootspyro/50BEERS/config/parser"
+	"github.com/rootspyro/50BEERS/handlers/country"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/middlewares"
@@ -13,6 +14,7 @@ import (
 
 func New(
 	healthHandler *health.HealthHandler,
+	countryHandler *country.CountryHandler,
 	drinkHandler *drinks.DrinkHandler,
 ) *http.ServeMux{
 
@@ -22,6 +24,9 @@ func New(
 
 	// Health
 	router.HandleFunc("GET /api/v1/health", middlewares.Logger(healthHandler.ServerStatus))
+
+	//  Country
+	router.HandleFunc("GET /api/v1/country/blog", middlewares.Logger(countryHandler.ListCountriesForBlog))
 
 	// Drinks
 	router.HandleFunc("GET /api/v1/drinks/blog", middlewares.Logger(middlewares.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog)))

@@ -13,6 +13,7 @@ import (
 	"github.com/rootspyro/50BEERS/db/migrations"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/db/seeders"
+	"github.com/rootspyro/50BEERS/handlers/country"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/routes"
@@ -75,11 +76,13 @@ func main() {
 
 	// handlers
 	healthHandler := health.NewHealthHandler()
+	countryHandler := country.NewCountryHandler()
 	drinkHandler := drinks.NewDrinkHandler(drinkSrv)
 
 	// routes
 	routes := routes.New(
 		healthHandler,
+		countryHandler,
 		drinkHandler,
 	)
 
