@@ -20,6 +20,34 @@ func NewCountriesRepo(collection *mongo.Collection) *CountriesRepo {
 	}
 }
 
+func(r *CountriesRepo) GetAllCountries() ([]models.Country, error) {
+
+	// make query
+	cursor, err := r.Collection.Find(context.TODO(), bson.D{{}})
+	
+	if err != nil {
+		return nil, err
+	}
+
+	defer cursor.Close(context.TODO())
+
+	//iterate result
+
+	var countries []models.Country
+
+	for cursor.Next(context.TODO()) {
+		var country models.Country
+
+		if err := cursor.Decode(&country); err != nil {
+			return nil, err
+		}
+
+		countries = append(countries, country)
+	}
+
+	return countries, nil
+}
+
 func(r *CountriesRepo) FindByName(name string) (models.Country, error) {
 	
 	filter := bson.D{{"name", name}}

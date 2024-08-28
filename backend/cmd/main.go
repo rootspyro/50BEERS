@@ -72,11 +72,12 @@ func main() {
 	}
 
 	// services
+	countrySrv := services.NewCountrySrv(countriesRepo)
 	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 
 	// handlers
 	healthHandler := health.NewHealthHandler()
-	countryHandler := country.NewCountryHandler()
+	countryHandler := country.NewCountryHandler(countrySrv)
 	drinkHandler := drinks.NewDrinkHandler(drinkSrv)
 
 	// routes
@@ -97,7 +98,7 @@ func main() {
    | |
    | |     
   /   \    50 BEERS API
- |     |   Listening on %s...
+ |     |   Listening on %s
  |     |   
  |     |
  |_____|   By %s %s %s

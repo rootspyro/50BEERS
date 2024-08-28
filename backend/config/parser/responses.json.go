@@ -30,8 +30,9 @@ type Error struct {
 }
 
 type CommonError struct {
-	Code    string
-	Message string
+	Code       string
+	Message    string
+	Suggestion string
 }
 
 type statusList struct {
@@ -62,6 +63,7 @@ var Errors errorList = errorList{
 	INTERNAL_SERVER_ERROR: CommonError{
 		Code:    "INTERNAL_SERVER_ERROR",
 		Message: "error from the data layer",
+		Suggestion: "check server status at GET:/api/v1/health",
 	},
 }
 

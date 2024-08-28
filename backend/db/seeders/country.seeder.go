@@ -42,7 +42,7 @@ func(s *CountrySeeder) Seed() error {
 			Name: "spain",
 		},
 		{
-			Name: "united_states",
+			Name: "united states",
 		},
 		{
 			Name: "venezuela",

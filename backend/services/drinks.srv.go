@@ -3,7 +3,6 @@ package services
 import (
 	"fmt"
 	"math"
-	"strings"
 
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db/models"
@@ -156,7 +155,7 @@ func parseDrink(data models.Drink) Drink {
 
 func parseResumeDrink(data models.Drink) DrinkResume {
 	newDrink := DrinkResume{
-		ID:           parseDrinkId(data.Name),
+		ID:           ParsePublicId(data.Name),
 		Name:         data.Name,
 		Type:         data.Type,
 		ABV:          data.ABV,
@@ -169,10 +168,6 @@ func parseResumeDrink(data models.Drink) DrinkResume {
 	}
 
 	return newDrink
-}
-
-func parseDrinkId(name string) string {
-	return strings.ReplaceAll(name, " ", "_")
 }
 
 type Drink struct {
