@@ -27,22 +27,22 @@ func New(
 	// API V1
 
 	// Health
-	router.HandleFunc("GET /api/v1/health", middlewares.Logger(healthHandler.ServerStatus))
+	router.HandleFunc("GET /api/v1/health", healthHandler.ServerStatus)
 
 	// Tag
-	router.HandleFunc("GET /api/v1/tag/blog", middlewares.Logger(tagHandler.ListCategoriesForBlog))
+	router.HandleFunc("GET /api/v1/tag/blog", tagHandler.ListCategoriesForBlog)
 
 	//  Country
-	router.HandleFunc("GET /api/v1/country/blog", middlewares.Logger(countryHandler.ListCountriesForBlog))
+	router.HandleFunc("GET /api/v1/country/blog", countryHandler.ListCountriesForBlog)
 
 	// Location
-	router.HandleFunc("GET /api/v1/location/blog", middlewares.Logger(locationHandler.ListLocationsForBlog))
+	router.HandleFunc("GET /api/v1/location/blog", locationHandler.ListLocationsForBlog)
 
 	// Drinks
-	router.HandleFunc("GET /api/v1/drinks/blog", middlewares.Logger(middlewares.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog)))
+	router.HandleFunc("GET /api/v1/drinks/blog", middlewares.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog))
 
 	// 404 - PATH NOT FOUND
-	router.HandleFunc("/", middlewares.Logger(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/",func(w http.ResponseWriter, r *http.Request) {
 
 		parser.JSON(w, parser.ErrorResponse{
 			Status: parser.Status.Error,
@@ -56,8 +56,9 @@ func New(
 			},
 		})
 
-	}) )
+	}) 
 
-	return &router
+
+	return &router 
 }
 

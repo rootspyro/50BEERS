@@ -8,6 +8,13 @@ interface country {
   updatedAt: string;
 }
 
+interface tag {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface location {
   id: string;
   name: string;
@@ -17,7 +24,7 @@ interface location {
   updatedAt: string;
 }
 
-function PostSection({countries, locations} : {countries: country[], locations: location[]}) {
+function PostSection({countries, locations, tags} : {countries: country[], locations: location[], tags: tag[]}) {
 
   // search Data
   const [direction, SetDirection] = useState("down")
@@ -32,7 +39,25 @@ function PostSection({countries, locations} : {countries: country[], locations: 
 
   }
 
+  function fetchDrinks() {
+    const endpoint = import.meta.env.PUBLIC_API_HOST + "/drinks/blog"
+
+      try {
+
+        fetch(endpoint)
+          .then(result => result.json())
+          .then(drinks => {
+            console.log(drinks) 
+          })
+
+      }catch(err) {
+        console.log(err)
+      }
+  }
+
   useEffect(() => {
+
+    fetchDrinks()
 
   }, [direction])
 
@@ -52,6 +77,10 @@ function PostSection({countries, locations} : {countries: country[], locations: 
             </button>
             <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">Sort by</option>
+              <option value="abv">ABV</option>
+              <option value="date">Date</option>
+              <option value="name">Name</option>
+              <option value="stars">Stars</option>
             </select>
             <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">Country</option>
@@ -81,10 +110,11 @@ function PostSection({countries, locations} : {countries: country[], locations: 
           <h3 className="font-title text-xl">Categories</h3>
           <ul className="mt-5">
             <li className="cursor-pointer hover:line-through">{`>`} All</li>
-            <li className="cursor-pointer hover:line-through">{`>`} Beer</li>
-            <li className="cursor-pointer hover:line-through">{`>`} Whisky</li>
-            <li className="cursor-pointer hover:line-through">{`>`} Rum</li>
-            <li className="cursor-pointer hover:line-through">{`>`} Wine</li>
+            {
+              tags.map((tag: tag) =>{
+                return <li key={tag.id} className={`cursor-pointer hover:line-through`}>{`>`} {tag.name}</li>
+              })
+            }
           </ul>
         </div>
 

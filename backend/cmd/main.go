@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/rs/cors"
+
 	"github.com/rootspyro/50BEERS/config"
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db"
@@ -18,6 +20,7 @@ import (
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/handlers/location"
 	"github.com/rootspyro/50BEERS/handlers/tag"
+	"github.com/rootspyro/50BEERS/middlewares"
 	"github.com/rootspyro/50BEERS/routes"
 	"github.com/rootspyro/50BEERS/services"
 )
@@ -96,8 +99,16 @@ func main() {
 	)
 
 	// Configurate server
+
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowCredentials: true,
+		Debug: false,
+	})
+
+
 	app := http.Server{
-		Handler: routes,
+		Handler: c.Handler(middlewares.Logger(routes)),
 		Addr:    config.App.Server.Socket,
 	}
 

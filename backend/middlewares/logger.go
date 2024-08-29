@@ -9,7 +9,7 @@ import (
 	"github.com/rootspyro/50BEERS/config"
 )
 
-func Logger(next http.HandlerFunc) http.HandlerFunc {
+func Logger(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		start := time.Now()
@@ -19,7 +19,7 @@ func Logger(next http.HandlerFunc) http.HandlerFunc {
 			StatusCode: http.StatusOK,
 		}
 
-		next(recorder,r)
+		next.ServeHTTP(recorder,r)
 
 		duration := time.Since(start)
 

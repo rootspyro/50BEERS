@@ -21,6 +21,13 @@ interface location {
   updatedAt: string;
 }
 
+interface tag {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 let countries: country[] = []
 
 try {
@@ -57,6 +64,23 @@ try {
   console.log(err)
 }
 
+let tags: tag[] = []
+try {
+
+  const endpoint = API_HOST + "/tag/blog"
+  const tagsResult = await fetch(endpoint)
+  const tagsData = await tagsResult.json()
+
+  if (tagsData.status == "success") {
+    tags = tagsData.data.items 
+  } if (tagsData.status == "error") {
+    console.log(tagsData.error)  
+  } 
+
+} catch(err) {
+  console.log(err)
+}
+
 ---
 
 <Layout title="50 BEERS: Exploring beverages around the world">
@@ -70,6 +94,7 @@ try {
     <PostSection 
       countries={countries}
       locations={locations}
+      tags={tags}
       client:load 
      /> 
   </section>
