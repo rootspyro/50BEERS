@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         "dark": "#242424",
-        "base": "#FFFDF6",
+        "main": "#FFFDF6",
         "light": "#FAFAFA"
       },
       fontFamily: {

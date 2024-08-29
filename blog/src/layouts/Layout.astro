@@ -2,6 +2,8 @@
 import "@fontsource/anton"
 import "@fontsource-variable/roboto-condensed"
 
+import Navbar from "./Navbar.astro"
+
 interface Props {
 	title: string;
 }
@@ -24,6 +26,7 @@ const { title } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body>
+    <Navbar />
 		<slot />
 	</body>
   <style>
