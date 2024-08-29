@@ -1,54 +1,47 @@
-# Astro Starter Kit: Basics
+# 50 BEERS: Blog
 
-```sh
-npm create astro@latest -- --template basics
+For this project I decided to build my blog using Astro combined with React for the dynamic sections of the page.
+
+## Tech Sack
+
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Astro](https://img.shields.io/badge/astro-%232C2052.svg?style=for-the-badge&logo=astro&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+## Project Setup
+
+### Requirements
+
+To run this project is required to install:
+
+- Node v22.3.0
+
+### Steps
+
+1 - Enter into the [blog directory](./blog) and install the required node packages.
+```shell
+$ cd blog
+$ npm install
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+2 - Build and Start the project
+```shell
+$ npm run build
+...
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+$ npm run start
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+# > blog@0.0.1 start
+# > astro dev
 
-## 🚀 Project Structure
+# 01:05:45 [types] Generated 1ms
+# 01:05:45 [vite] Port 4321 is in use, trying another one...
 
-Inside of your Astro project, you'll see the following folders and files:
+# astro  v4.14.6 ready in 277 ms
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+# ┃ Local    http://localhost:4322/
+# ┃ Network  use --host to expose
+
+# 01:05:45 watching for file changes...
+
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
