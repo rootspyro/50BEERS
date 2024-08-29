@@ -1,4 +1,7 @@
 ---
+import "@fontsource/anton"
+import "@fontsource-variable/roboto-condensed"
+
 interface Props {
 	title: string;
 }
@@ -23,4 +26,10 @@ const { title } = Astro.props;
 	<body>
 		<slot />
 	</body>
+  <style>
+  body {
+    color: #242424;
+    background-color: #FFFDF6;
+  }
+  </style>
 </html>
