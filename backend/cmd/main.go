@@ -99,9 +99,8 @@ func main() {
 	)
 
 	// Configurate server
-
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
+		AllowedOrigins: config.App.Server.Origins,
 		AllowCredentials: true,
 		Debug: false,
 	})

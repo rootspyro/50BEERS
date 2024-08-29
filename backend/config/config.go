@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -14,9 +15,10 @@ type app struct {
 		Name string
 	}
 	Server struct {
-		Port   string
-		Host   string
-		Socket string
+		Port    string
+		Host    string
+		Socket  string
+		Origins []string
 	}
 	Database struct {
 		Name     string
@@ -48,9 +50,10 @@ func init() {
 		App.Server.Port = os.Getenv("PORT")
 	}
 
+	App.Server.Origins = parseAllowedOrigins(os.Getenv("ORIGINS"))
+
 	// SOCKET = localhost:3000
 	App.Server.Socket = App.Server.Host + ":" + App.Server.Port
-
 
 	// MONGODB
 	App.Database.Host = os.Getenv("DB_HOST")
@@ -66,5 +69,16 @@ func init() {
 		App.Database.Port,
 		App.Database.Name,
 	)
+}
 
+func parseAllowedOrigins(data string) []string {
+	var origins []string
+
+	parts := strings.Split(data, ",")
+
+	for _, origin := range parts {
+		origins = append(origins, origin)
+	}
+
+	return origins
 }
