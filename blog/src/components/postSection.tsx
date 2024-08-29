@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react"
 import StarsView from "./starsView"
+import DrinkCard from "./drinkCard";
 
 interface country {
   id: string;
@@ -24,10 +25,31 @@ interface location {
   updatedAt: string;
 }
 
+interface drink {
+  id: string;
+  name: string;
+  type: string;
+  abv: number;
+  date: string;
+  challengeNumber: number;
+  stars: number;
+  pictureUrl: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface drinksSearch {
+  itemsFound: number;
+  items: drink[];
+  pagination: {pages: number; page: number, pageSize: number}
+}
+
 function PostSection({countries, locations, tags} : {countries: country[], locations: location[], tags: tag[]}) {
 
   // search Data
   const [direction, SetDirection] = useState("down")
+
+  const [drinks, SetDrinks] = useState<drinksSearch>({itemsFound: 0, items: [], pagination: { pages: 1, page: 1, pageSize: 10 }})
 
   function handleDirection() {
 
@@ -47,7 +69,10 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
         fetch(endpoint)
           .then(result => result.json())
           .then(drinks => {
-            console.log(drinks) 
+              if (drinks.status == "success") {
+                let drinksData: drinksSearch = drinks.data
+                SetDrinks(drinksData)
+              }
           })
 
       }catch(err) {
@@ -102,7 +127,22 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
             </select>
           </div>
         </div>
+
+        <div className="mt-5">
+          <p className="text-sm"><span className="font-bold">{drinks.itemsFound}</span> items found...</p>
+          <div id="posts" className="w-full flex flex-col gap-4 items-start justify-start mt-5">
+          {
+            drinks.items.map((drink: drink) => {
+
+                return (
+                  <DrinkCard drink={drink} />
+                )
+            })
+          }
+          </div>
+        </div>
       </div> 
+
 
       <div id="side-section" className="lg:flex hidden flex-col gap-4 items-center max-w-72">
 

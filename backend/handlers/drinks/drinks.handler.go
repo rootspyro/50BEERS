@@ -86,7 +86,7 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 				Country: filters.Country,
 				Location: filters.Location,
 				SortBy: filters.SortBy,
-				Direction: filters.SortBy,
+				Direction: filters.Direction,
 			},
 		},
 	})	
