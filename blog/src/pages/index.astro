@@ -1,6 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PostSection from "../components/postSection.tsx"
+
+// fetch countries
+const API_HOST = import.meta.env.PUBLIC_API_HOST
+
+let countries = []
+try {
+
+  const endpoint = API_HOST + "/country/blog"
+  const countriesResult = await fetch(endpoint)
+  const countriesData = await countriesResult.json()
+
+  if (countriesData.status == "success") {
+    countries = countriesData.data 
+  }
+
+} catch(err) {
+  console.log(err)
+}
 ---
 
 <Layout title="50 BEERS: Exploring beverages around the world">
@@ -11,6 +29,6 @@ import PostSection from "../components/postSection.tsx"
     <p class="font-content text-lg md:text-2xl">JUST <span class="line-through">DRINKING</span> WRITING TO LOOK BUSY</p>
   </section>
   <section class="p-7">
-    <PostSection client:load /> 
+    <PostSection apiHost={import.meta.env.PUBLIC_API_HOST} client:load /> 
   </section>
 </Layout>

@@ -45,7 +45,7 @@ func parseCountry(data models.Country) Country {
 
 type Country struct {
 	ID        string `json:"id"`
-	Name      string `bson:"name"`
-	CreatedAt string `bson:"created_at"`
-	UpdatedAt string `bson:"updated_at"`
+	Name      string `json:"name"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }

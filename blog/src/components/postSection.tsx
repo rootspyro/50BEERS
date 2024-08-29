@@ -1,8 +1,32 @@
 import {useEffect, useState} from "react"
 import StarsView from "./starsView"
-export default function PostSection() {
 
+interface props {
+  apiHost: string
+}
+
+function PostSection(props: props) {
+
+
+  // search Data
   const [direction, SetDirection] = useState("down")
+
+  // async function fetchCountries() {
+  //
+  //   try {
+  //     const endpoint = props.apiHost + "/country/blog"
+  //
+  //     const result = await fetch(endpoint)
+  //     const data = await result.json()
+  //
+  //     if (data.status == "success") {
+  //      
+  //     }
+  //
+  //   } catch(err) {
+  //     console.log(err)
+  //   }
+  // }
 
   function handleDirection() {
 
@@ -96,3 +120,5 @@ export default function PostSection() {
   </>
   )
 }
+
+export default PostSection;
