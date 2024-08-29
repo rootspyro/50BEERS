@@ -179,7 +179,7 @@ type Drink struct {
 	ABV          float64  `json:"abv"`
 	CountryID    string   `json:"countryId"`
 	Date         string   `json:"date"`
-	ChallengeNum float64  `json:"challengNumber"`
+	ChallengeNum float64  `json:"challengeNumber"`
 	Stars        float64  `json:"stars"`
 	PictureURL   string   `json:"pictureUrl"`
 	LocationId   string   `json:"locationId"`
@@ -195,7 +195,7 @@ type DrinkResume struct {
 	Type         string  `json:"type"`
 	ABV          float64 `json:"abv"`
 	Date         string  `json:"date"`
-	ChallengeNum float64 `json:"challengNumber"`
+	ChallengeNum float64 `json:"challengeNumber"`
 	Stars        float64 `json:"stars"`
 	PictureURL   string  `json:"pictureUrl"`
 	CreatedAt    string  `json:"createdAt"`

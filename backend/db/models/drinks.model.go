@@ -9,7 +9,7 @@ type Drink struct {
 	ABV          float64            `bson:"abv"`
 	CountryID    string             `bson:"country_id"`
 	Date         string             `bson:"date"`
-	ChallengeNum float64            `bson:"challeng_number"`
+	ChallengeNum float64            `bson:"challenge_number"`
 	Stars        float64            `bson:"stars"`
 	PictureURL   string             `bson:"picture_url"`
 	LocationId   string             `bson:"location_id"`
