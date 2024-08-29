@@ -5,7 +5,24 @@ import PostSection from "../components/postSection.tsx"
 // fetch countries
 const API_HOST = import.meta.env.PUBLIC_API_HOST
 
-let countries = []
+interface country {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface location {
+  id: string;
+  name: string;
+  url: string;
+  comments: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+let countries: country[] = []
+
 try {
 
   const endpoint = API_HOST + "/country/blog"
@@ -13,12 +30,33 @@ try {
   const countriesData = await countriesResult.json()
 
   if (countriesData.status == "success") {
-    countries = countriesData.data 
-  }
+    countries = countriesData.data.items 
+  } if (countriesData.status == "error") {
+    console.log(countriesData.error)  
+  } 
 
 } catch(err) {
   console.log(err)
 }
+
+let locations: location[] = []
+
+try {
+
+  const endpoint = API_HOST + "/location/blog"
+  const locationsResult = await fetch(endpoint)
+  const locationsData = await locationsResult.json()
+
+  if (locationsData.status == "success") {
+    locations = locationsData.data.items 
+  } if (locationsData.status == "error") {
+    console.log(locationsData.error)  
+  } 
+
+} catch(err) {
+  console.log(err)
+}
+
 ---
 
 <Layout title="50 BEERS: Exploring beverages around the world">
@@ -29,6 +67,10 @@ try {
     <p class="font-content text-lg md:text-2xl">JUST <span class="line-through">DRINKING</span> WRITING TO LOOK BUSY</p>
   </section>
   <section class="p-7">
-    <PostSection apiHost={import.meta.env.PUBLIC_API_HOST} client:load /> 
+    <PostSection 
+      countries={countries}
+      locations={locations}
+      client:load 
+     /> 
   </section>
 </Layout>

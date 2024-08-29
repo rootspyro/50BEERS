@@ -1,32 +1,26 @@
 import {useEffect, useState} from "react"
 import StarsView from "./starsView"
 
-interface props {
-  apiHost: string
+interface country {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-function PostSection(props: props) {
+interface location {
+  id: string;
+  name: string;
+  url: string;
+  comments: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
+function PostSection({countries, locations} : {countries: country[], locations: location[]}) {
 
   // search Data
   const [direction, SetDirection] = useState("down")
-
-  // async function fetchCountries() {
-  //
-  //   try {
-  //     const endpoint = props.apiHost + "/country/blog"
-  //
-  //     const result = await fetch(endpoint)
-  //     const data = await result.json()
-  //
-  //     if (data.status == "success") {
-  //      
-  //     }
-  //
-  //   } catch(err) {
-  //     console.log(err)
-  //   }
-  // }
 
   function handleDirection() {
 
@@ -56,20 +50,32 @@ function PostSection(props: props) {
             <button onClick={handleDirection} className="rounded-sm text-white bg-dark p-3">
               <i className={`fi fi-rs-angle-${direction} flex items-center`}></i>
             </button>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32">
+            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">Sort by</option>
             </select>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32">
+            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">Country</option>
+              {
+              countries.map((country: country) => {
+
+                  return <option key={country.id} value={country.id}>{country.name}</option>
+              })
+              }
             </select>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32">
+            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32 max-w-36">
               <option value="">Location</option>
+              {
+              locations.map((location: location) => {
+
+                  return <option key={location.id} value={location.id}>{location.name}</option>
+              })
+              }
             </select>
           </div>
         </div>
       </div> 
 
-      <div id="side-section" className="md:flex hidden flex-col gap-4 items-center max-w-72">
+      <div id="side-section" className="lg:flex hidden flex-col gap-4 items-center max-w-72">
 
         <div className="p-5 bg-light border border-dashed border-dark rounded-sm w-full">
           <h3 className="font-title text-xl">Categories</h3>
