@@ -29,7 +29,7 @@ export default function DrinkCard({drink}: {drink:drink}) {
   return(
     <div className="w-full bg-light border border-dark text-dark font-content">
       <div className={`p-3 border-b border-dark flex justify-between items-center gap-2 sm:text-lg text-sm ${drink.challengeNumber > 0 ? "bg-dark text-light" : ""}`}>
-        <h3 className="font-title w-auto sm:text-nowrap text-center w-full sm:w-auto sm:text-left">{drink.name} : {drink.type}</h3> 
+        <h3 className="font-title sm:text-nowrap text-center w-full sm:w-auto sm:text-left">{drink.name} : {drink.type}</h3> 
         <hr className={drink.challengeNumber > 0 ? " w-full border border-light border-dashed hidden sm:flex" : "hidden"}></hr>
         <p className={drink.challengeNumber > 0 ? "text-nowrap font-title hidden sm:flex" : "hidden"}>{drink.challengeNumber} / 50</p>
       </div>
