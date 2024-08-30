@@ -93,6 +93,54 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
     <div className="w-full flex justify-between font-content gap-5">
 
       <div id="content" className="w-full">
+
+        <div id="mobile-filters" className="md:hidden flex flex-col gap-2">
+          <div className="flex gap-2 items-center w-full">
+            <input placeholder="search by name..." className="bg-light w-full border border-dark border-dashed p-2 text-xs rounded-sm outline-none" />
+            <button className="p-3 rounded-sm flex items-center text-xs md:text-sm justify-center text-white bg-dark"><i className="fi fi-rs-search flex items-center"></i></button>
+          </div>
+          <div className="flex gap-2 items-center w-full">
+            <select className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
+              <option value="">Categories</option>
+              {
+              tags.map((tag: tag) => {
+               return <option key={tag.id} value={tag.id}>{tag.name}</option>
+              })
+              }
+            </select>
+            <select className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
+              <option value="">Sort by</option>
+              <option value="abv">ABV</option>
+              <option value="date">Date</option>
+              <option value="name">Name</option>
+              <option value="stars">Stars</option>
+            </select>
+          </div>
+          <div className="flex gap-2 items-center w-full">
+            <select className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
+              <option value="">Country</option>
+              {
+              countries.map((country: country) => {
+
+                  return <option key={country.id} value={country.id}>{country.name}</option>
+              })
+              }
+            </select>
+            <select className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
+              <option value="">Location</option>
+              {
+              locations.map((location: location) => {
+
+                  return <option key={location.id} value={location.id}>{location.name}</option>
+              })
+              }
+            </select>
+            <button onClick={handleDirection} className="rounded-sm text-xs text-white bg-dark p-3">
+              <i className={`fi fi-rs-angle-${direction} flex items-center`}></i>
+            </button>
+          </div>
+        </div>
+
         <div id="desktop-filters" className="md:flex hidden w-full justify-between">
           <div className="flex gap-2 items-center">
             <input placeholder="search by name..." className="bg-light border border-dark border-dashed p-2 text-xs md:text-sm rounded-sm outline-none" />
@@ -137,7 +185,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
         }
         </ul>
 
-        <div className="mt-5">
+        <div className="mt-10 sm:mt-5">
           <p className="text-sm"><span className="font-bold">{drinks.itemsFound}</span> items found...</p>
           <div id="posts" className="w-full flex flex-col gap-4 items-start justify-start mt-5">
           {
