@@ -41,6 +41,11 @@ func ValidateDrinksBlogFilters(next http.HandlerFunc) http.HandlerFunc {
 		page := queries.Get("page")
 		limit := queries.Get("limit")
 
+		// replace "_" with space
+		name = strings.ReplaceAll(name, "_", " ")
+		country = strings.ReplaceAll(country, "_", " ")
+		location = strings.ReplaceAll(location, "_", " ")
+
 		// default values
 		var defDirection = "desc"
 		var defSort = "created_at"

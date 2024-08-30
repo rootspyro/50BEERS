@@ -32,59 +32,51 @@ func NewDrinkSrv(
 	}
 }
 
-func(s *DrinkSrv) CalculatePages(limit int) (int, error) {
-
+func (s *DrinkSrv) CalculatePages(limit int) (int, error) {
 	count, err := s.repo.CountAllDrinks()
 	if err != nil {
 		return 0, err
 	}
 
-	var pagesCalc float64 = float64(count) / float64(limit) 
+	var pagesCalc float64 = float64(count) / float64(limit)
 
 	pages := math.Ceil(pagesCalc)
 
 	return int(pages), nil
-} 
+}
 
 func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, error) {
 	nameRegex := fmt.Sprintf(".*%s.*", filters.Name)
 
-	// Get Country Id
-	var countryId string
-
-	country, err := s.countryRepo.FindByName(filters.Country)
+	// validate country exists
+	_, err := s.countryRepo.FindByName(filters.Country)
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			countryId = ""
+			filters.Country = ""
 		} else {
 			return nil, err
 		}
-	} else {
-		countryId = country.ID.Hex()
-	}
+	} 
 
-	// Get location Id
-	var locationId string
+	// validate if location exists
 
-	location, err := s.locationRepo.FindByName(filters.Location)
+	_, err = s.locationRepo.FindByName(filters.Location)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			locationId = ""
+			filters.Location = ""
 		} else {
 			return nil, err
 		}
-	} else {
-		locationId = location.ID.Hex()
-	}
+	} 	
 
-	// build search filter 
+	// build search filter
 	searchFilter := bson.D{
 		{
 			"$and",
 			bson.A{
 				bson.D{{"tags", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Category)}}}},
-				bson.D{{"country_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", countryId)}}}},
+				bson.D{{"country", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Country)}}}},
 				bson.D{{
 					"$or",
 					bson.A{
@@ -92,7 +84,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 						bson.D{{"type", bson.D{{"$regex", nameRegex}}}},
 					},
 				}},
-				bson.D{{"location_id", bson.D{{"$regex", fmt.Sprintf(".*%s.*", locationId)}}}},
+				bson.D{{"location", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Location)}}}},
 				bson.D{{"status", "public"}},
 			},
 		},
@@ -102,22 +94,17 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 	var direction int = -1
 
 	if filters.Direction == "asc" {
-
 		direction = 1
-
 	} else if filters.Direction == "desc" {
-
 		direction = -1
-
-	} else if filters.Direction != ""{
-
+	} else if filters.Direction != "" {
 		log.Warning(fmt.Sprintf("invalid sort direction: %s", filters.Direction))
 	}
 
 	skip := (filters.Page - 1) * filters.Limit
 
 	sortFilter := options.Find().SetSort(bson.D{
-		{Key: filters.SortBy, Value: direction}, 
+		{Key: filters.SortBy, Value: direction},
 	}).SetSkip(int64(skip)).SetLimit(int64(filters.Limit))
 
 	response, err := s.repo.GetAllDrinks(searchFilter, sortFilter)
@@ -137,12 +124,12 @@ func parseDrink(data models.Drink) Drink {
 		Name:         data.Name,
 		Type:         data.Type,
 		ABV:          data.ABV,
-		CountryID:    data.CountryID,
+		Country:      data.Country,
 		Date:         data.Date,
 		ChallengeNum: data.ChallengeNum,
 		Stars:        data.Stars,
 		PictureURL:   data.PictureURL,
-		LocationId:   data.LocationId,
+		Location:     data.Location,
 		CreatedAt:    data.CreatedAt,
 		UpdatedAt:    data.UpdatedAt,
 		Status:       data.Status,
@@ -161,8 +148,10 @@ func parseResumeDrink(data models.Drink) DrinkResume {
 		Name:         cases.Title(language.Und).String(data.Name),
 		Type:         cases.Title(language.Und).String(data.Type),
 		ABV:          data.ABV,
+		Country:      data.Country,
 		Date:         data.Date,
 		ChallengeNum: data.ChallengeNum,
+		Location:     data.Location,
 		Stars:        data.Stars,
 		PictureURL:   data.PictureURL,
 		CreatedAt:    data.CreatedAt,
@@ -177,12 +166,12 @@ type Drink struct {
 	Name         string   `json:"name"`
 	Type         string   `json:"type"`
 	ABV          float64  `json:"abv"`
-	CountryID    string   `json:"countryId"`
+	Country      string   `json:"country"`
 	Date         string   `json:"date"`
 	ChallengeNum float64  `json:"challengeNumber"`
 	Stars        float64  `json:"stars"`
 	PictureURL   string   `json:"pictureUrl"`
-	LocationId   string   `json:"locationId"`
+	Location     string   `json:"location"`
 	Tags         []string `json:"tags"`
 	CreatedAt    string   `json:"createdAt"`
 	UpdatedAt    string   `json:"updatedAt"`
@@ -194,10 +183,12 @@ type DrinkResume struct {
 	Name         string  `json:"name"`
 	Type         string  `json:"type"`
 	ABV          float64 `json:"abv"`
+	Country      string  `json:"country"`
 	Date         string  `json:"date"`
 	ChallengeNum float64 `json:"challengeNumber"`
 	Stars        float64 `json:"stars"`
 	PictureURL   string  `json:"pictureUrl"`
+	Location     string  `json:"location"`
 	CreatedAt    string  `json:"createdAt"`
 	UpdatedAt    string  `json:"updatedAt"`
 }

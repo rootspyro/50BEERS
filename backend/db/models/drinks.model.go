@@ -7,12 +7,12 @@ type Drink struct {
 	Name         string             `bson:"name"`
 	Type         string             `bson:"type"`
 	ABV          float64            `bson:"abv"`
-	CountryID    string             `bson:"country_id"`
+	Country      string             `bson:"country"`
 	Date         string             `bson:"date"`
 	ChallengeNum float64            `bson:"challenge_number"`
 	Stars        float64            `bson:"stars"`
 	PictureURL   string             `bson:"picture_url"`
-	LocationId   string             `bson:"location_id"`
+	Location     string             `bson:"location"`
 	Tags         []string           `bson:"tags"`
 	CreatedAt    string             `bson:"created_at"`
 	UpdatedAt    string             `bson:"updated_at"`
