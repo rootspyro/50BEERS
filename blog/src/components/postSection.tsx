@@ -30,8 +30,10 @@ interface drink {
   name: string;
   type: string;
   abv: number;
+  country: string;
   date: string;
   challengeNumber: number;
+  location: string;
   stars: number;
   pictureUrl: string;
   createdAt: string;
@@ -93,21 +95,21 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
       <div id="content" className="w-full">
         <div id="desktop-filters" className="md:flex hidden w-full justify-between">
           <div className="flex gap-2 items-center">
-            <input placeholder="search by name..." className="bg-light border border-dark border-dashed p-2 text-sm rounded-sm outline-none" />
-            <button className="p-3 rounded-sm flex items-center justify-center text-white bg-dark"><i className="fi fi-rs-search flex items-center"></i></button>
+            <input placeholder="search by name..." className="bg-light border border-dark border-dashed p-2 text-xs md:text-sm rounded-sm outline-none" />
+            <button className="p-3 rounded-sm flex items-center text-xs md:text-sm justify-center text-white bg-dark"><i className="fi fi-rs-search flex items-center"></i></button>
           </div>
           <div className="flex gap-2 items-center justify-end">
-            <button onClick={handleDirection} className="rounded-sm text-white bg-dark p-3">
+            <button onClick={handleDirection} className="rounded-sm text-xs md:text-sm text-white bg-dark p-3">
               <i className={`fi fi-rs-angle-${direction} flex items-center`}></i>
             </button>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32  max-w-36">
+            <select className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">Sort by</option>
               <option value="abv">ABV</option>
               <option value="date">Date</option>
               <option value="name">Name</option>
               <option value="stars">Stars</option>
             </select>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32  max-w-36">
+            <select className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">Country</option>
               {
               countries.map((country: country) => {
@@ -116,7 +118,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
               })
               }
             </select>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-sm rounded-sm outline-none min-w-32 max-w-36">
+            <select className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32 max-w-36">
               <option value="">Location</option>
               {
               locations.map((location: location) => {
@@ -127,6 +129,13 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
             </select>
           </div>
         </div>
+        <ul className="w-full bg-light p-2 hidden md:flex lg:hidden justify-center gap-4 text-sm rounded-sm border border-dashed border-dark mt-4">
+        {
+          tags.map((tag: tag) => {
+            return <li key={tag.id} className={`cursor-pointer hover:line-through`}>{tag.name}</li>
+          })
+        }
+        </ul>
 
         <div className="mt-5">
           <p className="text-sm"><span className="font-bold">{drinks.itemsFound}</span> items found...</p>
