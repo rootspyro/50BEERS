@@ -5,8 +5,10 @@ interface drink {
   name: string;
   type: string;
   abv: number;
+  country: string;
   date: string;
   challengeNumber: number;
+  location: string;
   stars: number;
   pictureUrl: string;
   createdAt: string;
