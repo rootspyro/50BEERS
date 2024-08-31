@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react"
 import StarsView from "./starsView"
 import DrinkCard from "./drinkCard";
+import PaginationMenu from "./paginationMenu";
 
 interface country {
   id: string;
@@ -50,6 +51,13 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
 
   // search Data
   const [direction, SetDirection] = useState("down")
+  const [sortBy, SetSortBy] = useState("created_at")
+  const [country, SetCountry] = useState("")
+  const [location, SetLocation] = useState("")
+  const [category, SetCategory] = useState("")
+  const [page, SetPage] = useState(1)
+  const [limit, SetLimit] = useState(10)
+  const [pagination, SetPagination] = useState<number[]>([])
 
   const [drinks, SetDrinks] = useState<drinksSearch>({itemsFound: 0, items: [], pagination: { pages: 1, page: 1, pageSize: 10 }})
 
@@ -63,8 +71,27 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
 
   }
 
+  function handleSort(e: any) {
+    SetSortBy(e.target.value)
+  }
+
+  function handleCountry(e: any) {
+    SetCountry(e.target.value)
+  }
+
+  function handleLocation(e: any) {
+    SetLocation(e.target.value)
+  }
+
+  function handleCategoryMobile(e: any) {
+    SetCategory(e.target.value)
+  }
+
   function fetchDrinks() {
-    const endpoint = import.meta.env.PUBLIC_API_HOST + "/drinks/blog"
+
+    const directionFilter = direction == "up" ? "asc" : "desc"
+
+    const endpoint = import.meta.env.PUBLIC_API_HOST + `/drinks/blog?page=${page}&limit=${limit}&direction=${directionFilter}&sortBy=${sortBy}&country=${country}&location=${location}&category=${category}`
 
       try {
 
@@ -73,6 +100,14 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
           .then(drinks => {
               if (drinks.status == "success") {
                 let drinksData: drinksSearch = drinks.data
+                
+                let pagination = []
+
+                for (let i = 1; i <= drinksData.pagination.pages; i++) {
+                  pagination.push(i)
+                }
+
+                SetPagination(pagination)
                 SetDrinks(drinksData)
               }
           })
@@ -86,7 +121,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
 
     fetchDrinks()
 
-  }, [direction])
+  }, [direction, sortBy, country, location, category, page])
 
   return(
   <>
@@ -100,7 +135,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
             <button className="p-3 rounded-sm flex items-center text-xs md:text-sm justify-center text-white bg-dark"><i className="fi fi-rs-search flex items-center"></i></button>
           </div>
           <div className="flex gap-2 items-center w-full">
-            <select className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
+            <select onChange={handleCategoryMobile} className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
               <option value="">Categories</option>
               {
               tags.map((tag: tag) => {
@@ -108,8 +143,8 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
               })
               }
             </select>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
-              <option value="">Sort by</option>
+            <select onChange={handleSort} defaultValue={"created_at"} className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
+              <option value="created_at">Sort by</option>
               <option value="abv">ABV</option>
               <option value="date">Date</option>
               <option value="name">Name</option>
@@ -117,7 +152,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
             </select>
           </div>
           <div className="flex gap-2 items-center w-full">
-            <select className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
+            <select onChange={handleCountry} className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
               <option value="">Country</option>
               {
               countries.map((country: country) => {
@@ -126,7 +161,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
               })
               }
             </select>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
+            <select onChange={handleLocation} className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
               <option value="">Location</option>
               {
               locations.map((location: location) => {
@@ -150,14 +185,14 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
             <button onClick={handleDirection} className="rounded-sm text-xs md:text-sm text-white bg-dark p-3">
               <i className={`fi fi-rs-angle-${direction} flex items-center`}></i>
             </button>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32  max-w-36">
+            <select onChange={handleSort} className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">Sort by</option>
               <option value="abv">ABV</option>
               <option value="date">Date</option>
               <option value="name">Name</option>
               <option value="stars">Stars</option>
             </select>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32  max-w-36">
+            <select  onChange={handleCountry} className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">Country</option>
               {
               countries.map((country: country) => {
@@ -166,7 +201,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
               })
               }
             </select>
-            <select className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32 max-w-36">
+            <select onChange={handleLocation} className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32 max-w-36">
               <option value="">Location</option>
               {
               locations.map((location: location) => {
@@ -178,26 +213,29 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
           </div>
         </div>
         <ul className="w-full bg-light p-2 hidden md:flex lg:hidden justify-center gap-4 text-sm rounded-sm border border-dashed border-dark mt-4">
+          <li onClick={() => SetCategory("")} className={`cursor-pointer hover:line-through ${category == "" ? "line-through" : ""}`}>All</li>
         {
           tags.map((tag: tag) => {
-            return <li key={tag.id} className={`cursor-pointer hover:line-through`}>{tag.name}</li>
+            return <li onClick={() => SetCategory(tag.id)} key={tag.id} className={`cursor-pointer hover:line-through ${category == tag.id ? "line-through" : ""}`}>{tag.name}</li>
           })
         }
         </ul>
 
         <div className="mt-10 sm:mt-5">
-          <p className="text-sm"><span className="font-bold">{drinks.itemsFound}</span> items found...</p>
+        <PaginationMenu setPage={SetPage} found={drinks.itemsFound} page={page} pages={drinks.pagination.pages} pagination={pagination} />
           <div id="posts" className="w-full flex flex-col gap-4 items-start justify-start mt-5">
           {
             drinks.items.map((drink: drink) => {
 
                 return (
-                  <DrinkCard drink={drink} />
+                  <DrinkCard key={drink.id} drink={drink} />
                 )
             })
           }
           </div>
         </div>
+      
+      <PaginationMenu setPage={SetPage} found={drinks.itemsFound} page={page} pages={drinks.pagination.pages} pagination={pagination} />
       </div> 
 
 
@@ -206,10 +244,10 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
         <div className="p-5 bg-light border border-dashed border-dark rounded-sm w-full">
           <h3 className="font-title text-xl">Categories</h3>
           <ul className="mt-5">
-            <li className="cursor-pointer hover:line-through">{`>`} All</li>
+            <li onClick={() => SetCategory("")} className={`cursor-pointer hover:line-through ${category == "" ? "line-through" : ""}`}> All</li>
             {
               tags.map((tag: tag) =>{
-                return <li key={tag.id} className={`cursor-pointer hover:line-through`}>{`>`} {tag.name}</li>
+                  return <li onClick={() => SetCategory(tag.id)} key={tag.id} className={`cursor-pointer hover:line-through ${category == tag.id ? "line-through" : ""}`}>{tag.name}</li>
               })
             }
           </ul>

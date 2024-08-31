@@ -71,6 +71,10 @@ func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) 
 		PageSize: filters.Limit,
 	}
 
+	if data == nil {
+		data = []services.DrinkResume{}
+	}
+
 	// final response
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,

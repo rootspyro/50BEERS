@@ -12,7 +12,7 @@ import (
 	"github.com/rootspyro/50BEERS/services"
 )
 
-var allowedSortFields = []string{"name", "date", "stars", "abv"}
+var allowedSortFields = []string{"name", "date", "stars", "abv", "created_at"}
 
 func fieldIsValid(field string) bool {
 	var valid bool = false
