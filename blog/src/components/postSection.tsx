@@ -236,6 +236,43 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
         </div>
       
       <PaginationMenu setPage={SetPage} found={drinks.itemsFound} page={page} pages={drinks.pagination.pages} pagination={pagination} />
+
+      <div className="mt-10 lg:hidden flex gap-5 flex-col items-start">
+        <div className="p-5 bg-light border border-dashed border-dark rounded-sm w-full">
+          <h3 className="font-title text-xl">Popular Drinks</h3>
+          <ul className="mt-5 flex flex-col gap-4">
+            <li className="flex flex-col gap-1">
+              <p>Barlobento Althaia</p>
+              <StarsView stars={3} size="sm" /> 
+            </li>
+
+            <li className="flex flex-col gap-1">
+              <p>Barlobento Althaia</p>
+              <StarsView stars={3} size="sm" /> 
+            </li>
+
+            <li className="flex flex-col gap-1">
+              <p>Barlobento Althaia</p>
+              <StarsView stars={3} size="sm" /> 
+            </li>
+          </ul>
+        </div>
+
+        <div className="p-5 bg-light border border-dashed border-dark rounded-sm w-full">
+          <h3 className="font-title text-xl">About Me</h3>
+          <p className="text-sm mt-5">
+            Hi, <span className="font-bold">My name is Spyro!</span>
+            <br/>             
+            <br/>             
+            I am a software developer with a love for beverage tasting who on a trip to Spain was challenged to try 50 different beers and decided to document it.
+            <br/>             
+            <br/>             
+            <span className="font-bold">I’m NOT</span> a professional taster, nor am I an oenologist, or anything like that, this blog is purely a hobby. If you need a developer you can count on me.
+          </p>
+        </div>
+
+      </div>
+
       </div> 
 
 
