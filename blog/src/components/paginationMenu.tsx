@@ -32,7 +32,7 @@ export default function PaginationMenu({found, page, pages, setPage, pagination}
         </button>
       {
       pagination.map(item => {
-          return <button onClick={() => {setPage(item)}} className={item == page ? "line-through" : "hover:line-through"}>{item}</button>
+          return <button key={item} onClick={() => {setPage(item)}} className={item == page ? "line-through" : "hover:line-through"}>{item}</button>
         })
       }
         <button onClick={Next} className={`${page == pages ? "hidden" : ""} font-bold text-main bg-dark rounded-sm p-2 hover:bg-light hover:text-dark border border-dark hover:border-dashed `}>
