@@ -32,8 +32,63 @@ func NewDrinkSrv(
 	}
 }
 
+func (s *DrinkSrv) CountDrinksForBlog() (DrinksCount, error) {
+
+	var result DrinksCount
+
+	all, err := s.repo.CountDrinks(bson.D{})
+	if err != nil {
+		return result, err 
+	}
+
+	whiskys, err := s.repo.CountDrinks(bson.D{{"tags", "whisky"}})
+	if err != nil {
+		return result, err
+	}
+
+	rums, err := s.repo.CountDrinks(bson.D{{"tags", "rum"}})
+	if err != nil {
+		return result, err
+	}
+
+	beers, err := s.repo.CountDrinks(bson.D{{"tags", "beer"}})
+	if err != nil {
+		return result, err
+	}
+
+	wines, err := s.repo.CountDrinks(bson.D{{"tags", "wines"}})
+	if err != nil {
+		return result, err
+	}
+
+	others, err := s.repo.CountDrinks(
+		bson.D{{
+			"$and",
+			bson.A{
+				bson.M{"tags": bson.M{"$ne": "whisky"}},
+				bson.M{"tags": bson.M{"$ne": "rum"}},
+				bson.M{"tags": bson.M{"$ne": "beer"}},
+				bson.M{"tags": bson.M{"$ne": "wine"}},
+			},
+		}},
+	)
+
+	if err != nil {
+		return result, err
+	}
+
+	result.All = all
+	result.Whiskys = whiskys
+	result.Rums = rums
+	result.Beers = beers
+	result.Wines = wines
+	result.Others = others
+
+	return result, nil
+}
+
 func (s *DrinkSrv) CalculatePages(limit int) (int, error) {
-	count, err := s.repo.CountAllDrinks()
+	count, err := s.repo.CountDrinks(bson.D{})
 	if err != nil {
 		return 0, err
 	}
@@ -50,14 +105,13 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 
 	// validate country exists
 	_, err := s.countryRepo.FindByName(filters.Country)
-
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			filters.Country = ""
 		} else {
 			return nil, err
 		}
-	} 
+	}
 
 	// validate if location exists
 
@@ -68,7 +122,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 		} else {
 			return nil, err
 		}
-	} 	
+	}
 
 	// build search filter
 	searchFilter := bson.D{
@@ -207,4 +261,13 @@ type DrinkSearchFilters struct {
 	Direction string
 	Page      int
 	Limit     int
+}
+
+type DrinksCount struct {
+	All     int64 `json:"all"`
+	Whiskys int64 `json:"whiskys"`
+	Rums    int64 `json:"rums"`
+	Beers   int64 `json:"beers"`
+	Wines   int64 `json:"wines"`
+	Others  int64 `json:"others"`
 }

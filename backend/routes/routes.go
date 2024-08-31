@@ -40,6 +40,7 @@ func New(
 
 	// Drinks
 	router.HandleFunc("GET /api/v1/drinks/blog", middlewares.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog))
+	router.HandleFunc("GET /api/v1/drinks/blog/count", drinkHandler.CountDrinks)
 
 	// 404 - PATH NOT FOUND
 	router.HandleFunc("/",func(w http.ResponseWriter, r *http.Request) {

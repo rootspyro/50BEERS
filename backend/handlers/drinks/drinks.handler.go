@@ -19,6 +19,32 @@ func NewDrinkHandler(drinkSrv *services.DrinkSrv) *DrinkHandler {
 	}
 }
 
+func(h *DrinkHandler) CountDrinks(w http.ResponseWriter, r *http.Request) {
+
+	counts, err := h.srv.CountDrinksForBlog()
+
+	if err != nil {
+		parser.JSON(w, parser.ErrorResponse{
+			Status: parser.Status.Error,
+			StatusCode: http.StatusInternalServerError,
+			Error: parser.Error{
+				Code: parser.Errors.INTERNAL_SERVER_ERROR.Code,
+				Message: parser.Errors.INTERNAL_SERVER_ERROR.Message,
+				Details: "error counting drinks for blog",
+				Suggestion: parser.Errors.INTERNAL_SERVER_ERROR.Suggestion,
+				Path: r.RequestURI,
+				Timestamp: time.Now().Local(),
+			},
+		})
+	}
+
+	parser.JSON(w, parser.SuccessResponse{
+		Status: parser.Status.Success,
+		StatusCode: http.StatusOK,
+		Data: counts,
+	})
+}
+
 func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) {
 
 	// Get Filters

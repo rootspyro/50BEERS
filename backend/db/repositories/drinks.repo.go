@@ -20,8 +20,8 @@ func NewDrinksRepo(collection *mongo.Collection) *DrinksRepo {
 	}
 }
 
-func(m *DrinksRepo) CountAllDrinks() (int64, error) {
-	return m.Collection.CountDocuments(context.TODO(), bson.D{})
+func(m *DrinksRepo) CountDrinks(filter bson.D) (int64, error) {
+	return m.Collection.CountDocuments(context.TODO(), filter)
 }
 
 func (m *DrinksRepo) GetAllDrinks(searchFilters bson.D, sortFilters *options.FindOptions) ([]models.Drink, error) {
