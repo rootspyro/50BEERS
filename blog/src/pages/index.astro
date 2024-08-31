@@ -28,6 +28,15 @@ interface tag {
   updatedAt: string;
 }
 
+interface counts {
+  all: number;
+  whiskys: number;
+  rums: number;
+  beers: number;
+  wines: number;
+  others: number;
+}
+
 let countries: country[] = []
 
 try {
@@ -81,6 +90,23 @@ try {
   console.log(err)
 }
 
+let counts : counts = { all: 0, whiskys: 0, rums: 0, beers: 0, wines: 0, others: 0 }
+
+try {
+
+  const endpoint = API_HOST + "/drinks/blog/count"
+
+  const countsResult = await fetch(endpoint)
+  const countsData = await countsResult.json()
+
+  if (countsData.status == "success") {
+    counts = countsData.data
+  }
+
+} catch(err) {
+  console.log(err)
+}
+
 ---
 
 <Layout title="50 BEERS: Exploring beverages around the world">
@@ -97,5 +123,45 @@ try {
       tags={tags}
       client:load 
      /> 
+  </section>
+  <section class="w-full bg-dark mt-5 text-light px-10 py-24 flex flex-col items-center justify-center gap-8">
+    <p class="text-center">
+      In <span class="font-bold">October 2023</span> I started my journey. Since then I have tested a total of <span class="font-bold">{counts.all}</span> different drinks. <br/> Among them we can find...
+    </p>
+
+    <div class="flex w-full flex-col gap-8 items-center justify-center sm:flex-row">
+
+      <div class="flex text-2xl font-title flex-col items-center justify-center">
+        <p>{counts.whiskys}</p>
+        <p>WHISKYS</p>
+      </div>
+
+      <div class="flex text-2xl font-title flex-col items-center justify-center">
+        <p>{counts.rums}</p>
+        <p>RUMS</p>
+      </div>
+
+      <div class="flex text-2xl font-title flex-col items-center justify-center">
+        <p>{counts.beers}</p>
+        <p>BEERS</p>
+      </div>
+
+      <div class="flex text-2xl font-title flex-col items-center justify-center">
+        <p>{counts.wines}</p>
+        <p>WINES</p>
+      </div>
+
+      <div class="flex text-2xl font-title flex-col items-center justify-center">
+        <p>{counts.others}</p>
+        <p>OTHERS</p>
+      </div>
+
+    </div>
+
+    <p class="text-center">
+      All of them documented here.
+    </p>
+  </section>
+  <section class="w-full  px-10 py-16">
   </section>
 </Layout>
