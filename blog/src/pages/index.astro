@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PostSection from "../components/postSection.tsx"
+import ContactForm from "../components/contactForm.tsx"
 
 // fetch countries
 const API_HOST = import.meta.env.PUBLIC_API_HOST
@@ -162,6 +163,15 @@ try {
       All of them documented here.
     </p>
   </section>
-  <section class="w-full  px-10 py-16">
+  <section class="w-full text-dark px-10 py-16 flex flex-col md:flex-row md:justify-center gap-10">
+    <div class="w-full font-title flex flex-col items-center md:items-start">
+      <p class="text-2xl sm:text-3xl">Do you like my content?</p>
+      <p class="text-light bg-dark inline-block p-2 mt-5 text-3xl sm:text-4xl">Do you need a developer?</p>
+      <p class="text-xl sm:text-2xl mt-5">Want to insult me because I didn't like your favorite beer?</p>
+      <p class="text-3xl sm:text-4xl mt-12">Feel free to contact me!</p>
+    </div>
+    <div class="w-full flex justify-center items-center">
+      <ContactForm />
+    </div>
   </section>
 </Layout>
