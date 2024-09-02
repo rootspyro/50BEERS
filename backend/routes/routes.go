@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/rootspyro/50BEERS/config/parser"
+	bloguser "github.com/rootspyro/50BEERS/handlers/blogUser"
 	"github.com/rootspyro/50BEERS/handlers/country"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
@@ -20,6 +21,7 @@ func New(
 	countryHandler *country.CountryHandler,
 	locationHandler *location.LocationHandler,
 	drinkHandler *drinks.DrinkHandler,
+	blogUser *bloguser.BlogUserHandler,
 ) *http.ServeMux{
 
 	router := http.ServeMux{}
@@ -41,6 +43,9 @@ func New(
 	// Drinks
 	router.HandleFunc("GET /api/v1/drinks/blog", middlewares.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog))
 	router.HandleFunc("GET /api/v1/drinks/blog/count", drinkHandler.CountDrinks)
+
+	// Authentication
+	router.HandleFunc("POST /api/v1/auth/blog/signup", blogUser.SignUp)
 
 	// 404 - PATH NOT FOUND
 	router.HandleFunc("/",func(w http.ResponseWriter, r *http.Request) {
