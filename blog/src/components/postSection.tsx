@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import StarsView from "./starsView"
 import DrinkCard from "./drinkCard";
 import PaginationMenu from "./paginationMenu";
@@ -49,17 +49,26 @@ interface drinksSearch {
 
 function PostSection({countries, locations, tags} : {countries: country[], locations: location[], tags: tag[]}) {
 
+  const limit = 5
+
+  const nameRef = useRef(null)
+
   // search Data
+  const [name, SetName] = useState("")
   const [direction, SetDirection] = useState("down")
   const [sortBy, SetSortBy] = useState("created_at")
   const [country, SetCountry] = useState("")
   const [location, SetLocation] = useState("")
   const [category, SetCategory] = useState("")
   const [page, SetPage] = useState(1)
-  const [limit, SetLimit] = useState(10)
   const [pagination, SetPagination] = useState<number[]>([])
 
   const [drinks, SetDrinks] = useState<drinksSearch>({itemsFound: 0, items: [], pagination: { pages: 1, page: 1, pageSize: 10 }})
+
+  function handleName(e: any) {
+    e.preventDefault()
+    SetName(nameRef.current.value)
+  }
 
   function handleDirection() {
 
@@ -91,7 +100,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
 
     const directionFilter = direction == "up" ? "asc" : "desc"
 
-    const endpoint = import.meta.env.PUBLIC_API_HOST + `/drinks/blog?page=${page}&limit=${limit}&direction=${directionFilter}&sortBy=${sortBy}&country=${country}&location=${location}&category=${category}`
+    const endpoint = import.meta.env.PUBLIC_API_HOST + `/drinks/blog?page=${page}&limit=${limit}&direction=${directionFilter}&sortBy=${sortBy}&country=${country}&location=${location}&category=${category}&name=${name}`
 
       try {
 
@@ -121,7 +130,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
 
     fetchDrinks()
 
-  }, [direction, sortBy, country, location, category, page])
+  }, [direction, sortBy, country, location, category, page, name])
 
   return(
   <>
@@ -130,10 +139,10 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
       <div id="content" className="w-full">
 
         <div id="mobile-filters" className="md:hidden flex flex-col gap-2">
-          <div className="flex gap-2 items-center w-full">
-            <input placeholder="search by name..." className="bg-light w-full border border-dark border-dashed p-2 text-xs rounded-sm outline-none" />
+          <form onSubmit={handleName} className="flex gap-2 items-center w-full">
+            <input ref={nameRef} placeholder="search by name..." className="bg-light w-full border border-dark border-dashed p-2 text-xs rounded-sm outline-none" />
             <button className="p-3 rounded-sm flex items-center text-xs md:text-sm justify-center text-white bg-dark"><i className="fi fi-rs-search flex items-center"></i></button>
-          </div>
+          </form>
           <div className="flex gap-2 items-center w-full">
             <select onChange={handleCategoryMobile} className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
               <option value="">Categories</option>
@@ -177,10 +186,10 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
         </div>
 
         <div id="desktop-filters" className="md:flex hidden w-full justify-between">
-          <div className="flex gap-2 items-center">
-            <input placeholder="search by name..." className="bg-light border border-dark border-dashed p-2 text-xs md:text-sm rounded-sm outline-none" />
+          <form onSubmit={handleName} className="flex gap-2 items-center">
+            <input ref={nameRef} placeholder="search by name..." className="bg-light border border-dark border-dashed p-2 text-xs md:text-sm rounded-sm outline-none" />
             <button className="p-3 rounded-sm flex items-center text-xs md:text-sm justify-center text-white bg-dark"><i className="fi fi-rs-search flex items-center"></i></button>
-          </div>
+          </form>
           <div className="flex gap-2 items-center justify-end">
             <button onClick={handleDirection} className="rounded-sm text-xs md:text-sm text-white bg-dark p-3">
               <i className={`fi fi-rs-angle-${direction} flex items-center`}></i>
