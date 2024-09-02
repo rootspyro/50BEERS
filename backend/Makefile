@@ -10,6 +10,9 @@ start:
 run:
 	go run $(MAIN_PATH)
 
+test:
+	go test -v ./...
+
 migrate:
 	go run $(MAIN_PATH) -migrate
 
