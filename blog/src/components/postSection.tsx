@@ -230,7 +230,7 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
         }
         </ul>
 
-        <div className="mt-10 sm:mt-5">
+        <div className={`mt-10 sm:mt-5 ${drinks.itemsFound == 0 ? "hidden" : ""}`}>
         <PaginationMenu setPage={SetPage} found={drinks.itemsFound} page={page} pages={drinks.pagination.pages} pagination={pagination} />
           <div id="posts" className="w-full flex flex-col gap-4 items-start justify-start mt-5">
           {
@@ -242,9 +242,16 @@ function PostSection({countries, locations, tags} : {countries: country[], locat
             })
           }
           </div>
+        <PaginationMenu setPage={SetPage} found={drinks.itemsFound} page={page} pages={drinks.pagination.pages} pagination={pagination} />
         </div>
-      
-      <PaginationMenu setPage={SetPage} found={drinks.itemsFound} page={page} pages={drinks.pagination.pages} pagination={pagination} />
+        <div className={`my-16 sm:mt-20 w-full items-center flex flex-col gap-4 ${drinks.itemsFound == 0 ? "" : "hidden"}`}>
+          <img src="/notfound.png" className="max-w-52" />
+          <p className="text-center font-title text-3xl">BEVERAGE <span className="bg-dark text-light px-1">NOT FOUND</span></p>
+          <p className="mt-8 text-center text-sm sm:text-base">Didn't find what you were looking for? maybe I haven't tried it yet. Feel free to recommend it to me</p>
+          <a href="#" className="block mt-3 text-sm bg-dark border border-dark text-main max-w-56 p-3 rounded-sm hover:bg-light hover:text-dark hover:border-dashed active:border-solid">
+            MAKE A RECOMMENDATION
+          </a>
+        </div>
 
       <div className="mt-10 lg:hidden flex gap-5 flex-col items-start">
         <div className="p-5 bg-light border border-dashed border-dark rounded-sm w-full">
