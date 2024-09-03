@@ -3,13 +3,12 @@ package db
 import (
 	"context"
 
-	"github.com/rootspyro/50BEERS/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func New() (*mongo.Client, error) {
-	clientOptions := options.Client().ApplyURI(config.App.Database.URL)
+func New(connUrl string) (*mongo.Client, error) {
+	clientOptions := options.Client().ApplyURI(connUrl)
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {

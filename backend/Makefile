@@ -1,7 +1,10 @@
 MAIN_PATH=cmd/main.go
 BIN_PATH=dist/app
 
-build:
+test:
+	go test -v ./...
+
+build: test
 	go build -o $(BIN_PATH) $(MAIN_PATH)
 
 start:
@@ -9,9 +12,6 @@ start:
 
 run:
 	go run $(MAIN_PATH)
-
-test:
-	go test -v ./...
 
 migrate:
 	go run $(MAIN_PATH) -migrate

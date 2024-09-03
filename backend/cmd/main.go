@@ -37,7 +37,7 @@ func main() {
 	flag.Parse()
 
 	// database
-	dbclient, err := db.New()
+	dbclient, err := db.New(config.App.Database.URL)
 	if err != nil {
 		log.Error(err.Error())
 		os.Exit(1)
