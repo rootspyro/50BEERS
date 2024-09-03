@@ -21,7 +21,7 @@ func(h *BlogUserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,	
-		StatusCode: http.StatusOK,
+		StatusCode: http.StatusCreated,
 		Data: "Success",
 	})
 }
