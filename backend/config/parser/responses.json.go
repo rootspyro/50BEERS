@@ -46,12 +46,17 @@ var Status statusList = statusList{
 }
 
 type errorList struct {
+	BAD_REQUEST_BODY      CommonError
 	BAD_REQUEST_QUERY     CommonError
 	PATH_NOT_FOUND        CommonError
 	INTERNAL_SERVER_ERROR CommonError
 }
 
 var Errors errorList = errorList{
+	BAD_REQUEST_BODY: CommonError{
+		Code: "BAD_REQUEST",
+		Message: "invalid body json format",
+	},
 	BAD_REQUEST_QUERY: CommonError{
 		Code:    "BAD_REQUEST",
 		Message: "invalid format for request query",

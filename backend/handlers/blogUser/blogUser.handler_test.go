@@ -50,7 +50,7 @@ func TestSignUpFromSite(t *testing.T) {
 	body := services.BlogUserDTO {
 		Username: "user",
 		Email: "user@gmail.com",
-		Password: "12345",
+		Password: "S3cureP4$word",
 	}
 	
 	bodyJSON, err := json.Marshal(body)
