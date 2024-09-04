@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"regexp"
@@ -121,6 +122,7 @@ func PipeNewDrinkBody(next http.HandlerFunc) http.HandlerFunc {
 			})
 		}
 
-		next.ServeHTTP(w,r)
+		ctx := context.WithValue(r.Context(), "body", body)
+		next.ServeHTTP(w,r.WithContext(ctx))
 	}
 }
