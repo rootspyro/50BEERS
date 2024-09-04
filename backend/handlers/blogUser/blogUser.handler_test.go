@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/middlewares"
@@ -47,19 +49,19 @@ func TestSignUpFromSite(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeNewDrinkBody(handler.SignUp)))
 
 	// do the request
-	body := services.BlogUserDTO {
+	body := services.BlogUserDTO{
 		Username: "user",
-		Email: "user@gmail.com",
+		Email:    "user@gmail.com",
 		Password: "S3cureP4$word",
 	}
-	
+
 	bodyJSON, err := json.Marshal(body)
 	if err != nil {
 		t.Error(err)
 	}
-	
+
 	bodyData := bytes.NewBuffer([]byte(bodyJSON))
-	
+
 	request, err := http.NewRequest(http.MethodPost, server.URL, bodyData)
 	if err != nil {
 		t.Error(err)
@@ -72,8 +74,167 @@ func TestSignUpFromSite(t *testing.T) {
 		t.Error(err)
 	}
 
+	var result signUpSuccessResponse
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+
 	if resp.StatusCode != http.StatusCreated {
 		t.Errorf("status code expected %d but got %d", http.StatusCreated, resp.StatusCode)
 	}
 
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+
+	if result.Status != parser.Status.Success {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Success, result.Status)
+	}
+}
+
+func TestSignUpBadEmail(t *testing.T) {
+	connStr, dbName := connString()
+
+	dbClient, err := db.New(connStr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	database := dbClient.Database(dbName)
+
+	repo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
+	srv := services.NewBlogUserSrv(repo)
+	handler := NewBlogUserHandler(srv)
+
+	// build the testing server
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeNewDrinkBody(handler.SignUp)))
+
+	// do the request
+	body := services.BlogUserDTO{
+		Username: "user",
+		Email:    "user@gmail",
+	}
+
+	bodyJSON, err := json.Marshal(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bodyData := bytes.NewBuffer([]byte(bodyJSON))
+
+	request, err := http.NewRequest(http.MethodPost, server.URL, bodyData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := http.Client{}
+
+	resp, err := client.Do(request)
+	if err != nil {
+		t.Error(err)
+	}
+
+	var result parser.ErrorResponse 
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Errorf("status code expected %d but got %d", http.StatusBadRequest, resp.StatusCode)
+	}
+
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+
+	if result.Status != parser.Status.Error {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Error, result.Status)
+	}
+
+	if result.Error.Code != parser.Errors.BAD_REQUEST_BODY.Code {
+		t.Errorf("error code expected '%s' but got '%s'", parser.Errors.BAD_REQUEST_BODY.Code, result.Error.Code)
+	}
+}
+
+func TestSignUpInsecurePassword(t *testing.T) {
+	connStr, dbName := connString()
+
+	dbClient, err := db.New(connStr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	database := dbClient.Database(dbName)
+
+	repo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
+	srv := services.NewBlogUserSrv(repo)
+	handler := NewBlogUserHandler(srv)
+
+	// build the testing server
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeNewDrinkBody(handler.SignUp)))
+
+	// do the request
+	body := services.BlogUserDTO{
+		Username: "user",
+		Email:    "user@gmail",
+		Password: "us3radm1n#", // for this case we are not using uppercase letters
+	}
+
+	bodyJSON, err := json.Marshal(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bodyData := bytes.NewBuffer([]byte(bodyJSON))
+
+	request, err := http.NewRequest(http.MethodPost, server.URL, bodyData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := http.Client{}
+
+	resp, err := client.Do(request)
+	if err != nil {
+		t.Error(err)
+	}
+
+	var result parser.ErrorResponse 
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Errorf("status code expected %d but got %d", http.StatusBadRequest, resp.StatusCode)
+	}
+
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+
+	if result.Status != parser.Status.Error {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Error, result.Status)
+	}
+
+	if result.Error.Code != parser.Errors.BAD_REQUEST_BODY.Code {
+		t.Errorf("error code expected '%s' but got '%s'", parser.Errors.BAD_REQUEST_BODY.Code, result.Error.Code)
+	}
+}
+
+type signUpSuccessResponse struct {
+	Status     string `json:"status"`
+	StatusCode int    `json:"statusCode"`
+	Data       services.BlogUser
 }

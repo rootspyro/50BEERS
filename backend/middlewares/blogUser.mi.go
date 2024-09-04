@@ -105,6 +105,7 @@ func PipeNewDrinkBody(next http.HandlerFunc) http.HandlerFunc {
 					Timestamp: time.Now().Local(),
 				},
 			})
+			return
 		}
 
 		if !isPasswordSecure(body.Password) {
@@ -120,6 +121,7 @@ func PipeNewDrinkBody(next http.HandlerFunc) http.HandlerFunc {
 					Timestamp: time.Now().Local(),
 				},
 			})
+			return
 		}
 
 		ctx := context.WithValue(r.Context(), "body", body)
