@@ -48,6 +48,31 @@ func(h *BlogUserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	_, err = h.srv.GetUserByEmail(body.Email)
+
+	if err == nil {
+		parser.JSON(w, parser.ErrorResponse{
+			Status: parser.Status.Error,
+			StatusCode: http.StatusConflict,
+			Error: parser.Error{
+				Code: parser.Errors.CONFLICT.Code,
+				Message: parser.Errors.CONFLICT.Message,
+				Details: "there is already an account with this email",
+				Suggestion: "Try to login or use another email",
+				Path: r.RequestURI,
+				Timestamp: parser.Timestamp(),
+			},
+		})
+		return
+
+	} else {
+		if err != mongo.ErrNoDocuments {
+			log.Error(err.Error())
+			parser.SERVER_ERROR(w, "error trying to validate email", r.RequestURI)
+			return
+		}
+	}
+
 	newUser, err := h.srv.NewUserFromSite(body)	
 
 	if err != nil {
