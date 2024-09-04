@@ -54,7 +54,7 @@ func isPasswordSecure(password string) bool {
 	return true
 }
 
-func PipeNewDrinkBody(next http.HandlerFunc) http.HandlerFunc {
+func PipeNewBlogUserBody(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		var body services.BlogUserDTO
