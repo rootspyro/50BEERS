@@ -23,18 +23,23 @@ func(r *BlogUserRepo) CreateUser(data models.NewBlogUser) (models.BlogUser, erro
 
 	now := time.Now().Local()
 
+	data.CreatedAt = now.String()
+	data.UpdatedAt = now.String()
+
+
+	result, err := r.Collection.InsertOne(context.TODO(), data)
+	if err != nil {
+
+		return models.BlogUser{}, err
+	}
+
 	var newUser = models.BlogUser{
 		Username: data.Username,
 		Email: data.Email,
 		Password: data.Password,
 		Origin: data.Origin,
-		CreatedAt: now.String(),
-		UpdatedAt: now.String(),
-	}
-
-	result, err := r.Collection.InsertOne(context.TODO(), data)
-	if err != nil {
-		return newUser, err
+		CreatedAt: data.CreatedAt,
+		UpdatedAt: data.UpdatedAt,
 	}
 
 	newUser.ID = result.InsertedID.(primitive.ObjectID)

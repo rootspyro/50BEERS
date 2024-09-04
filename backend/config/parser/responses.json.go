@@ -24,7 +24,7 @@ type Error struct {
 	Code       string    `json:"code"`
 	Message    string    `json:"message"`
 	Details    string    `json:"details"`
-	Suggestion string    `json:"suggestion"`
+	Suggestion string    `json:"suggestion,omitempty"`
 	Timestamp  time.Time `json:"timestamp"`
 	Path       string    `json:"path"`
 }
