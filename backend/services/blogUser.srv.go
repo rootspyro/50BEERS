@@ -15,6 +15,15 @@ func NewBlogUserSrv(repo *repositories.BlogUserRepo) *BlogUserSrv {
 	}
 }
 
+func (s *BlogUserSrv) GetUserByUsername(username string) (BlogUser, error) {
+	user, err := s.repo.FindByUsername(username)
+	if err != nil {
+		return BlogUser{}, err
+	}
+
+	return parseBlogUser(user), err
+}
+
 func (s *BlogUserSrv) NewUserFromSite(data BlogUserDTO) (BlogUser, error){
 
 	result, err := s.repo.CreateUser(models.NewBlogUser{

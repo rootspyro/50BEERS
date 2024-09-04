@@ -2,11 +2,11 @@ package bloguser
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/services"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type BlogUserHandler struct {
@@ -23,23 +23,36 @@ func(h *BlogUserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	body := r.Context().Value("body").(services.BlogUserDTO)
 
+	// validate if user already exists
+	_, err := h.srv.GetUserByUsername(body.Username)
+	if err == nil {
+		parser.JSON(w, parser.ErrorResponse{
+			Status: parser.Status.Error,
+			StatusCode: http.StatusConflict,
+			Error: parser.Error{
+				Code: parser.Errors.CONFLICT.Code,
+				Message: parser.Errors.CONFLICT.Message,
+				Details: "username is already taken",
+				Suggestion: "try another username",
+				Path: r.RequestURI,
+				Timestamp: parser.Timestamp(),
+			},
+		})
+		return
+
+	} else {
+		if err != mongo.ErrNoDocuments {
+			log.Error(err.Error())
+			parser.SERVER_ERROR(w, "error trying to validate username", r.RequestURI)
+			return
+		}
+	}
+
 	newUser, err := h.srv.NewUserFromSite(body)	
 
 	if err != nil {
 		log.Error(err.Error())
-		parser.JSON(w, parser.ErrorResponse{
-			Status: parser.Status.Error,
-			StatusCode: http.StatusInternalServerError,
-			Error: parser.Error{
-				Code: parser.Errors.INTERNAL_SERVER_ERROR.Code,
-				Message: parser.Errors.INTERNAL_SERVER_ERROR.Message,
-				Details: "something went wrong creating the new user",
-				Suggestion: "",
-				Path: r.RequestURI,
-				Timestamp: time.Now().Local(),
-			},
-		})
-
+		parser.SERVER_ERROR(w, "error trying to create a new user", r.RequestURI)
 		return
 	}
 	

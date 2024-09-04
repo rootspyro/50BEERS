@@ -49,6 +49,7 @@ type errorList struct {
 	BAD_REQUEST_BODY      CommonError
 	BAD_REQUEST_QUERY     CommonError
 	PATH_NOT_FOUND        CommonError
+	CONFLICT              CommonError
 	INTERNAL_SERVER_ERROR CommonError
 }
 
@@ -65,11 +66,34 @@ var Errors errorList = errorList{
 		Code:    "NOT_FOUND",
 		Message: "path was not found",
 	},
+	CONFLICT: CommonError{
+		Code: "CONFLICT",
+		Message: "resource already exists",
+	},
 	INTERNAL_SERVER_ERROR: CommonError{
 		Code:    "INTERNAL_SERVER_ERROR",
 		Message: "error from the data layer",
 		Suggestion: "check server status at GET:/api/v1/health",
 	},
+}
+
+func Timestamp() time.Time {
+	return time.Now().Local()
+}
+
+func SERVER_ERROR(w http.ResponseWriter, detail, path string) {
+	JSON(w, ErrorResponse{
+		Status: Status.Error,
+		StatusCode: http.StatusInternalServerError,
+		Error: Error{
+			Code: Errors.INTERNAL_SERVER_ERROR.Code,
+			Message: Errors.INTERNAL_SERVER_ERROR.Message,
+			Details: detail,
+			Suggestion: Errors.INTERNAL_SERVER_ERROR.Suggestion,
+			Path: path,
+			Timestamp: Timestamp(),
+		},
+	})
 }
 
 func JSON(w http.ResponseWriter, response interface{}) {
