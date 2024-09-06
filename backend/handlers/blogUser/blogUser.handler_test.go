@@ -1,4 +1,4 @@
-package bloguser
+package bloguser_test
 
 import (
 	"bytes"
@@ -14,6 +14,7 @@ import (
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	bloguser "github.com/rootspyro/50BEERS/handlers/blogUser"
 	"github.com/rootspyro/50BEERS/middlewares"
 	"github.com/rootspyro/50BEERS/services"
 )
@@ -43,7 +44,7 @@ func TestSignUpFromSite(t *testing.T) {
 
 	repo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
 	srv := services.NewBlogUserSrv(repo)
-	handler := NewBlogUserHandler(srv)
+	handler := bloguser.NewBlogUserHandler(srv)
 
 	// build the testing server
 	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeNewBlogUserBody(handler.SignUp)))
@@ -108,7 +109,7 @@ func TestSignUpBadEmail(t *testing.T) {
 
 	repo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
 	srv := services.NewBlogUserSrv(repo)
-	handler := NewBlogUserHandler(srv)
+	handler := bloguser.NewBlogUserHandler(srv)
 
 	// build the testing server
 	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeNewBlogUserBody(handler.SignUp)))
@@ -176,7 +177,7 @@ func TestSignUpInsecurePassword(t *testing.T) {
 
 	repo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
 	srv := services.NewBlogUserSrv(repo)
-	handler := NewBlogUserHandler(srv)
+	handler := bloguser.NewBlogUserHandler(srv)
 
 	// build the testing server
 	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeNewBlogUserBody(handler.SignUp)))
@@ -245,7 +246,7 @@ func TestSignUpFromSiteConflictUserExists(t *testing.T) {
 
 	repo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
 	srv := services.NewBlogUserSrv(repo)
-	handler := NewBlogUserHandler(srv)
+	handler := bloguser.NewBlogUserHandler(srv)
 
 	// build the testing server
 	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeNewBlogUserBody(handler.SignUp)))
