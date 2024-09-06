@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type BlogUserSrv struct {
@@ -35,10 +36,16 @@ func (s *BlogUserSrv) GetUserByEmail(email string) (BlogUser, error) {
 
 func (s *BlogUserSrv) NewUserFromSite(data BlogUserDTO) (BlogUser, error){
 
+	// hash password
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return BlogUser{}, err
+	}
+
 	result, err := s.repo.CreateUser(models.NewBlogUser{
 		Username: data.Username,
 		Email: data.Email,
-		Password: data.Password,
+		Password: string(passwordHash),
 		Origin: "site",
 	})
 
