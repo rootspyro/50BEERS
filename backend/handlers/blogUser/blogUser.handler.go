@@ -21,10 +21,10 @@ func NewBlogUserHandler(srv *services.BlogUserSrv) *BlogUserHandler {
 
 func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
+	// get body
 	body := r.Context().Value("body").(LoginDTO)
 
-	log.Debug(body.Password)
-
+	log.Debug(body.User)
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,
 		StatusCode: http.StatusOK,

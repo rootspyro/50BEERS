@@ -295,7 +295,7 @@ func TestSignUpFromSiteConflictUserExists(t *testing.T) {
 	}
 
 	if result.Status != parser.Status.Error {
-		t.Errorf("status expected '%s' but got '%s'", parser.Status.Success, result.Status)
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Error, result.Status)
 	}
 
 	if result.Error.Code != parser.Errors.CONFLICT.Code {
@@ -303,8 +303,81 @@ func TestSignUpFromSiteConflictUserExists(t *testing.T) {
 	}
 }
 
+func TestLoginFromSite(t *testing.T) {
+	connStr, dbName := connString()
+
+	dbClient, err := db.New(connStr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	database := dbClient.Database(dbName)
+
+	repo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
+	srv := services.NewBlogUserSrv(repo)
+	handler := bloguser.NewBlogUserHandler(srv)
+
+	// build testing server
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeLoginBody(handler.Login)))
+
+	// build the request
+	body := bloguser.LoginDTO { 
+		User: "user",
+		Password: "S3cureP4$word",
+	}
+
+	bodyJson, err := json.Marshal(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bodyData := bytes.NewBuffer([]byte(bodyJson))
+
+	request, err := http.NewRequest(http.MethodPost, server.URL, bodyData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("status code expected %d but got %d", http.StatusOK, resp.StatusCode)
+	}
+
+	var result loginSuccessResponse
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+	if err != nil {
+		t.Error(err)
+	}
+	
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+
+	if result.Status != parser.Status.Success {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Success, result.Status)
+	}
+
+}
+
+
 type signUpSuccessResponse struct {
 	Status     string `json:"status"`
 	StatusCode int    `json:"statusCode"`
 	Data       services.BlogUser
+}
+
+type loginSuccessResponse struct {
+	Status     string `json:"status"`
+	StatusCode int    `json:"statusCode"`
 }
