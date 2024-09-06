@@ -1,4 +1,4 @@
-package tag
+package tag_test
 
 import (
 	"context"
@@ -13,6 +13,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"github.com/rootspyro/50BEERS/handlers/tag"
 	"github.com/rootspyro/50BEERS/services"
 )
 
@@ -45,7 +46,7 @@ func TestListCategoriesForBlog(t *testing.T) {
 	repo := repositories.NewTagRepo(database.Collection("tag"))
 	srv := services.NewTagSrv(repo)
 
-	handler := NewTagHandler(srv)
+	handler := tag.NewTagHandler(srv)
 
 	// build testing server
 	server := httptest.NewServer(http.HandlerFunc(handler.ListCategoriesForBlog))

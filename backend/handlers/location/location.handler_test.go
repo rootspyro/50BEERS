@@ -1,4 +1,4 @@
-package location
+package location_test
 
 import (
 	"context"
@@ -13,6 +13,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"github.com/rootspyro/50BEERS/handlers/location"
 	"github.com/rootspyro/50BEERS/services"
 )
 
@@ -42,7 +43,7 @@ func TestListLocationsForBlog(t *testing.T) {
 	repo := repositories.NewLocationRepo(database.Collection("location"))
 	srv := services.NewLocationSrv(repo)
 
-	var handler LocationHandler = *NewLocationHandler(srv)
+	var handler location.LocationHandler = *location.NewLocationHandler(srv)
 
 	server := httptest.NewServer(http.HandlerFunc(handler.ListLocationsForBlog))
 
@@ -79,5 +80,5 @@ func TestListLocationsForBlog(t *testing.T) {
 type locationListSuccessResponse struct {
 	Status     string            `json:"status"`
 	StatusCode int               `json:"statusCode"`
-	Data       LocationsResponse `json:"data"`
+	Data       location.LocationsResponse `json:"data"`
 }

@@ -1,4 +1,4 @@
-package country
+package country_test
 
 import (
 	"context"
@@ -13,6 +13,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"github.com/rootspyro/50BEERS/handlers/country"
 	"github.com/rootspyro/50BEERS/services"
 )
 
@@ -43,7 +44,7 @@ func TestListCountriesForBlog(t *testing.T) {
 
 	repo := repositories.NewCountriesRepo(database.Collection("country"))
 	srv := services.NewCountrySrv(repo)
-	handler := NewCountryHandler(srv)
+	handler := country.NewCountryHandler(srv)
 
 	server := httptest.NewServer(http.HandlerFunc(handler.ListCountriesForBlog))
 
@@ -75,5 +76,5 @@ func TestListCountriesForBlog(t *testing.T) {
 type countriesSuccessResponse struct {
 	Status     string            `json:"status"`
 	StatusCode int               `json:"statusCode"`
-	Data       CountriesResponse `json:"data"`
+	Data       country.CountriesResponse `json:"data"`
 }

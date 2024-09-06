@@ -1,4 +1,4 @@
-package drinks
+package drinks_test
 
 import (
 	"context"
@@ -14,6 +14,7 @@ import (
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/middlewares"
 	"github.com/rootspyro/50BEERS/services"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -32,7 +33,7 @@ func connString() (string, string) {
 	), os.Getenv("DB_NAME")
 }
 
-func buildHandler(database *mongo.Database) DrinkHandler {		
+func buildHandler(database *mongo.Database) drinks.DrinkHandler {		
 	// required repositories
 	countryRepo := repositories.NewCountriesRepo(database.Collection("country"))
 	locationRepo := repositories.NewLocationRepo(database.Collection("location"))
@@ -45,7 +46,7 @@ func buildHandler(database *mongo.Database) DrinkHandler {
 		drinksRepo,
 	)
 
-	return *NewDrinkHandler(srv)
+	return *drinks.NewDrinkHandler(srv)
 }
 
 
@@ -306,6 +307,6 @@ type successResponse struct {
 type drinksSuccessResponse struct {
 	Status     string `json:"status"`
 	StatusCode int `json:"statusCode"`
-	Data       DrinksResponse
+	Data       drinks.DrinksResponse
 }
 
