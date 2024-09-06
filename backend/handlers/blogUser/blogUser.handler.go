@@ -19,6 +19,19 @@ func NewBlogUserHandler(srv *services.BlogUserSrv) *BlogUserHandler {
 	}
 }
 
+func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
+
+	body := r.Context().Value("body").(LoginDTO)
+
+	log.Debug(body.Password)
+
+	parser.JSON(w, parser.SuccessResponse{
+		Status: parser.Status.Success,
+		StatusCode: http.StatusOK,
+		Data: "successfull login",
+	})
+} 
+
 func(h *BlogUserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	body := r.Context().Value("body").(services.BlogUserDTO)

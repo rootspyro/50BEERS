@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/rootspyro/50BEERS/db/models"
 	"github.com/rootspyro/50BEERS/db/repositories"
+	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -17,7 +18,7 @@ func NewBlogUserSrv(repo *repositories.BlogUserRepo) *BlogUserSrv {
 }
 
 func (s *BlogUserSrv) GetUserByUsername(username string) (BlogUser, error) {
-	user, err := s.repo.FindByUsername(username)
+	user, err := s.repo.GetUser(bson.D{{"username", username}})
 	if err != nil {
 		return BlogUser{}, err
 	}
@@ -26,12 +27,30 @@ func (s *BlogUserSrv) GetUserByUsername(username string) (BlogUser, error) {
 }
 
 func (s *BlogUserSrv) GetUserByEmail(email string) (BlogUser, error) {
-	user, err := s.repo.FindByEmail(email)
+	user, err := s.repo.GetUser(bson.D{{"email", email}})
 	if err != nil {
 		return BlogUser{}, err
 	}
 
 	return parseBlogUser(user), err
+}
+
+// this function recieves the "user" variable that could be the username or the email
+func (s *BlogUserSrv) GetUserForLogin(user string) (BlogUser, error){
+	filter := bson.D{{
+		"$or",
+		bson.A{
+			bson.D{{"username", user}},	
+			bson.D{{"email", user}},	
+		},
+	},}	
+
+	data, err := s.repo.GetUser(filter)
+	if err != nil {
+		return BlogUser{}, err
+	}
+
+	return parseBlogUser(data), nil
 }
 
 func (s *BlogUserSrv) NewUserFromSite(data BlogUserDTO) (BlogUser, error){

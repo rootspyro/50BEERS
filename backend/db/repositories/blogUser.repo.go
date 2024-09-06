@@ -20,8 +20,8 @@ func NewBlogUserRepo(collection *mongo.Collection) *BlogUserRepo {
 	}
 }
 
-func (r *BlogUserRepo) FindByUsername(username string) (models.BlogUser, error) {
-	filter := bson.D{{"username", username}}	
+
+func (r *BlogUserRepo) GetUser(filter bson.D) (models.BlogUser, error){
 
 	var user models.BlogUser
 
@@ -31,19 +31,7 @@ func (r *BlogUserRepo) FindByUsername(username string) (models.BlogUser, error) 
 	}
 
 	return user, nil
-}
 
-func (r *BlogUserRepo) FindByEmail(email string) (models.BlogUser, error) {
-	filter := bson.D{{"email", email}}	
-
-	var user models.BlogUser
-
-	err := r.Collection.FindOne(context.TODO(), filter).Decode(&user)
-	if err != nil {
-		return user, err 
-	}
-
-	return user, nil
 }
 
 func(r *BlogUserRepo) CreateUser(data models.NewBlogUser) (models.BlogUser, error) {

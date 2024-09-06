@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/rootspyro/50BEERS/config/parser"
+	bloguser "github.com/rootspyro/50BEERS/handlers/blogUser"
 	"github.com/rootspyro/50BEERS/services"
 )
 
@@ -52,6 +53,67 @@ func isPasswordSecure(password string) bool {
 	}
 
 	return true
+}
+
+func PipeLoginBody(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var body bloguser.LoginDTO			
+	
+		err := json.NewDecoder(r.Body).Decode(&body)
+		if err != nil {
+			parser.JSON(w, parser.ErrorResponse{
+				Status: parser.Status.Error,
+				StatusCode: http.StatusBadRequest,
+				Error: parser.Error{
+					Code: parser.Errors.BAD_REQUEST_BODY.Code,
+					Message: parser.Errors.BAD_REQUEST_BODY.Message,
+					Details: "body of the request is missing",
+					Suggestion: "add the body on json format",
+					Path: r.RequestURI,
+					Timestamp: parser.Timestamp(),
+				},
+			})
+
+			return
+		}
+
+		if body.User == "" {
+			parser.JSON(w, parser.ErrorResponse{
+				Status: parser.Status.Error,
+				StatusCode: http.StatusBadRequest,
+				Error: parser.Error{
+					Code: parser.Errors.BAD_REQUEST_BODY.Code,
+					Message: parser.Errors.BAD_REQUEST_BODY.Message,
+					Details: "user cannot be empty",
+					Suggestion: "insert username or email",
+					Path: r.RequestURI,
+					Timestamp: time.Now().Local(),
+				},
+			})
+			return
+		}
+
+		if body.Password == "" {
+
+			parser.JSON(w, parser.ErrorResponse{
+				Status: parser.Status.Error,
+				StatusCode: http.StatusBadRequest,
+				Error: parser.Error{
+					Code: parser.Errors.BAD_REQUEST_BODY.Code,
+					Message: parser.Errors.BAD_REQUEST_BODY.Message,
+					Details: "password cannot be empty",
+					Suggestion: "insert the login password",
+					Path: r.RequestURI,
+					Timestamp: time.Now().Local(),
+				},
+			})
+			return
+		}
+
+		// pass the parsed body to the handler by the request context
+		ctx := context.WithValue(r.Context(), "body", body)
+		next.ServeHTTP(w,r.WithContext(ctx))
+	}
 }
 
 func PipeNewBlogUserBody(next http.HandlerFunc) http.HandlerFunc {
@@ -128,3 +190,4 @@ func PipeNewBlogUserBody(next http.HandlerFunc) http.HandlerFunc {
 		next.ServeHTTP(w,r.WithContext(ctx))
 	}
 }
+
