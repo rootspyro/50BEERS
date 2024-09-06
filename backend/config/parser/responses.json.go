@@ -46,16 +46,21 @@ var Status statusList = statusList{
 }
 
 type errorList struct {
-	BAD_REQUEST_BODY      CommonError
-	BAD_REQUEST_QUERY     CommonError
-	PATH_NOT_FOUND        CommonError
-	CONFLICT              CommonError
-	INTERNAL_SERVER_ERROR CommonError
+	UNAUTHORIZED            CommonError
+	BAD_REQUEST_BODY        CommonError
+	BAD_REQUEST_QUERY       CommonError
+	PATH_NOT_FOUND          CommonError
+	CONFLICT                CommonError
+	INTERNAL_SERVER_ERROR   CommonError
 }
 
 var Errors errorList = errorList{
+	UNAUTHORIZED: CommonError{
+		Code: "UNAUTHORIZED",
+		Message: "invalid credentials",
+	},
 	BAD_REQUEST_BODY: CommonError{
-		Code: "BAD_REQUEST",
+		Code:    "BAD_REQUEST",
 		Message: "invalid body json format",
 	},
 	BAD_REQUEST_QUERY: CommonError{
@@ -67,12 +72,12 @@ var Errors errorList = errorList{
 		Message: "path was not found",
 	},
 	CONFLICT: CommonError{
-		Code: "CONFLICT",
+		Code:    "CONFLICT",
 		Message: "resource already exists",
 	},
 	INTERNAL_SERVER_ERROR: CommonError{
-		Code:    "INTERNAL_SERVER_ERROR",
-		Message: "error from the data layer",
+		Code:       "INTERNAL_SERVER_ERROR",
+		Message:    "error from the data layer",
 		Suggestion: "check server status at GET:/api/v1/health",
 	},
 }
@@ -83,15 +88,15 @@ func Timestamp() time.Time {
 
 func SERVER_ERROR(w http.ResponseWriter, detail, path string) {
 	JSON(w, ErrorResponse{
-		Status: Status.Error,
+		Status:     Status.Error,
 		StatusCode: http.StatusInternalServerError,
 		Error: Error{
-			Code: Errors.INTERNAL_SERVER_ERROR.Code,
-			Message: Errors.INTERNAL_SERVER_ERROR.Message,
-			Details: detail,
+			Code:       Errors.INTERNAL_SERVER_ERROR.Code,
+			Message:    Errors.INTERNAL_SERVER_ERROR.Message,
+			Details:    detail,
 			Suggestion: Errors.INTERNAL_SERVER_ERROR.Suggestion,
-			Path: path,
-			Timestamp: Timestamp(),
+			Path:       path,
+			Timestamp:  Timestamp(),
 		},
 	})
 }

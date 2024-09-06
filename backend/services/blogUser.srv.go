@@ -36,7 +36,7 @@ func (s *BlogUserSrv) GetUserByEmail(email string) (BlogUser, error) {
 }
 
 // this function recieves the "user" variable that could be the username or the email
-func (s *BlogUserSrv) GetUserForLogin(user string) (BlogUser, error){
+func (s *BlogUserSrv) GetUserForLogin(user string) (BlogUserWithPass, error){
 	filter := bson.D{{
 		"$or",
 		bson.A{
@@ -47,10 +47,15 @@ func (s *BlogUserSrv) GetUserForLogin(user string) (BlogUser, error){
 
 	data, err := s.repo.GetUser(filter)
 	if err != nil {
-		return BlogUser{}, err
+		return BlogUserWithPass{}, err
 	}
 
-	return parseBlogUser(data), nil
+	return BlogUserWithPass{
+		Username: data.Username,
+		Email: data.Email,
+		Password: data.Password,
+		Origin: data.Origin,
+	}, nil
 }
 
 func (s *BlogUserSrv) NewUserFromSite(data BlogUserDTO) (BlogUser, error){
@@ -87,6 +92,13 @@ type BlogUser struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Origin   string `json:"origin"`
+}
+
+type BlogUserWithPass struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Origin   string `json:"origin"`
+	Password string `json:"password"`
 }
 
 type BlogUserDTO struct{

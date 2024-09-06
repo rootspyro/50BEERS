@@ -7,6 +7,7 @@ import (
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/services"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type BlogUserHandler struct {
@@ -24,7 +25,39 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	// get body
 	body := r.Context().Value("body").(LoginDTO)
 
-	log.Debug(body.User)
+	invalidCredentialsError := parser.ErrorResponse {
+		Status: parser.Status.Error,
+		StatusCode: http.StatusUnauthorized,
+		Error: parser.Error{
+			Code: parser.Errors.UNAUTHORIZED.Code,
+			Message: parser.Errors.UNAUTHORIZED.Message,
+			Details: "incorrect user or password",
+			Suggestion: "check the credentials or try to sign up",
+			Path: r.RequestURI,
+			Timestamp: parser.Timestamp(),
+		},
+	}
+
+	// get user data
+	user, err := h.srv.GetUserForLogin(body.User)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+
+			parser.JSON(w, invalidCredentialsError)
+			return
+		}
+		
+		log.Error(err.Error())
+		parser.SERVER_ERROR(w, "error trying to get user", r.RequestURI)
+		return
+	}
+
+	// evaluate password
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err != nil {
+		parser.JSON(w, invalidCredentialsError)
+		return
+	}
+
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,
 		StatusCode: http.StatusOK,
