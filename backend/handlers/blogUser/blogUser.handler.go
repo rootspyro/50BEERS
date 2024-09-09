@@ -3,7 +3,6 @@ package bloguser
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/rootspyro/50BEERS/config/jwt"
 	"github.com/rootspyro/50BEERS/config/log"
@@ -109,18 +108,20 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		Name: "access_token",
 		Value: token,
 		HttpOnly: true,
-		Secure: false,
-		Path: r.RequestURI,
-		MaxAge: int(time.Now().Add(time.Hour * 1).Unix()),
+		Secure: true,
+		SameSite: http.SameSiteNoneMode,
+		Path: "/",
+		MaxAge: 3600,
 	}
 
 	cookkieRefreshToken := http.Cookie {
 		Name: "refresh_token",
 		Value: refreshToken,
 		HttpOnly: true,
-		Secure: false,
-		Path: r.RequestURI,
-		MaxAge: int(time.Now().Add(time.Hour * 1).Unix()),
+		Secure: true,
+		SameSite: http.SameSiteNoneMode,
+		Path: "/",
+		MaxAge: 3600 * 12,
 	}
 
 	http.SetCookie(w, &cookkieToken)

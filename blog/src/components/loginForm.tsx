@@ -61,7 +61,7 @@ export default function Login() {
       const responseData : Response = await response.json()
 
       if (responseData.status == "success") {
-        window.location.replace("/")
+        // window.location.href="/"
         return
       } else if (responseData.status == "error") {
         SetNotificationLabel("Error")
