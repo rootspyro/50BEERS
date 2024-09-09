@@ -4,7 +4,7 @@ import Notification from "./notification";
 import Notify from "../utils/notify"
 
 
-export default function SignUpForm() {
+export default function Login() {
 
   const [passwordView, SetPasswordView] = useState(false)
   const [notificationView, SetNotificationView] = useState(false)
@@ -14,14 +14,11 @@ export default function SignUpForm() {
   const handlePasswordView = () => {
     SetPasswordView(!passwordView)
   }
+
   type Response = {
     status: string;
     statusCode: string;
-    data: {
-      username: string;
-      email: string;
-      origin: string
-    };
+    data: string,
     error: {
       code: string;
       message: string;
@@ -33,10 +30,8 @@ export default function SignUpForm() {
   }
 
   type Inputs = {
-    username: string;
-    email: string;
+    user: string;
     password: string;
-    confirmPassword: string;
   }
 
   const {
@@ -50,7 +45,7 @@ export default function SignUpForm() {
 
   const onSubmit: SubmitHandler<Inputs> = async(data) => {
 
-    let endpoint = import.meta.env.PUBLIC_API_HOST + "/auth/blog/signup"
+    let endpoint = import.meta.env.PUBLIC_API_HOST + "/auth/blog/login"
 
     try {
       
@@ -65,7 +60,7 @@ export default function SignUpForm() {
       const responseData : Response = await response.json()
 
       if (responseData.status == "success") {
-        window.location.replace("/login")
+        window.location.replace("/")
         return
       } else if (responseData.status == "error") {
         SetNotificationLabel("Error")
@@ -92,40 +87,20 @@ export default function SignUpForm() {
     >
       <input 
         type="text"
-        placeholder="username"
+        placeholder="username or email"
         className="outline-none border border-dark border-dashed focus:border-solid p-2 rounded-sm"
         {
-          ...register("username",
+          ...register("user",
             {
               required: {
                 value: true,
-                message: "username is required"
+                message: "user is required"
               }
             }
           )
         }
       />       
-      <p className={ errors.username ? "text-xs" : "hidden"}><span className="font-bold text-red-500">*</span> {errors.username?.message}</p>
-      <input 
-        type="email"
-        placeholder="email"
-        className="outline-none border border-dark border-dashed focus:border-solid p-2 rounded-sm"
-        {
-          ...register("email",
-            {
-              required: {
-                value: true,
-                message: "email is required"
-              },
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "invalid email address"
-              }
-            }
-          )
-        }
-      />       
-      <p className={ errors.email ? "text-xs" : "hidden"}><span className="font-bold text-red-500">*</span> {errors.email?.message}</p>
+      <p className={ errors.user ? "text-xs" : "hidden"}><span className="font-bold text-red-500">*</span> {errors.user?.message}</p>
       <div className="w-full flex gap-2">
         <input 
           type={passwordView ? "text" : "password"}
@@ -137,10 +112,6 @@ export default function SignUpForm() {
                 required: {
                   value: true,
                   message: "password is required"
-                },
-                pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                  message: "Password must be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.",
                 }
               }
             )
@@ -149,27 +120,7 @@ export default function SignUpForm() {
         <button onClick={handlePasswordView} type="button" className="p-2 bg-dark text-main rounded-sm"><i className={`fi fi-${passwordView ? "ss-eye-crossed" : "rs-eye"} flex items-center`}></i></button>
       </div>
       <p className={ errors.password ? "text-xs" : "hidden"}><span className="font-bold text-red-500">*</span> {errors.password?.message}</p>
-      <div className="w-full flex gap-2">
-        <input 
-          type={confPasswordView ? "text" : "password"}
-        placeholder="confirm password"
-          className="outline-none border border-dark border-dashed focus:border-solid p-2 rounded-sm w-full"
-          {
-            ...register("confirmPassword",
-              {
-                required: {
-                  value: true,
-                  message: "password confirmation is required"
-                },
-                validate: value => value === password || "password do not match"
-              }
-            )
-          }
-        />       
-        <button onClick={handleConfPasswordView} type="button" className="p-2 bg-dark text-main rounded-sm"><i className={`fi fi-${confPasswordView ? "ss-eye-crossed" : "rs-eye"} flex items-center`}></i></button>
-      </div>
-      <p className={ errors.confirmPassword ? "text-xs" : "hidden"}><span className="font-bold text-red-500">*</span> {errors.confirmPassword?.message}</p>
-      <button className="py-3 text-main bg-dark rounded-sm border border-dark hover:border-dashed hover:bg-light hover:text-dark">Sign Up</button>
+      <button className="py-3 text-main bg-dark rounded-sm border border-dark hover:border-dashed hover:bg-light hover:text-dark">Login</button>
     </form>
     <Notification view={notificationView} label={notificationLabel} message={notificationMsg} />
     </>

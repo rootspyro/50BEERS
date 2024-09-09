@@ -2,6 +2,7 @@ package bloguser
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/rootspyro/50BEERS/config/jwt"
 	"github.com/rootspyro/50BEERS/config/log"
@@ -74,6 +75,7 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure: false,
 		Path: r.RequestURI,
+		MaxAge: int(time.Now().Add(time.Hour * 1).Unix()),
 	}
 
 	http.SetCookie(w, &cookkie)

@@ -4,7 +4,7 @@ export default function Notification({label, message, view}: {label: string, mes
       <div className="w-full flex justify-end">
         <div className="bg-light p-5 w-full max-w-sm rounded-sm border border-dark border-dashed">
           <p className="font-title text-lg">{label}</p>
-          <p className="font-content text-xs">{message}</p>
+          <p className="font-content text-sm">{message}</p>
         </div>
       </div>
     </div>
