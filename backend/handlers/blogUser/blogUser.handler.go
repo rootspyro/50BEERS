@@ -58,6 +58,16 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// build session cookie
+	cookkie := http.Cookie {
+		Name: "token",
+		Value: "hello world from the beer paradise",
+		HttpOnly: true,
+		Secure: false,
+	}
+
+	http.SetCookie(w, &cookkie)
+
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,
 		StatusCode: http.StatusOK,
