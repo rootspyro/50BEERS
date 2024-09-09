@@ -3,6 +3,7 @@ package bloguser
 import (
 	"net/http"
 
+	"github.com/rootspyro/50BEERS/config/jwt"
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/services"
@@ -58,12 +59,21 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// build session cookie
+	// generate token
+	token, err := jwt.Encode(user.Email)
+	if err != nil {
+		log.Error(err.Error())
+		parser.SERVER_ERROR(w, "token couldn't be generated", r.RequestURI)
+		return
+	}
+
+	// build cookie
 	cookkie := http.Cookie {
 		Name: "token",
-		Value: "hello world from the beer paradise",
+		Value: token,
 		HttpOnly: true,
 		Secure: false,
+		Path: r.RequestURI,
 	}
 
 	http.SetCookie(w, &cookkie)
@@ -71,7 +81,7 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,
 		StatusCode: http.StatusOK,
-		Data: "successfull login",
+		Data: "logged in",
 	})
 } 
 

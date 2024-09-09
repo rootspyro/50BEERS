@@ -15,6 +15,7 @@ type app struct {
 		Name string
 	}
 	Server struct {
+		Secret  string
 		Port    string
 		Host    string
 		Socket  string
@@ -40,6 +41,11 @@ func init() {
 	}
 
 	// SERVER
+	App.Server.Host = "localhost"
+	if os.Getenv("SECRET") != "" {
+		App.Server.Host = os.Getenv("SECRET")
+	}
+
 	App.Server.Host = "localhost"
 	if os.Getenv("HOST") != "" {
 		App.Server.Host = os.Getenv("HOST")
