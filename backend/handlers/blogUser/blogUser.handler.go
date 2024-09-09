@@ -1,6 +1,7 @@
 package bloguser
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -20,6 +21,34 @@ func NewBlogUserHandler(srv *services.BlogUserSrv) *BlogUserHandler {
 	return &BlogUserHandler{
 		srv: srv,	
 	}
+}
+
+func(h *BlogUserHandler) ValidateToken(w http.ResponseWriter, r *http.Request) {
+	accessToken, err := r.Cookie("access_token")
+
+	if err != nil {
+
+		parser.JSON(w, parser.ErrorResponse{
+			Status: parser.Status.Error,
+			StatusCode: http.StatusUnauthorized,
+			Error: parser.Error{
+				Code: parser.Errors.UNAUTHORIZED.Code,
+				Message: parser.Errors.UNAUTHORIZED.Message,
+				Details: err.Error(),
+				Timestamp: parser.Timestamp(),
+				Path: r.RequestURI,
+			},
+		})
+		return
+	}
+
+	fmt.Println(accessToken)
+
+	parser.JSON(w, parser.SuccessResponse{
+		Status: parser.Status.Success,
+		StatusCode: http.StatusOK,
+		Data: "all ok",
+	})
 }
 
 func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
@@ -61,16 +90,23 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// generate token
-	token, err := jwt.Encode(user.Email)
+	token, err := jwt.SignToken(user.Email)
 	if err != nil {
 		log.Error(err.Error())
 		parser.SERVER_ERROR(w, "token couldn't be generated", r.RequestURI)
 		return
 	}
 
+	refreshToken, err := jwt.SignRefreshToken(user.Email)
+	if err != nil {
+		log.Error(err.Error())
+		parser.SERVER_ERROR(w, "refresh token couldn't be generated", r.RequestURI)
+		return
+	}
+
 	// build cookie
-	cookkie := http.Cookie {
-		Name: "token",
+	cookkieToken := http.Cookie {
+		Name: "access_token",
 		Value: token,
 		HttpOnly: true,
 		Secure: false,
@@ -78,7 +114,17 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		MaxAge: int(time.Now().Add(time.Hour * 1).Unix()),
 	}
 
-	http.SetCookie(w, &cookkie)
+	cookkieRefreshToken := http.Cookie {
+		Name: "refresh_token",
+		Value: refreshToken,
+		HttpOnly: true,
+		Secure: false,
+		Path: r.RequestURI,
+		MaxAge: int(time.Now().Add(time.Hour * 1).Unix()),
+	}
+
+	http.SetCookie(w, &cookkieToken)
+	http.SetCookie(w, &cookkieRefreshToken)
 
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,

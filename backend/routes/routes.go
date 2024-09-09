@@ -47,6 +47,7 @@ func New(
 	// Authentication
 	router.HandleFunc("POST /api/v1/auth/blog/signup", middlewares.PipeNewBlogUserBody(blogUser.SignUp))
 	router.HandleFunc("POST /api/v1/auth/blog/login", middlewares.PipeLoginBody(blogUser.Login))
+	router.HandleFunc("POST /api/v1/auth/blog/validate", blogUser.ValidateToken)
 
 	// 404 - PATH NOT FOUND
 	router.HandleFunc("/",func(w http.ResponseWriter, r *http.Request) {
