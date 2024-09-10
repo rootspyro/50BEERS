@@ -216,6 +216,38 @@ func(h *BlogUserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	})
 } 
 
+func(h *BlogUserHandler) Logout(w http.ResponseWriter, r *http.Request) {
+	// rewrite access and refresh token cookies
+	accessCookie := http.Cookie {
+		Name: "access_token",
+		Value: "",
+		HttpOnly: true,
+		Secure: true,
+		SameSite: http.SameSiteNoneMode,
+		Path: "/",
+		MaxAge: -1,
+	}
+
+	refreshCookie := http.Cookie {
+		Name: "refresh_token",
+		Value: "",
+		HttpOnly: true,
+		Secure: true,
+		SameSite: http.SameSiteNoneMode,
+		Path: "/",
+		MaxAge: -1,
+	}
+
+	http.SetCookie(w, &accessCookie)
+	http.SetCookie(w, &refreshCookie)
+
+	parser.JSON(w, parser.SuccessResponse{
+		Status: parser.Status.Success,
+		StatusCode: http.StatusOK,
+		Data: "successfull logout",
+	})
+}
+
 func(h *BlogUserHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 
 	body := r.Context().Value("body").(services.BlogUserDTO)
