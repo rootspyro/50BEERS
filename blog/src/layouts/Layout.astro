@@ -9,12 +9,12 @@ interface Props {
 	title: string;
 }
 
-
+const {currentLocale} = Astro;
 const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={currentLocale}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Join my written journey through the world of beer, wine, whiskey, rum, mead, cider, and more. What began as a diary and ink has turned into a challenge to explore and share my tasting experiences." />
