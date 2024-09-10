@@ -17,7 +17,7 @@ func NewTagSrv(repo *repositories.TagRepo) *TagSrv {
 	}
 }
 
-func(s *TagSrv) GetAllTags() ([]Tag, error) {
+func(s *TagSrv) GetAllTags(lang string) ([]Tag, error) {
 	
 	data, err := s.repo.GetAllTags()
 
@@ -28,15 +28,22 @@ func(s *TagSrv) GetAllTags() ([]Tag, error) {
 	var tags []Tag
 
 	for _, tag := range data {
-		tags = append(tags, parseTag(tag)) }
+		tags = append(tags, parseTag(tag, lang)) }
 
 	return tags, nil
 }
 
-func parseTag(data models.Tag) Tag {
+func parseTag(data models.Tag, lang string) Tag {
+
+	var name string = data.EN.Name
+
+	if (lang == "es") {
+		name = data.ES.Name
+	}
+
 	return Tag{
-		ID: ParsePublicId(data.Name),
-		Name: cases.Title(language.Und).String(data.Name),
+		ID: ParsePublicId(data.EN.Name),
+		Name: cases.Title(language.Und).String(name),
 		CreatedAt: data.CreatedAt,
 		UpdatedAt: data.UpdatedAt,
 	}

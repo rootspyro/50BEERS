@@ -12,7 +12,7 @@ import (
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/handlers/location"
 	"github.com/rootspyro/50BEERS/handlers/tag"
-	"github.com/rootspyro/50BEERS/middlewares"
+	mid "github.com/rootspyro/50BEERS/middlewares"
 )
 
 func New(
@@ -32,7 +32,7 @@ func New(
 	router.HandleFunc("GET /api/v1/health", healthHandler.ServerStatus)
 
 	// Tag
-	router.HandleFunc("GET /api/v1/tag/blog", tagHandler.ListCategoriesForBlog)
+	router.HandleFunc("GET /api/v1/tag/blog", mid.LangHeader(tagHandler.ListCategoriesForBlog))
 
 	//  Country
 	router.HandleFunc("GET /api/v1/country/blog", countryHandler.ListCountriesForBlog)
@@ -41,12 +41,12 @@ func New(
 	router.HandleFunc("GET /api/v1/location/blog", locationHandler.ListLocationsForBlog)
 
 	// Drinks
-	router.HandleFunc("GET /api/v1/drinks/blog", middlewares.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog))
+	router.HandleFunc("GET /api/v1/drinks/blog", mid.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog))
 	router.HandleFunc("GET /api/v1/drinks/blog/count", drinkHandler.CountDrinks)
 
 	// Authentication
-	router.HandleFunc("POST /api/v1/auth/blog/signup", middlewares.PipeNewBlogUserBody(blogUser.SignUp))
-	router.HandleFunc("POST /api/v1/auth/blog/login", middlewares.PipeLoginBody(blogUser.Login))
+	router.HandleFunc("POST /api/v1/auth/blog/signup", mid.PipeNewBlogUserBody(blogUser.SignUp))
+	router.HandleFunc("POST /api/v1/auth/blog/login", mid.PipeLoginBody(blogUser.Login))
 	router.HandleFunc("GET /api/v1/auth/blog/profile", blogUser.ValidateToken)
 	router.HandleFunc("POST /api/v1/auth/blog/logout", blogUser.Logout)
 
