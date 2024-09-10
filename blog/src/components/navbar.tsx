@@ -1,7 +1,5 @@
 export default function NavbarComponent({currentPath, currentLang}: {currentPath: string, currentLang: string}) {
 
-  console.log(currentLang)
-
   return(
     <>
     <div className="flex bg-dark justify-between px-5 py-3 items-center text-main">

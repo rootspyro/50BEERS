@@ -2,6 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import PostSection from "../components/postSection.tsx"
 import ContactForm from "../components/contactForm.tsx"
+import { ui } from '../i18n/ui';
+
+const contactLang = {
+  name: ui.en['contact.name'],
+  email: ui.en['contact.email'],
+  message: ui.en['contact.message'],
+  send: ui.en['contact.send']
+}
 
 // fetch countries
 const API_HOST = import.meta.env.PUBLIC_API_HOST
@@ -171,7 +179,7 @@ try {
       <p class="text-3xl sm:text-4xl mt-12">Feel free to contact me!</p>
     </div>
     <div class="w-full flex justify-center items-center">
-      <ContactForm  client:load/>
+      <ContactForm  content={contactLang} client:load/>
     </div>
   </section>
 </Layout>
