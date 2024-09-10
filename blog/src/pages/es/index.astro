@@ -1,0 +1,177 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostSection from "../../components/postSection.tsx"
+import ContactForm from "../../components/contactForm.tsx"
+
+// fetch countries
+const API_HOST = import.meta.env.PUBLIC_API_HOST
+
+interface country {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface location {
+  id: string;
+  name: string;
+  url: string;
+  comments: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface tag {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface counts {
+  all: number;
+  whiskys: number;
+  rums: number;
+  beers: number;
+  wines: number;
+  others: number;
+}
+
+let countries: country[] = []
+
+try {
+
+  const endpoint = API_HOST + "/country/blog"
+  const countriesResult = await fetch(endpoint)
+  const countriesData = await countriesResult.json()
+
+  if (countriesData.status == "success") {
+    countries = countriesData.data.items 
+  } if (countriesData.status == "error") {
+    console.log(countriesData.error)  
+  } 
+
+} catch(err) {
+  console.log(err)
+}
+
+let locations: location[] = []
+
+try {
+
+  const endpoint = API_HOST + "/location/blog"
+  const locationsResult = await fetch(endpoint)
+  const locationsData = await locationsResult.json()
+
+  if (locationsData.status == "success") {
+    locations = locationsData.data.items 
+  } if (locationsData.status == "error") {
+    console.log(locationsData.error)  
+  } 
+
+} catch(err) {
+  console.log(err)
+}
+
+let tags: tag[] = []
+try {
+
+  const endpoint = API_HOST + "/tag/blog"
+  const tagsResult = await fetch(endpoint)
+  const tagsData = await tagsResult.json()
+
+  if (tagsData.status == "success") {
+    tags = tagsData.data.items 
+  } if (tagsData.status == "error") {
+    console.log(tagsData.error)  
+  } 
+
+} catch(err) {
+  console.log(err)
+}
+
+let counts : counts = { all: 0, whiskys: 0, rums: 0, beers: 0, wines: 0, others: 0 }
+
+try {
+
+  const endpoint = API_HOST + "/drinks/blog/count"
+
+  const countsResult = await fetch(endpoint)
+  const countsData = await countsResult.json()
+
+  if (countsData.status == "success") {
+    counts = countsData.data
+  }
+
+} catch(err) {
+  console.log(err)
+}
+
+---
+
+<Layout title="50 BEERS: Exploring beverages around the world">
+  <section class="h-96 w-full flex justify-center items-center flex-col">
+    <h1 class="font-title text-5xl md:text-7xl font-normal text-dark p-10">
+      50 <span class="text-light bg-dark px-1">BEERS</span>
+    </h1> 
+    <p class="font-content text-lg md:text-2xl">JUST <span class="line-through">DRINKING</span> WRITING TO LOOK BUSY</p>
+  </section>
+  <section class="p-7">
+    <PostSection 
+      countries={countries}
+      locations={locations}
+      tags={tags}
+      client:load 
+     /> 
+  </section>
+  <section class="w-full bg-dark mt-5 text-light px-10 py-24 flex flex-col items-center justify-center gap-8">
+    <p class="text-center">
+      In <span class="font-bold">October 2023</span> I started my journey. Since then I have tested a total of <span class="font-bold">{counts.all}</span> different drinks. <br/> Among them we can find...
+    </p>
+
+    <div class="flex w-full flex-col gap-8 items-center justify-center sm:flex-row">
+
+      <div class="flex text-3xl font-title flex-col items-center justify-center">
+        <p>{counts.whiskys}</p>
+        <p>WHISKYS</p>
+      </div>
+
+      <div class="flex text-3xl font-title flex-col items-center justify-center">
+        <p>{counts.rums}</p>
+        <p>RUMS</p>
+      </div>
+
+      <div class="flex text-3xl font-title flex-col items-center justify-center">
+        <p>{counts.beers}</p>
+        <p>BEERS</p>
+      </div>
+
+      <div class="flex text-3xl font-title flex-col items-center justify-center">
+        <p>{counts.wines}</p>
+        <p>WINES</p>
+      </div>
+
+      <div class="flex text-3xl font-title flex-col items-center justify-center">
+        <p>{counts.others}</p>
+        <p>OTHERS</p>
+      </div>
+
+    </div>
+
+    <p class="text-center">
+      All of them documented here.
+    </p>
+  </section>
+  <section class="w-full text-dark px-10 py-16 flex flex-col md:flex-row md:justify-center gap-10">
+    <div class="w-full font-title flex flex-col items-center md:items-start">
+      <p class="text-2xl sm:text-3xl">Do you like my content?</p>
+      <p class="text-light bg-dark inline-block p-2 mt-5 text-3xl sm:text-4xl">Do you need a developer?</p>
+      <p class="text-xl sm:text-2xl mt-5">Want to insult me because I didn't like your favorite beer?</p>
+      <p class="text-3xl sm:text-4xl mt-12">Feel free to contact me!</p>
+    </div>
+    <div class="w-full flex justify-center items-center">
+      <ContactForm  client:load/>
+    </div>
+  </section>
+</Layout>
