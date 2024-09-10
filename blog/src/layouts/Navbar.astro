@@ -1,8 +1,18 @@
 ---
 import NavbarComponent from "../components/navbar.tsx"
+import { getLangFromUrl, useTranslations } from "../i18n/utils"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const content = {
+  login: t('nav.login'),
+  signup: t('nav.signup'),
+  logout: t('nav.logout'),
+}
 ---
 <header class="w-full top-0 left-0 z-10 font-content">
   <navbar class="block">
-    <NavbarComponent client:load />
+    <NavbarComponent content={content} client:load />
   </navbar>
 </header>

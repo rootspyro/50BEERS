@@ -3,7 +3,13 @@ import FetchUserData from "../utils/auth"
 import Notify from "../utils/notify"
 import Notification from "./notification"
 
-export default function Navbar() {
+type content = {
+  login: string
+  signup: string
+  logout: string
+}
+
+export default function NavbarComponent({content}: {content: content}) {
 
   const [notificationView, SetNotificationView] = useState(false)
   const [notificationMsg, SetNotificationMsg] = useState("")
@@ -64,9 +70,9 @@ export default function Navbar() {
       </div>
       <div className="flex gap-4 font-title items-center justify-end">
         <a href="#" className={`p-2 text-main text-sm hover:line-through duration-200 transition-all ${user.isLogged ? "": "hidden"}`}>{user.username}</a>
-        <a onClick={Logout} href="#" className={`p-2 bg-main text-dark text-sm hover:bg-dark hover:text-main duration-200 transition-all ${user.isLogged ? "": "hidden"}`}>Logout</a>
-        <a href="/login" className={`p-2 text-main text-sm hover:bg-main hover:text-dark duration-200 transition-all ${user.isLogged ? "hidden": ""}`}>Login</a>
-        <a href="/signup" className={`p-2 bg-main text-dark text-sm hover:bg-dark hover:text-main duration-200 transition-all ${user.isLogged ? "hidden": ""}`}>Sign Up</a>
+        <a onClick={Logout} href="#" className={`p-2 bg-main text-dark text-sm hover:bg-dark hover:text-main duration-200 transition-all ${user.isLogged ? "": "hidden"}`}>{content.logout}</a>
+        <a href="/login" className={`p-2 text-main text-sm hover:bg-main hover:text-dark duration-200 transition-all ${user.isLogged ? "hidden": ""}`}>{content.login}</a>
+        <a href="/signup" className={`p-2 bg-main text-dark text-sm hover:bg-dark hover:text-main duration-200 transition-all ${user.isLogged ? "hidden": ""}`}>{content.signup}</a>
       </div>
     </div>
     <Notification view={notificationView} label={notificationLabel} message={notificationMsg} />
