@@ -1,8 +1,8 @@
 package bloguser
 
 import (
-	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/rootspyro/50BEERS/config/jwt"
 	"github.com/rootspyro/50BEERS/config/log"
@@ -23,7 +23,35 @@ func NewBlogUserHandler(srv *services.BlogUserSrv) *BlogUserHandler {
 }
 
 func(h *BlogUserHandler) ValidateToken(w http.ResponseWriter, r *http.Request) {
-	accessToken, err := r.Cookie("access_token")
+
+	var subject string
+	accessToken, atErr := r.Cookie("access_token")
+	refreshToken, rtErr := r.Cookie("refresh_token")
+
+	var token string
+
+	if atErr != nil {
+		if rtErr != nil {
+			parser.JSON(w, parser.ErrorResponse{
+				Status: parser.Status.Error,
+				StatusCode: http.StatusUnauthorized,
+				Error: parser.Error{
+					Code: parser.Errors.UNAUTHORIZED.Code,
+					Message: parser.Errors.UNAUTHORIZED.Message,
+					Details: "access token is missing",
+					Timestamp: parser.Timestamp(),
+					Path: r.RequestURI,
+				},
+			})
+			return
+		}
+
+		token = refreshToken.Value
+	} else {
+		token = accessToken.Value
+	}
+
+	subject, err := jwt.Decode(token)
 
 	if err != nil {
 
@@ -41,12 +69,66 @@ func(h *BlogUserHandler) ValidateToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(accessToken)
+	// get blog user data
+	user, err := h.srv.GetUserByEmail(subject)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+
+			//remove the accessToken cookie
+			cookie := http.Cookie {
+				Name: "access_token",
+				Value: "",
+				HttpOnly: true,
+				Secure: true,
+				SameSite: http.SameSiteNoneMode,
+				Path: "/",
+				MaxAge: -1, // new cookie that instantly dies
+			}
+
+			http.SetCookie(w, &cookie)
+
+			parser.JSON(w, parser.ErrorResponse{
+				Status: parser.Status.Error,
+				StatusCode: http.StatusUnauthorized,
+				Error: parser.Error{
+					Code: parser.Errors.UNAUTHORIZED.Code,
+					Message: parser.Errors.UNAUTHORIZED.Message,
+					Details: "invalid user",
+					Path: r.RequestURI,
+					Timestamp: parser.Timestamp(),
+				},
+			})
+			return
+		}
+
+		parser.SERVER_ERROR(w, "error validating user", r.RequestURI)
+		return
+	}
+
+	if atErr != nil {
+		newAccessToken, err := jwt.SignToken(user.Email)
+		if err != nil {
+			parser.SERVER_ERROR(w, "error signing new token", r.RequestURI)
+			return
+		}
+
+		cookie := http.Cookie{
+			Name: "access_token",
+			Value: newAccessToken,
+			HttpOnly: true,
+			Secure: true,
+			SameSite: http.SameSiteNoneMode,
+			Path: "/",
+			MaxAge: int(time.Hour.Seconds()),
+		}		
+
+		http.SetCookie(w, &cookie)
+	}
 
 	parser.JSON(w, parser.SuccessResponse{
 		Status: parser.Status.Success,
 		StatusCode: http.StatusOK,
-		Data: "all ok",
+		Data: user,
 	})
 }
 

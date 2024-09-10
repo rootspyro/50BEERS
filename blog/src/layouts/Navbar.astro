@@ -1,13 +1,8 @@
+---
+import NavbarComponent from "../components/navbar.tsx"
+---
 <header class="w-full top-0 left-0 z-10 font-content">
   <navbar class="block">
-    <div class="flex bg-dark justify-between px-5 py-3 items-center text-main">
-      <div>
-        <a href="/" class="font-title text-xl">50 BEERS</a>
-      </div>
-      <div class="flex gap-4 font-title items-center justify-end">
-        <a href="/login" class="p-2 text-main text-sm hover:bg-main hover:text-dark duration-200 transition-all">Login</a>
-        <a href="/signup" class="p-2 bg-main text-dark text-sm hover:bg-dark hover:text-main duration-200 transition-all">Sign Up</a>
-      </div>
-    </div>
+    <NavbarComponent client:load />
   </navbar>
 </header>

@@ -8,6 +8,11 @@ import (
 	"github.com/rootspyro/50BEERS/config"
 )
 
+type BlogUserClaims struct {
+	Sub string `json:"sub"`
+	Iat string `json:"iat"`
+	Exp string `json:"exp"`
+}
 
 func Encode(email string, hours time.Duration) (string, error) {
 
@@ -32,7 +37,7 @@ func SignRefreshToken(email string) (string, error) {
 	return Encode(email, 12)
 }
 
-func Decode(tokenStr string) error {
+func Decode(tokenStr string) (string, error) {
 
 	secretKey := []byte(config.App.Server.Secret)
 
@@ -46,14 +51,17 @@ func Decode(tokenStr string) error {
 	})
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if !token.Valid {
-		return fmt.Errorf("invalid token")
+		return "", fmt.Errorf("invalid token")
 	}
 
-	fmt.Println(token)
+	subject, err := token.Claims.GetSubject()
+	if err != nil {
+		return "", fmt.Errorf("error getting subject")
+	}
 
-	return err
+	return  subject, nil
 }

@@ -7,6 +7,7 @@ import Notify from "../utils/notify"
 export default function SignUpForm() {
 
   const [passwordView, SetPasswordView] = useState(false)
+  const [confPasswordView, SetConfPasswordView] = useState(false)
   const [notificationView, SetNotificationView] = useState(false)
   const [notificationMsg, SetNotificationMsg] = useState("")
   const [notificationLabel, SetNotificationLabel] = useState("")
@@ -14,6 +15,11 @@ export default function SignUpForm() {
   const handlePasswordView = () => {
     SetPasswordView(!passwordView)
   }
+
+  const handleConfPasswordView = () => {
+    SetConfPasswordView(!confPasswordView)
+  }
+
   type Response = {
     status: string;
     statusCode: string;
