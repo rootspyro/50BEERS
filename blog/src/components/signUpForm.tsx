@@ -1,7 +1,8 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useForm, type SubmitHandler} from "react-hook-form";
 import Notification from "./notification";
 import Notify from "../utils/notify"
+import FetchUserData from "../utils/auth";
 
 
 export default function SignUpForm() {
@@ -89,6 +90,14 @@ export default function SignUpForm() {
 
     Notify(SetNotificationView)
   }
+
+  useEffect(() => {
+    FetchUserData().then((user: {isLogged: boolean}) => {
+      if (user.isLogged) {
+        window.location.href = "/"
+      } 
+    })
+  }, [])
 
   return (
   <>
