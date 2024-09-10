@@ -12,6 +12,33 @@ const contactLang = {
   send: ui.es['contact.send']
 }
 
+const postsLang = {
+  filters: {
+    defaultSearch: ui.es['posts.defaultSearch'],
+    defaultSortBy: ui.es['posts.sortBy'],
+    defaultCountry: ui.es['posts.defaultCountry'],
+    defaultLocation: ui.es['posts.defaultLocation'],
+    defaultCategory: ui.es['posts.defaultCategory'],
+    categoryTitle: ui.es['posts.categoryTitle'],
+  },
+  popularDrinks: ui.es['posts.popular'],
+  itemsFound: ui.es['posts.itemsFound'],
+  notFound: {
+    title1: ui.es['posts.notFound.1'],
+    title2: ui.es['posts.notFound.2'],
+    text: ui.es['posts.notFound.text'],
+    cta: ui.es['posts.notFound.cta'],
+  },
+  aboutMe: {
+    title: ui.es['posts.aboutme.title'],
+    part1: ui.es['posts.aboutme.1'],
+    part2: ui.es['posts.aboutme.2'],
+    part3: ui.es['posts.aboutme.3'],
+    part4: ui.es['posts.aboutme.4'],
+    part5: ui.es['posts.aboutme.5'],
+  }
+}
+
 // fetch countries
 const API_HOST = import.meta.env.PUBLIC_API_HOST
 
@@ -131,6 +158,7 @@ try {
       countries={countries}
       locations={locations}
       tags={tags}
+      lang={postsLang}
       client:load 
      /> 
   </section>
