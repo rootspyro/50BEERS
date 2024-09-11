@@ -11,6 +11,12 @@ interface lang {
     defaultLocation: string;
     defaultCategory: string;
     categoryTitle: string;
+    sort: {
+      abv: string;
+      date: string;
+      name: string;
+      stars: string;
+   }
   },
   popularDrinks: string
   itemsFound: string
@@ -181,10 +187,10 @@ function PostSection({countries, locations, tags, lang} : {countries: country[],
             </select>
             <select onChange={handleSort} defaultValue={"created_at"} className="bg-light border border-dark border-dashed p-2.5 text-xs rounded-sm outline-none w-full">
               <option value="created_at">{lang.filters.defaultSortBy}</option>
-              <option value="abv">ABV</option>
-              <option value="date">Date</option>
-              <option value="name">Name</option>
-              <option value="stars">Stars</option>
+              <option value="abv">{lang.filters.sort.abv}</option>
+              <option value="date">{lang.filters.sort.abv}</option>
+              <option value="name">{lang.filters.sort.name}</option>
+              <option value="stars">{lang.filters.sort.stars}</option>
             </select>
           </div>
           <div className="flex gap-2 items-center w-full">
@@ -223,10 +229,10 @@ function PostSection({countries, locations, tags, lang} : {countries: country[],
             </button>
             <select onChange={handleSort} className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">{lang.filters.defaultSortBy}</option>
-              <option value="abv">ABV</option>
-              <option value="date">Date</option>
-              <option value="name">Name</option>
-              <option value="stars">Stars</option>
+              <option value="abv">{lang.filters.sort.abv}</option>
+              <option value="date">{lang.filters.sort.date}</option>
+              <option value="name">{lang.filters.sort.name}</option>
+              <option value="stars">{lang.filters.sort.stars}</option>
             </select>
             <select  onChange={handleCountry} className="bg-light border border-dark border-dashed p-2.5 text-xs md:text-sm rounded-sm outline-none min-w-32  max-w-36">
               <option value="">{lang.filters.defaultCountry}</option>
