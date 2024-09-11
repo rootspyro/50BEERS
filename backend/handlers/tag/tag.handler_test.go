@@ -14,6 +14,7 @@ import (
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/handlers/tag"
+	"github.com/rootspyro/50BEERS/middlewares"
 	"github.com/rootspyro/50BEERS/services"
 )
 
@@ -49,7 +50,8 @@ func TestListCategoriesForBlog(t *testing.T) {
 	handler := tag.NewTagHandler(srv)
 
 	// build testing server
-	server := httptest.NewServer(http.HandlerFunc(handler.ListCategoriesForBlog))
+	handlerFunc := middlewares.LangHeader(handler.ListCategoriesForBlog)
+	server := httptest.NewServer(http.HandlerFunc(handlerFunc))
 
 	// make http GET request
 	resp, err := http.Get(server.URL)
