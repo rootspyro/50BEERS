@@ -41,7 +41,7 @@ func New(
 	router.HandleFunc("GET /api/v1/location/blog", mid.LangHeader(locationHandler.ListLocationsForBlog))
 
 	// Drinks
-	router.HandleFunc("GET /api/v1/drinks/blog", mid.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog))
+	router.HandleFunc("GET /api/v1/drinks/blog", mid.LangHeader(mid.ValidateDrinksBlogFilters(drinkHandler.ListDrinksForBlog)))
 	router.HandleFunc("GET /api/v1/drinks/blog/count", drinkHandler.CountDrinks)
 
 	// Authentication

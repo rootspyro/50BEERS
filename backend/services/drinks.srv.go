@@ -100,7 +100,7 @@ func (s *DrinkSrv) CalculatePages(limit int) (int, error) {
 	return int(pages), nil
 }
 
-func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, error) {
+func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters, lang string) ([]DrinkResume, error) {
 	nameRegex := fmt.Sprintf(".*%s.*", filters.Name)
 
 	// validate country exists
@@ -129,7 +129,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 			"$and",
 			bson.A{
 				bson.D{{"tags", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Category)}}}},
-				bson.D{{"country", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Country)}}}},
+				bson.D{{"en.country", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Country)}}}},
 				bson.D{{
 					"$or",
 					bson.A{
@@ -137,7 +137,7 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 						bson.D{{"type", bson.D{{"$regex", nameRegex}}}},
 					},
 				}},
-				bson.D{{"location", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Location)}}}},
+				bson.D{{"en.location", bson.D{{"$regex", fmt.Sprintf(".*%s.*", filters.Location)}}}},
 				bson.D{{"status", "public"}},
 			},
 		},
@@ -165,24 +165,33 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 	var drinks []DrinkResume
 
 	for _, drink := range response {
-		drinks = append(drinks, parseResumeDrink(drink))
+		drinks = append(drinks, parseResumeDrink(drink, lang))
 	}
 
 	return drinks, err
 }
 
-func parseDrink(data models.Drink) Drink {
+func parseDrink(data models.Drink, lang string) Drink {
+
+	var country string = data.EN.Country	
+	var location string = data.EN.Location
+
+	if lang == "es" {
+		country = data.ES.Country
+		location = data.ES.Location
+	}
+
 	newDrink := Drink{
 		ID:           data.ID.Hex(),
 		Name:         data.Name,
 		Type:         data.Type,
 		ABV:          data.ABV,
-		Country:      data.Country,
+		Country:      country,
 		Date:         data.Date,
 		ChallengeNum: data.ChallengeNum,
 		Stars:        data.Stars,
 		PictureURL:   data.PictureURL,
-		Location:     data.Location,
+		Location:     location,
 		CreatedAt:    data.CreatedAt,
 		UpdatedAt:    data.UpdatedAt,
 		Status:       data.Status,
@@ -195,16 +204,25 @@ func parseDrink(data models.Drink) Drink {
 	return newDrink
 }
 
-func parseResumeDrink(data models.Drink) DrinkResume {
+func parseResumeDrink(data models.Drink, lang string) DrinkResume {
+
+	var country string = data.EN.Country	
+	var location string = data.EN.Location
+
+	if lang == "es" {
+		country = data.ES.Country
+		location = data.ES.Location
+	}
+
 	newDrink := DrinkResume{
 		ID:           ParsePublicId(data.Name),
 		Name:         cases.Title(language.Und).String(data.Name),
 		Type:         cases.Title(language.Und).String(data.Type),
 		ABV:          data.ABV,
-		Country:      cases.Title(language.Und).String(data.Country),
+		Country:      cases.Title(language.Und).String(country),
 		Date:         data.Date,
 		ChallengeNum: data.ChallengeNum,
-		Location:     cases.Title(language.Und).String(data.Location),
+		Location:     cases.Title(language.Und).String(location),
 		Stars:        data.Stars,
 		PictureURL:   data.PictureURL,
 		CreatedAt:    data.CreatedAt,
