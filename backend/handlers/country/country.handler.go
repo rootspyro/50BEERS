@@ -20,7 +20,9 @@ func NewCountryHandler(service *services.CountrySrv) *CountryHandler{
 
 func(h *CountryHandler) ListCountriesForBlog(w http.ResponseWriter, r *http.Request) {
 
-	countries, err := h.srv.GetAllCountries()
+	lang := r.Context().Value("lang").(string)
+
+	countries, err := h.srv.GetAllCountries(lang)
 
 	if err != nil {
 		parser.JSON(w, parser.ErrorResponse{

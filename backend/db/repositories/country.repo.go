@@ -50,7 +50,7 @@ func(r *CountriesRepo) GetAllCountries() ([]models.Country, error) {
 
 func(r *CountriesRepo) FindByName(name string) (models.Country, error) {
 	
-	filter := bson.D{{"name", name}}
+	filter := bson.D{{"en.name", name}}
 	
 	var result models.Country 
 

@@ -35,7 +35,7 @@ func New(
 	router.HandleFunc("GET /api/v1/tag/blog", mid.LangHeader(tagHandler.ListCategoriesForBlog))
 
 	//  Country
-	router.HandleFunc("GET /api/v1/country/blog", countryHandler.ListCountriesForBlog)
+	router.HandleFunc("GET /api/v1/country/blog", mid.LangHeader(countryHandler.ListCountriesForBlog))
 
 	// Location
 	router.HandleFunc("GET /api/v1/location/blog", locationHandler.ListLocationsForBlog)

@@ -24,28 +24,68 @@ func(s *CountrySeeder) Seed() error {
 
 	data := []models.NewCountry{
 		{
-			Name: "belgium",
+			EN: models.CountryLang{
+				Name: "belgium",
+			},
+			ES: models.CountryLang{
+				Name: "bélgica",
+			},
 		},
 		{
-			Name: "germany",
+			EN: models.CountryLang{
+				Name: "germany",
+			},
+			ES: models.CountryLang{
+				Name: "alemania",
+			},
 		},
 		{
-			Name: "ireland",
+			EN: models.CountryLang{
+				Name: "ireland",
+			},
+			ES: models.CountryLang{
+				Name: "irlanda",
+			},
 		},
 		{
-			Name: "mexico",
+			EN: models.CountryLang{
+				Name: "mexico",
+			},
+			ES: models.CountryLang{
+				Name: "méxico",
+			},
 		},
 		{
-			Name: "scotland",
+			EN: models.CountryLang{
+				Name: "scotland",
+			},
+			ES: models.CountryLang{
+				Name: "escocia",
+			},
 		},
 		{
-			Name: "spain",
+			EN: models.CountryLang{
+				Name: "spain",
+			},
+			ES: models.CountryLang{
+				Name: "españa",
+			},
 		},
 		{
-			Name: "united states",
+			EN: models.CountryLang{
+				Name: "united states",
+			},
+			ES: models.CountryLang{
+				Name: "estados unidos",
+			},
 		},
 		{
-			Name: "venezuela",
+			EN: models.CountryLang{
+				Name: "venezuela",
+			},
+			ES: models.CountryLang{
+				Name: "venezuela",
+			},
 		},
 	}
 

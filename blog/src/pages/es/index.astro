@@ -79,7 +79,11 @@ let countries: country[] = []
 try {
 
   const endpoint = API_HOST + "/country/blog"
-  const countriesResult = await fetch(endpoint)
+  const countriesResult = await fetch(endpoint, {
+    headers: {
+      "Accept-Language": "es"
+    }
+  })
   const countriesData = await countriesResult.json()
 
   if (countriesData.status == "success") {
