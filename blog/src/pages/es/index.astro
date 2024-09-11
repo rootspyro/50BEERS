@@ -114,7 +114,11 @@ let tags: tag[] = []
 try {
 
   const endpoint = API_HOST + "/tag/blog"
-  const tagsResult = await fetch(endpoint)
+  const tagsResult = await fetch(endpoint, {
+    headers: {
+      "Accept-Language": "es"
+    }
+  })
   const tagsData = await tagsResult.json()
 
   if (tagsData.status == "success") {

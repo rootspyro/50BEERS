@@ -25,7 +25,7 @@ func(s *TagSeeder) Seed() error {
 	data := []models.NewTag{
 		{
 			EN: models.TagLangContent{
-				Name: "beers",
+				Name: "beer",
 			},
 			ES: models.TagLangContent{
 				Name: "cerveza",
