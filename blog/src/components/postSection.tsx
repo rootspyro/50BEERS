@@ -4,6 +4,11 @@ import DrinkCard from "./drinkCard";
 import PaginationMenu from "./paginationMenu";
 
 interface lang {
+  card: {
+    date: string 
+    country: string
+    published: string
+  }
   filters: {
     defaultSearch: string;
     defaultSortBy: string
@@ -270,7 +275,7 @@ function PostSection({countries, locations, tags, lang} : {countries: country[],
             drinks.items.map((drink: drink) => {
 
                 return (
-                  <DrinkCard key={drink.id} drink={drink} />
+                  <DrinkCard key={drink.id} drink={drink} lang={lang.card} />
                 )
             })
           }
