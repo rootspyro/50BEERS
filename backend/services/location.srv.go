@@ -17,7 +17,7 @@ func NewLocationSrv(repo *repositories.LocationRepo) *LocationSrv {
 	}
 }
 
-func (s *LocationSrv) GetAllLocations() ([]Location, error) {
+func (s *LocationSrv) GetAllLocations(lang string) ([]Location, error) {
 	data, err := s.repo.GetAllLocations()
 	if err != nil {
 		return nil, err 
@@ -26,18 +26,27 @@ func (s *LocationSrv) GetAllLocations() ([]Location, error) {
 	var locations []Location
 	for _, location := range data {
 
-		locations = append(locations, parseLocation(location))
+		locations = append(locations, parseLocation(location, lang))
 	}
 
 	return locations, nil
 }
 
-func parseLocation(data models.Location) Location {
+func parseLocation(data models.Location, lang string) Location {
+
+	var name string = data.EN.Name
+	var comments string = data.EN.Comments
+
+	if lang == "es" {
+		name = data.ES.Name
+		comments = data.ES.Comments
+	}
+
 	return Location{
-		ID: ParsePublicId(data.Name),
-		Name: cases.Title(language.Und).String(data.Name),
+		ID: ParsePublicId(data.EN.Name),
+		Name: cases.Title(language.Und).String(name),
 		URL: data.URL,
-		Comments: data.Comments,
+		Comments: comments,
 		CreatedAt: data.CreatedAt,
 		UpdatedAt: data.UpdatedAt,
 	}

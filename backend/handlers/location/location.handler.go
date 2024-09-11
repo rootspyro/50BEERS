@@ -19,7 +19,9 @@ func NewLocationHandler(srv *services.LocationSrv) *LocationHandler {
 }
 
 func(h *LocationHandler) ListLocationsForBlog(w http.ResponseWriter, r *http.Request) {
-	locations, err := h.srv.GetAllLocations()
+	lang := r.Context().Value("lang").(string)
+
+	locations, err := h.srv.GetAllLocations(lang)
 	if err != nil {
 		parser.JSON(w, parser.ErrorResponse{
 			Status: parser.Status.Error,

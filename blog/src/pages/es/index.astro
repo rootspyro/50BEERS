@@ -101,7 +101,7 @@ let locations: location[] = []
 try {
 
   const endpoint = API_HOST + "/location/blog"
-  const locationsResult = await fetch(endpoint)
+  const locationsResult = await fetch(endpoint, {headers: {"Accept-Language": "es"}})
   const locationsData = await locationsResult.json()
 
   if (locationsData.status == "success") {
