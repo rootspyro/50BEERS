@@ -114,7 +114,6 @@ func (s *DrinkSrv) GetAllDrinks(filters DrinkSearchFilters) ([]DrinkResume, erro
 	}
 
 	// validate if location exists
-
 	_, err = s.locationRepo.FindByName(filters.Location)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {

@@ -48,7 +48,7 @@ func(r *LocationRepo) GetAllLocations() ([]models.Location, error) {
 
 func(r *LocationRepo) FindByName(name string) (models.Location, error) {
 
-	filter := bson.D{{"name", name}}
+	filter := bson.D{{"en.name", name}}
 
 	var location models.Location
 
