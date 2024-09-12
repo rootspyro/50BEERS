@@ -3,6 +3,7 @@ package subscriber
 import (
 	"net/http"
 
+	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/services"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -40,14 +41,23 @@ func(h *SubscriberHandler) NewSub(w http.ResponseWriter, r *http.Request) {
 
 	} else {
 		if err != mongo.ErrNoDocuments {
+			log.Error(err.Error())
 			parser.SERVER_ERROR(w, "error trying to get subscriber", r.RequestURI)
 			return
 		}
 	}
 
+	// insert new subscriber
+	data, err := h.srv.NewSubsciber(body.Email)
+
+	if err != nil {
+		log.Error(err.Error())
+		parser.SERVER_ERROR(w, "error adding new subscriber", r.RequestURI)
+	}
+
 	parser.JSON(w, parser.SuccessResponse {
 		Status: parser.Status.Success,
 		StatusCode: http.StatusCreated,
-		Data: "Subscription confirmed. Thank you for your support",
+		Data: data,
 	})
 }

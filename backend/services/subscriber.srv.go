@@ -25,6 +25,16 @@ func (s *SubscriberSrv) FindByEmail(email string) (Subscriber, error) {
 	return subscriberParser(data), nil
 }
 
+func (s *SubscriberSrv) NewSubsciber(email string) (Subscriber, error) {
+
+	newSubscriber, err := s.repo.NewSubsciber(email)
+	if err != nil {
+		return Subscriber{}, err
+	}
+	
+	return subscriberParser(newSubscriber), nil
+}
+
 func subscriberParser(data models.Subscriber) Subscriber {
 	return Subscriber{
 		Email: data.Email,

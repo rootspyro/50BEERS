@@ -172,3 +172,71 @@ func TestNewSubscriberBadEmail(t *testing.T) {
 	}
 
 }
+
+func TestNewSubscriberConflict(t *testing.T) {
+	connStr, dbName := connString()
+
+	dbClient, err := db.New(connStr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	database := dbClient.Database(dbName)
+
+	handler := buildHandler(database)
+
+	// build the testing server
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeSubscriberBody(handler.NewSub)))
+
+	// build the request
+	body := services.SubscriberDTO{
+		Email: "subscriber@mail.com",
+	}
+
+	bodyJSON, err := json.Marshal(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bodyData := bytes.NewBuffer([]byte(bodyJSON))
+
+	request, err := http.NewRequest(http.MethodPost, server.URL, bodyData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp.StatusCode != http.StatusConflict {
+		t.Errorf("status code expected %d but got %d", http.StatusConflict, resp.StatusCode)
+	}
+
+	var result parser.ErrorResponse
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if result.Status != parser.Status.Error {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Error, result.Status)
+	}
+
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+
+	if result.Error.Code != parser.Errors.CONFLICT.Code {
+		t.Errorf("error code expected '%s' but got '%s'", parser.Errors.CONFLICT.Code, result.Error.Code)
+	}
+
+}
