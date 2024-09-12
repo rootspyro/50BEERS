@@ -45,7 +45,7 @@ export const ui = {
     'footer.subtitle.3': "ESCRIBIENDO PARA PARECER OCUPADO",
     'footer.newsletter.text': "Mantente al día de las últimas cervezas y tragos.",
     'footer.newsletter.placeholder': 'Correo electrónico',
-    'footer.newsletter.cta': 'Subscrirse',
+    'footer.newsletter.cta': 'Subscribirse',
     'footer.rights': 'Todos los derechos reservados',
     'footer.developer': 'Desarrollado por',
   },

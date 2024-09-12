@@ -6,5 +6,6 @@ var Collections []string = []string{
 	"location",
 	"tag",
 	"blogUser",
+	"subscriber",
 }
 

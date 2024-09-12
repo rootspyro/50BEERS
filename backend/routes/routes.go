@@ -11,6 +11,7 @@ import (
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/handlers/location"
+	"github.com/rootspyro/50BEERS/handlers/subscriber"
 	"github.com/rootspyro/50BEERS/handlers/tag"
 	mid "github.com/rootspyro/50BEERS/middlewares"
 )
@@ -22,6 +23,7 @@ func New(
 	locationHandler *location.LocationHandler,
 	drinkHandler *drinks.DrinkHandler,
 	blogUser *bloguser.BlogUserHandler,
+	subsHandler *subscriber.SubscriberHandler,
 ) *http.ServeMux{
 
 	router := http.ServeMux{}
@@ -49,6 +51,9 @@ func New(
 	router.HandleFunc("POST /api/v1/auth/blog/login", mid.PipeLoginBody(blogUser.Login))
 	router.HandleFunc("GET /api/v1/auth/blog/profile", blogUser.ValidateToken)
 	router.HandleFunc("POST /api/v1/auth/blog/logout", blogUser.Logout)
+
+	// Subscribers
+	router.HandleFunc("POST /api/v1/newsletter/subscriber", subsHandler.NewSub)
 
 	// 404 - PATH NOT FOUND
 	router.HandleFunc("/",func(w http.ResponseWriter, r *http.Request) {

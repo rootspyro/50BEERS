@@ -20,6 +20,7 @@ import (
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/handlers/location"
+	"github.com/rootspyro/50BEERS/handlers/subscriber"
 	"github.com/rootspyro/50BEERS/handlers/tag"
 	"github.com/rootspyro/50BEERS/middlewares"
 	"github.com/rootspyro/50BEERS/routes"
@@ -53,6 +54,7 @@ func main() {
 	drinksRepo := repositories.NewDrinksRepo(database.Collection("drink"))
 	tagRepo := repositories.NewTagRepo(database.Collection("tag"))
 	blogUserRepo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
+	subscriberRepo := repositories.NewSubscriberRepo(database.Collection("subscriber"))
 
 	if migrate {
 
@@ -84,6 +86,7 @@ func main() {
 	locationSrv := services.NewLocationSrv(locationRepo)
 	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 	blogUserSrv := services.NewBlogUserSrv(blogUserRepo)
+	subscriberSrv := services.NewSubscriberSrv(subscriberRepo)
 
 	// handlers
 	healthHandler := health.NewHealthHandler()
@@ -92,6 +95,7 @@ func main() {
 	locationHandler := location.NewLocationHandler(locationSrv)
 	drinkHandler := drinks.NewDrinkHandler(drinkSrv)
 	blogUserHandler := bloguser.NewBlogUserHandler(blogUserSrv)
+	subscriberHandler := subscriber.NewSubscriberHandler(subscriberSrv)
 
 	// routes
 	routes := routes.New(
@@ -101,6 +105,7 @@ func main() {
 		locationHandler,
 		drinkHandler,
 		blogUserHandler,
+		subscriberHandler,
 	)
 
 	// Configurate server
