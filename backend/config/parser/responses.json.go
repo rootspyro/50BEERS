@@ -49,6 +49,7 @@ type errorList struct {
 	UNAUTHORIZED            CommonError
 	BAD_REQUEST_BODY        CommonError
 	BAD_REQUEST_QUERY       CommonError
+	NOT_FOUND               CommonError
 	PATH_NOT_FOUND          CommonError
 	CONFLICT                CommonError
 	INTERNAL_SERVER_ERROR   CommonError
@@ -66,6 +67,10 @@ var Errors errorList = errorList{
 	BAD_REQUEST_QUERY: CommonError{
 		Code:    "BAD_REQUEST",
 		Message: "invalid format for request query",
+	},
+	NOT_FOUND: CommonError{
+		Code: "NOT_FOUND",
+		Message: "resource was not found",
 	},
 	PATH_NOT_FOUND: CommonError{
 		Code:    "NOT_FOUND",

@@ -61,3 +61,43 @@ func(h *SubscriberHandler) NewSub(w http.ResponseWriter, r *http.Request) {
 		Data: data,
 	})
 }
+
+func(h *SubscriberHandler) RemoveSubscriber(w http.ResponseWriter, r *http.Request) {
+
+	body := r.Context().Value("body").(services.SubscriberDTO)
+
+	// validate if email is subscribed to newsletter
+	_, err := h.srv.FindByEmail(body.Email)	
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			parser.JSON(w, parser.ErrorResponse{
+				Status: parser.Status.Error,
+				StatusCode: http.StatusNotFound,
+				Error: parser.Error{
+					Code: parser.Errors.NOT_FOUND.Code,
+					Message: parser.Errors.NOT_FOUND.Message,
+					Details: "emails as not subscribed to newsletter",
+					Suggestion: "verify the email",
+					Path: r.RequestURI,
+					Timestamp: parser.Timestamp(),
+				},
+			})
+			return
+		} 
+		
+		parser.SERVER_ERROR(w, "error finding subscriber", r.RequestURI)
+		return
+	}
+
+	if err := h.srv.RemoveSubscriber(body.Email); err != nil {
+		log.Error(err.Error())
+		parser.SERVER_ERROR(w, "error trying to remove subscriber", r.RequestURI)
+		return
+	}
+
+	parser.JSON(w, parser.SuccessResponse{
+		Status: parser.Status.Success,
+		StatusCode: http.StatusOK,
+		Data: "subscription successfully cancelled",
+	})
+}

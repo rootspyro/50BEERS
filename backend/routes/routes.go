@@ -54,6 +54,7 @@ func New(
 
 	// Subscribers
 	router.HandleFunc("POST /api/v1/newsletter/subscriber", mid.PipeSubscriberBody(subsHandler.NewSub))
+	router.HandleFunc("DELETE /api/v1/newsletter/subscriber", mid.PipeSubscriberBody(subsHandler.RemoveSubscriber))
 
 	// 404 - PATH NOT FOUND
 	router.HandleFunc("/",func(w http.ResponseWriter, r *http.Request) {

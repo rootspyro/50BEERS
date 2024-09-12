@@ -35,6 +35,10 @@ func (s *SubscriberSrv) NewSubsciber(email string) (Subscriber, error) {
 	return subscriberParser(newSubscriber), nil
 }
 
+func (s *SubscriberSrv) RemoveSubscriber(email string) error {
+	return s.repo.RemoveSubscriber(email)
+}
+
 func subscriberParser(data models.Subscriber) Subscriber {
 	return Subscriber{
 		Email: data.Email,

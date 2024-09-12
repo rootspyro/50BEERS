@@ -56,3 +56,13 @@ func(r *SubscriberRepo) NewSubsciber(email string) (models.Subscriber, error) {
 
 	return newSubscriber, nil
 } 
+
+func(r *SubscriberRepo) RemoveSubscriber(email string) error {
+
+	_, err := r.Collection.DeleteOne(context.Background(), bson.D{{"email", email}})
+	if err != nil {
+		return err
+	}
+
+	return nil
+} 

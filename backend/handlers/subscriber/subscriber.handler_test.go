@@ -240,3 +240,203 @@ func TestNewSubscriberConflict(t *testing.T) {
 	}
 
 }
+
+func TestRemoveSubscriberSuccess(t *testing.T) {
+	connStr, dbName := connString()
+
+	dbClient, err := db.New(connStr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	database := dbClient.Database(dbName)
+
+	handler := buildHandler(database)
+
+	// build the testing server
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeSubscriberBody(handler.RemoveSubscriber)))
+
+	// build the request
+	body := services.SubscriberDTO{
+		Email: "subscriber@mail.com",
+	}
+
+	bodyJSON, err := json.Marshal(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bodyData := bytes.NewBuffer([]byte(bodyJSON))
+
+	request, err := http.NewRequest(http.MethodDelete, server.URL, bodyData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := http.Client{}
+
+	resp, err := client.Do(request)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("status code expected %d but got %d", http.StatusOK, resp.StatusCode)
+	}
+
+	var result parser.SuccessResponse
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if result.Status != parser.Status.Success {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Success, result.Status)
+	}
+
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+}
+
+func TestRemoveSubscriberBadEmail(t *testing.T) {
+	connStr, dbName := connString()
+
+	dbClient, err := db.New(connStr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	database := dbClient.Database(dbName)
+
+	handler := buildHandler(database)
+
+	// build the testing server
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeSubscriberBody(handler.RemoveSubscriber)))
+
+	// build the request
+	body := services.SubscriberDTO{
+		Email: "bad.email.format",
+	}
+
+	bodyJSON, err := json.Marshal(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bodyData := bytes.NewBuffer([]byte(bodyJSON))
+
+	request, err := http.NewRequest(http.MethodPost, server.URL, bodyData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Errorf("status code expected %d but got %d", http.StatusBadRequest, resp.StatusCode)
+	}
+
+	var result parser.ErrorResponse
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if result.Status != parser.Status.Error {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Error, result.Status)
+	}
+
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+
+	if result.Error.Code != parser.Errors.BAD_REQUEST_BODY.Code {
+		t.Errorf("error code expected '%s' but got '%s'", parser.Errors.BAD_REQUEST_BODY.Code, result.Error.Code)
+	}
+
+}
+
+func TestRemoveSubscriberNotFound(t *testing.T) {
+	connStr, dbName := connString()
+
+	dbClient, err := db.New(connStr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	database := dbClient.Database(dbName)
+
+	handler := buildHandler(database)
+
+	// build the testing server
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeSubscriberBody(handler.RemoveSubscriber)))
+
+	// build the request
+	body := services.SubscriberDTO{
+		Email: "subscriber@mail.com",
+	}
+
+	bodyJSON, err := json.Marshal(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bodyData := bytes.NewBuffer([]byte(bodyJSON))
+
+	request, err := http.NewRequest(http.MethodPost, server.URL, bodyData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp.StatusCode != http.StatusNotFound {
+		t.Errorf("status code expected %d but got %d", http.StatusNotFound, resp.StatusCode)
+	}
+
+	var result parser.ErrorResponse
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if result.Status != parser.Status.Error {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Error, result.Status)
+	}
+
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+
+	if result.Error.Code != parser.Errors.NOT_FOUND.Code {
+		t.Errorf("error code expected '%s' but got '%s'", parser.Errors.NOT_FOUND.Code, result.Error.Code)
+	}
+
+}
