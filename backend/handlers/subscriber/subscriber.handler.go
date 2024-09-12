@@ -24,3 +24,7 @@ func(h *SubscriberHandler) NewSub(w http.ResponseWriter, r *http.Request) {
 		Data: "Subscription confirmed. Thank you for your support",
 	})
 }
+
+type NewSubscriberDTO struct {
+	Email string `json:"email"`
+}
