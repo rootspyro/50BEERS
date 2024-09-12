@@ -7,6 +7,7 @@ export const defaultLang = "en";
 
 export const ui = {
   es: {
+    'meta.home.description': "Únete a mi viaje escrito por el mundo de la cerveza, el vino, el whisky, el ron, el hidromiel, la sidra y mucho más. Lo que empezó como un diario y tinta se ha convertido en un reto para explorar y compartir mis experiencias de cata.",
     'nav.login': "Iniciar Sesión",
     'nav.signup': "Registrarse",
     'nav.logout': "Cerrar Sesión",
@@ -49,6 +50,7 @@ export const ui = {
     'footer.developer': 'Desarrollado por',
   },
   en: {
+    'meta.home.description': "Join my written journey through the world of beer, wine, whiskey, rum, mead, cider, and more. What began as a diary and ink has turned into a challenge to explore and share my tasting experiences.",
     'nav.login': "Login",
     'nav.signup': "Sign Up",
     'nav.logout': "Logout",

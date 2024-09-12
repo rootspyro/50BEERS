@@ -1,6 +1,7 @@
 ---
 import "@fontsource/anton"
 import "@fontsource-variable/roboto-condensed"
+import { getLangFromUrl, useTranslations } from "../i18n/utils"
 
 import Navbar from "./Navbar.astro"
 import Footer from "./Footer.astro"
@@ -11,19 +12,22 @@ interface Props {
 
 const {currentLocale} = Astro;
 const { title } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
 ---
 
 <!doctype html>
 <html lang={currentLocale}>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Join my written journey through the world of beer, wine, whiskey, rum, mead, cider, and more. What began as a diary and ink has turned into a challenge to explore and share my tasting experiences." />
+		<meta name="description" content={t('meta.home.description')} />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
     <meta name="robots" content="index, follow" />
 
     <meta property="og:title" content={title} />
-    <meta property="og:description" content="Join my written journey through the world of beer, wine, whiskey, rum, mead, cider, and more. What began as a diary and ink has turned into a challenge to explore and share my tasting experiences." />
+    <meta property="og:description" content={t('meta.home.description')} />
     <!-- meta property="og:image" content="" /-->
 		<title>{title}</title>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.5.1/uicons-solid-straight/css/uicons-solid-straight.css'>

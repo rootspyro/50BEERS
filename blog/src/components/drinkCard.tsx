@@ -23,7 +23,6 @@ interface drink {
 }
 
 function formatTimestamp(timestamp: string, lang: string) :string {
-  console.log(lang)
   const dateTime = new Date(timestamp.split(" ")[0]);
   const year = dateTime.getFullYear();
   const month = dateTime.toLocaleString(lang, { month: 'long' });
