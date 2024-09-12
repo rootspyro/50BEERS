@@ -61,10 +61,11 @@ export default function SubscriptionForm({lang, api}: {lang:lang, api: string}) 
           reset()
         } else if (response.status == "error") {
 
-          SetNotificationLabel('Error')
           if (response.statusCode == 409) {
+            SetNotificationLabel('Info')
             SetNotificationMessage(lang.alreadySubscribed) 
           } else {
+            SetNotificationLabel('Error')
             SetNotificationMessage(lang.errorResponse)
           }
           
