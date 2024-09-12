@@ -4,13 +4,19 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Country struct {
 	ID        primitive.ObjectID `bson:"_id"`
-	Name      string             `bson:"name"`
+	EN        CountryLang        `bson:"en"`
+	ES        CountryLang        `bson:"es"`
 	CreatedAt string             `bson:"created_at"`
 	UpdatedAt string             `bson:"updated_at"`
 }
 
 type NewCountry struct {
-	Name      string             `bson:"name"`
+	EN        CountryLang        `bson:"en"`
+	ES        CountryLang        `bson:"es"`
 	CreatedAt string             `bson:"created_at"`
 	UpdatedAt string             `bson:"updated_at"`
+}
+
+type CountryLang struct {
+	Name string
 }

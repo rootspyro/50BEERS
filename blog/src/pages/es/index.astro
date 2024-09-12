@@ -1,53 +1,54 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import PostSection from "../components/postSection.tsx"
-import ContactForm from "../components/contactForm.tsx"
-import { ui } from '../i18n/ui';
+import Layout from '../../layouts/Layout.astro';
+import PostSection from "../../components/postSection.tsx"
+import ContactForm from "../../components/contactForm.tsx"
+
+import { ui } from '../../i18n/ui';
 
 const contactLang = {
-  name: ui.en['contact.name'],
-  email: ui.en['contact.email'],
-  message: ui.en['contact.message'],
-  send: ui.en['contact.send']
+  name: ui.es['contact.name'],
+  email: ui.es['contact.email'],
+  message: ui.es['contact.message'],
+  send: ui.es['contact.send']
 }
 
 const postsLang = {
-  lang: "en",
+  lang: "es",
   card: {
-    lang: "en",
-    date: ui.en['posts.card.date'], 
-    country: ui.en['posts.card.country'], 
-    published: ui.en['posts.card.published'], 
+    lang: "es",
+    date: ui.es['posts.card.date'], 
+    country: ui.es['posts.card.country'], 
+    published: ui.es['posts.card.published'], 
   },
   filters: {
-    defaultSearch: ui.en['posts.defaultSearch'],
-    defaultSortBy: ui.en['posts.sortBy'],
-    defaultCountry: ui.en['posts.defaultCountry'],
-    defaultLocation: ui.en['posts.defaultLocation'],
-    defaultCategory: ui.en['posts.defaultCategory'],
-    categoryTitle: ui.en['posts.categoryTitle'],
+    defaultSearch: ui.es['posts.defaultSearch'],
+    defaultSortBy: ui.es['posts.sortBy'],
+    defaultCountry: ui.es['posts.defaultCountry'],
+    defaultLocation: ui.es['posts.defaultLocation'],
+    defaultCategory: ui.es['posts.defaultCategory'],
+    categoryTitle: ui.es['posts.categoryTitle'],
     sort: {
-      abv: ui.en['posts.sort.abv'],
-      date: ui.en['posts.sort.date'],
-      name: ui.en['posts.sort.name'],
-      stars: ui.en['posts.sort.stars'],
+      abv: ui.es['posts.sort.abv'],
+      date: ui.es['posts.sort.date'],
+      name: ui.es['posts.sort.name'],
+      stars: ui.es['posts.sort.stars'],
     }
   },
-  popularDrinks: ui.en['posts.popular'],
-  itemsFound: ui.en['posts.itemsFound'],
+  popularDrinks: ui.es['posts.popular'],
+  itemsFound: ui.es['posts.itemsFound'],
   notFound: {
-    title1: ui.en['posts.notFound.1'],
-    title2: ui.en['posts.notFound.2'],
-    text: ui.en['posts.notFound.text'],
-    cta: ui.en['posts.notFound.cta'],
+    title1: ui.es['posts.notFound.1'],
+    title2: ui.es['posts.notFound.2'],
+    text: ui.es['posts.notFound.text'],
+    cta: ui.es['posts.notFound.cta'],
   },
   aboutMe: {
-    title: ui.en['posts.aboutme.title'],
-    part1: ui.en['posts.aboutme.1'],
-    part2: ui.en['posts.aboutme.2'],
-    part3: ui.en['posts.aboutme.3'],
-    part4: ui.en['posts.aboutme.4'],
-    part5: ui.en['posts.aboutme.5'],
+    title: ui.es['posts.aboutme.title'],
+    part1: ui.es['posts.aboutme.1'],
+    part2: ui.es['posts.aboutme.2'],
+    part3: ui.es['posts.aboutme.3'],
+    part4: ui.es['posts.aboutme.4'],
+    part5: ui.es['posts.aboutme.5'],
   }
 }
 
@@ -91,7 +92,11 @@ let countries: country[] = []
 try {
 
   const endpoint = API_HOST + "/country/blog"
-  const countriesResult = await fetch(endpoint)
+  const countriesResult = await fetch(endpoint, {
+    headers: {
+      "Accept-Language": "es"
+    }
+  })
   const countriesData = await countriesResult.json()
 
   if (countriesData.status == "success") {
@@ -109,7 +114,7 @@ let locations: location[] = []
 try {
 
   const endpoint = API_HOST + "/location/blog"
-  const locationsResult = await fetch(endpoint)
+  const locationsResult = await fetch(endpoint, {headers: {"Accept-Language": "es"}})
   const locationsData = await locationsResult.json()
 
   if (locationsData.status == "success") {
@@ -126,7 +131,11 @@ let tags: tag[] = []
 try {
 
   const endpoint = API_HOST + "/tag/blog"
-  const tagsResult = await fetch(endpoint)
+  const tagsResult = await fetch(endpoint, {
+    headers: {
+      "Accept-Language": "es"
+    }
+  })
   const tagsData = await tagsResult.json()
 
   if (tagsData.status == "success") {
@@ -158,12 +167,12 @@ try {
 
 ---
 
-<Layout title="50 BEERS: Exploring beverages around the world">
+<Layout title="50 BEERS: Explorando bebidas a lo largo del mundo">
   <section class="h-96 w-full flex justify-center items-center flex-col">
     <h1 class="font-title text-5xl md:text-7xl font-normal text-dark p-10">
       50 <span class="text-light bg-dark px-1">BEERS</span>
     </h1> 
-    <p class="font-content text-lg md:text-2xl">JUST <span class="line-through">DRINKING</span> WRITING TO LOOK BUSY</p>
+    <p class="font-content text-lg md:text-2xl">SOLO <span class="line-through">BEBIENDO</span> ESCRIBIENDO PARA PARECER OCUPADO</p>
   </section>
   <section class="p-7">
     <PostSection 
@@ -176,7 +185,7 @@ try {
   </section>
   <section class="w-full bg-dark mt-5 text-light px-10 py-24 flex flex-col items-center justify-center gap-8">
     <p class="text-center">
-      In <span class="font-bold">October 2023</span> I started my journey. Since then I have tested a total of <span class="font-bold">{counts.all}</span> different drinks. <br/> Among them we can find...
+      En <span class="font-bold">Octubre del 2023</span> comenzé mi viaje. Desde entonces he probado un total de <span class="font-bold">{counts.all}</span> bebidas distintas. <br/> Entre ellas podemos contar...
     </p>
 
     <div class="flex w-full flex-col gap-8 items-center justify-center sm:flex-row">
@@ -188,39 +197,39 @@ try {
 
       <div class="flex text-3xl font-title flex-col items-center justify-center">
         <p>{counts.rums}</p>
-        <p>RUMS</p>
+        <p>RONES</p>
       </div>
 
       <div class="flex text-3xl font-title flex-col items-center justify-center">
         <p>{counts.beers}</p>
-        <p>BEERS</p>
+        <p>CERVEZAS</p>
       </div>
 
       <div class="flex text-3xl font-title flex-col items-center justify-center">
         <p>{counts.wines}</p>
-        <p>WINES</p>
+        <p>VINOS</p>
       </div>
 
       <div class="flex text-3xl font-title flex-col items-center justify-center">
         <p>{counts.others}</p>
-        <p>OTHERS</p>
+        <p>OTROS</p>
       </div>
 
     </div>
 
     <p class="text-center">
-      All of them documented here.
+      Todas ellas documentadas aquí.
     </p>
   </section>
   <section class="w-full text-dark px-10 py-16 flex flex-col md:flex-row md:justify-center gap-10">
     <div class="w-full font-title flex flex-col items-center md:items-start">
-      <p class="text-2xl sm:text-3xl">Do you like my content?</p>
-      <p class="text-light bg-dark inline-block p-2 mt-5 text-3xl sm:text-4xl">Do you need a developer?</p>
-      <p class="text-xl sm:text-2xl mt-5">Want to insult me because I didn't like your favorite beer?</p>
-      <p class="text-3xl sm:text-4xl mt-12">Feel free to contact me!</p>
+      <p class="text-2xl sm:text-3xl">¿Te gusta mi contenido?</p>
+      <p class="text-light bg-dark inline-block p-2 mt-5 text-3xl sm:text-4xl">¿Necesitas un programador?</p>
+      <p class="text-xl sm:text-2xl mt-5">¿Quieres instultarme porque no me gustó tu cerveza favorita?</p>
+      <p class="text-3xl sm:text-4xl mt-12">¡Sientete libre de contactarme!</p>
     </div>
     <div class="w-full flex justify-center items-center">
-      <ContactForm  content={contactLang} client:load/>
+      <ContactForm content={contactLang}  client:load/>
     </div>
   </section>
 </Layout>

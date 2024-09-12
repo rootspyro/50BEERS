@@ -14,6 +14,7 @@ import (
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/handlers/country"
+	"github.com/rootspyro/50BEERS/middlewares"
 	"github.com/rootspyro/50BEERS/services"
 )
 
@@ -46,7 +47,8 @@ func TestListCountriesForBlog(t *testing.T) {
 	srv := services.NewCountrySrv(repo)
 	handler := country.NewCountryHandler(srv)
 
-	server := httptest.NewServer(http.HandlerFunc(handler.ListCountriesForBlog))
+	handlerFunc := middlewares.LangHeader(handler.ListCountriesForBlog)
+	server := httptest.NewServer(http.HandlerFunc(handlerFunc))
 
 	resp, err := http.Get(server.URL)
 	if err != nil {

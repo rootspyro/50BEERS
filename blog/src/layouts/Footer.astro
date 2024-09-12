@@ -2,20 +2,24 @@
 import { Image } from 'astro:assets';
 
 import Signatures from "../assets/signatures.png"
+
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
 ---
 
 <footer class="bg-dark w-full p-12 font-content text-light">
   <h2 class="p-5 font-title text-main text-3xl md:text-5xl text-center">
     50 <span class="bg-main text-dark">BEERS</span>
   </h2>
-  <p class="text-center">JUST <span class="line-through">DRINKING</span> WRITING TO LOOK BUSY</p>
+  <p class="text-center">{t('footer.subtitle.1')} <span class="line-through">{t('footer.subtitle.2')}</span> {t('footer.subtitle.3')}</p>
 
   <div class="mt-10 w-full flex justify-center">
     <div class="w-full py-7 max-w-md border-y border-light border-dashed flex flex-col items-center">
-      <p class="text-light font-bold text-center">Stay in the loop with the Latest Brews and Sips!</p>
+      <p class="text-light font-bold text-center">{t('footer.newsletter.text')}</p>
       <form class="flex bg-light rounded-sm w-full p-2 flex-between mt-5 text-dark">
-        <input placeholder="Your email..." class="outline-none w-full text-sm" />
-        <button class="bg-dark text-main rounded text-sm p-2">Subscribe</button>
+        <input placeholder={t('footer.newsletter.placeholder')} class="outline-none w-full text-sm" />
+        <button class="bg-dark text-main rounded text-sm p-2">{t('footer.newsletter.cta')}</button>
       </form>
     </div>
   </div>
@@ -23,7 +27,7 @@ import Signatures from "../assets/signatures.png"
     <Image src={Signatures}  alt="signatures" class="max-w-64 sm:max-w-80" />
   </div>
   <div class="justify-between hidden md:flex mt-16 font-light text-sm">
-    <p class="">&copy 2024. 50 BEERS. All rights reserved</p>
-    <p class="">Developed by Spyridon Mihalopoulos A.</p>
+    <p class="">&copy 2024. 50 BEERS. {t('footer.rights')}</p>
+    <p class="">{t('footer.developer')} Spyridon Mihalopoulos A.</p>
   </div>
 </footer>

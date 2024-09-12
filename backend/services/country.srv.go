@@ -17,7 +17,7 @@ func NewCountrySrv(repo *repositories.CountriesRepo) *CountrySrv {
 	}
 }
 
-func (s *CountrySrv) GetAllCountries() ([]Country, error) {
+func (s *CountrySrv) GetAllCountries(lang string) ([]Country, error) {
 	data, err := s.repo.GetAllCountries()
 	
 	if err != nil {
@@ -28,16 +28,22 @@ func (s *CountrySrv) GetAllCountries() ([]Country, error) {
 	var countries []Country
 
 	for _, country := range data {
-		countries = append(countries, parseCountry(country))
+		countries = append(countries, parseCountry(country, lang))
 	}
 
 	return countries, nil
 }
 
-func parseCountry(data models.Country) Country {
+func parseCountry(data models.Country, lang string) Country {
+	var name string = data.EN.Name
+
+	if lang == "es" {
+		name = data.ES.Name
+	}
+
 	return Country{
-		ID: ParsePublicId(data.Name),
-		Name: cases.Title(language.Und).String(data.Name),
+		ID: ParsePublicId(data.EN.Name),
+		Name: cases.Title(language.Und).String(name),
 		CreatedAt: data.CreatedAt,
 		UpdatedAt: data.UpdatedAt,
 	}

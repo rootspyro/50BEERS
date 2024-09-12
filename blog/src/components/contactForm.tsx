@@ -1,5 +1,13 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
-export default function ContactForm() {
+
+type langData = {
+  'name': string
+  'email': string
+  'message': string
+  'send': string
+}
+
+export default function ContactForm({content}: {content: langData}) {
 
   type Inputs = {
     name: string;
@@ -22,7 +30,7 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="w-full shadow-lg max-w-md text-sm bg-light text-dark font-content rounded-sm border border-dark p-5 flex flex-col gap-5">
       <input 
         type="text" 
-        placeholder="Your Name" 
+        placeholder={content.name}
         className="outline-none border border-dark border-dashed focus:border-solid p-2 rounded-sm" 
         {
         ...register("name", 
@@ -37,7 +45,7 @@ export default function ContactForm() {
 
       <input 
         type="email" 
-        placeholder="Your Email" 
+        placeholder={content.email}
         className="outline-none border border-dark border-dashed focus:border-solid p-2 rounded-sm" 
         {
         ...register("email", 
@@ -55,7 +63,7 @@ export default function ContactForm() {
       /> 
 
       <textarea
-        placeholder="Email content."
+        placeholder={content.message}
         className="resize-none h-28 outline-none border border-dark border-dashed focus:border-solid p-2 rounded-sm" 
         {
         ...register("content", 
@@ -76,7 +84,7 @@ export default function ContactForm() {
         }
       ></textarea>
 
-      <button className="py-3 text-main bg-dark rounded-sm border border-dark hover:border-dashed hover:bg-light hover:text-dark">Send</button>
+      <button className="py-3 text-main bg-dark rounded-sm border border-dark hover:border-dashed hover:bg-light hover:text-dark">{content.send}</button>
 
     </form>
   )

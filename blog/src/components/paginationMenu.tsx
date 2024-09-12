@@ -1,4 +1,4 @@
-export default function PaginationMenu({found, page, pages, setPage, pagination}: {found: number, page: number, pages: number, setPage: Function, pagination: number[]}) {
+export default function PaginationMenu({found, page, pages, setPage, pagination, foundText}: {found: number, page: number, pages: number, setPage: Function, pagination: number[], foundText: string}) {
 
   function Next() {
 
@@ -24,7 +24,7 @@ export default function PaginationMenu({found, page, pages, setPage, pagination}
   return(
     <div className="w-full flex justify-between mt-5 items-center text-sm">
       <div className="w-full">
-        <p><span className="font-bold">{found}</span> items found</p>
+        <p><span className="font-bold">{found}</span> {foundText}</p>
       </div>
       <div className="w-full flex justify-end gap-4">
         <button onClick={Back} className={`${page <= 1 ? "hidden" : ""} font-bold text-main bg-dark rounded-sm p-2 hover:bg-light hover:text-dark border border-dark hover:border-dashed `}>

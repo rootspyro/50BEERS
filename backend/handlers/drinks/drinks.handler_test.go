@@ -111,7 +111,7 @@ func TestGetAllDrinksDefault(t *testing.T) {
 	handler := buildHandler(dbClient.Database(dbName))
 
 	// build testing server
-	server := httptest.NewServer(http.HandlerFunc(middlewares.ValidateDrinksBlogFilters(handler.ListDrinksForBlog)))
+	server := httptest.NewServer(http.HandlerFunc(middlewares.LangHeader(middlewares.ValidateDrinksBlogFilters(handler.ListDrinksForBlog))))
 
 	// build http Get Request
 	resp, err := http.Get(server.URL)
@@ -179,7 +179,7 @@ func TestGetAllDrinksFiltersSuccess(t *testing.T) {
 	handler := buildHandler(dbClient.Database(dbName))
 
 	// build testing server
-	server := httptest.NewServer(http.HandlerFunc(middlewares.ValidateDrinksBlogFilters(handler.ListDrinksForBlog)))
+	server := httptest.NewServer(http.HandlerFunc(middlewares.LangHeader(middlewares.ValidateDrinksBlogFilters(handler.ListDrinksForBlog))))
 
 	// build http Get Request
 	resp, err := http.Get(server.URL + "?page=2&limit=1&sortBy=date&direction=asc&country=spain&location=2d2dspuma&name=marzen")
@@ -260,7 +260,7 @@ func TestGetAllDrinksBadPagination(t *testing.T) {
 	handler := buildHandler(dbClient.Database(dbName))
 
 	// build testing server
-	server := httptest.NewServer(http.HandlerFunc(middlewares.ValidateDrinksBlogFilters(handler.ListDrinksForBlog)))
+	server := httptest.NewServer(http.HandlerFunc(middlewares.LangHeader(middlewares.ValidateDrinksBlogFilters(handler.ListDrinksForBlog))))
 
 	// build http Get Request
 	resp, err := http.Get(server.URL + "?page=not-a-number")

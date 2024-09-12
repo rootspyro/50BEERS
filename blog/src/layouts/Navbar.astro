@@ -1,8 +1,27 @@
 ---
 import NavbarComponent from "../components/navbar.tsx"
+import { getLangFromUrl } from "../i18n/utils"
+/*
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const content = {
+  login: t('nav.login'),
+  signup: t('nav.signup'),
+  logout: t('nav.logout'),
+}
+*/
+
+let currentPath = Astro.url.pathname;
+if (currentPath.startsWith("/es")) {
+  currentPath = currentPath.replace(/^\/es/, '');
+}
+
+let currentLang = getLangFromUrl(Astro.url)
 ---
 <header class="w-full top-0 left-0 z-10 font-content">
   <navbar class="block">
-    <NavbarComponent client:load />
+    <NavbarComponent currentLang={currentLang} currentPath={currentPath} client:load />
   </navbar>
 </header>

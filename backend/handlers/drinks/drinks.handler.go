@@ -48,9 +48,10 @@ func(h *DrinkHandler) CountDrinks(w http.ResponseWriter, r *http.Request) {
 func(h *DrinkHandler) ListDrinksForBlog(w http.ResponseWriter, r *http.Request) {
 
 	// Get Filters
+	lang := r.Context().Value("lang").(string)
 	var filters services.DrinkSearchFilters = r.Context().Value("filters").(services.DrinkSearchFilters)
 
-	data, err := h.srv.GetAllDrinks(filters)
+	data, err := h.srv.GetAllDrinks(filters, lang)
 
 	if err != nil {
 

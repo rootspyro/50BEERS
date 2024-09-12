@@ -19,7 +19,10 @@ func NewTagHandler(srv *services.TagSrv) *TagHandler {
 }
 
 func(h *TagHandler) ListCategoriesForBlog(w http.ResponseWriter, r *http.Request) {
-	tags, err := h.srv.GetAllTags()
+
+	lang := r.Context().Value("lang").(string)
+
+	tags, err := h.srv.GetAllTags(lang)
 
 	if err != nil {
 		parser.JSON(w, parser.ErrorResponse{

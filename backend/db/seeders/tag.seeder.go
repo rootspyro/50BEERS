@@ -24,25 +24,60 @@ func(s *TagSeeder) Seed() error {
 
 	data := []models.NewTag{
 		{
-			Name: "beer",
+			EN: models.TagLangContent{
+				Name: "beer",
+			},
+			ES: models.TagLangContent{
+				Name: "cerveza",
+			},
 		},
 		{
-			Name: "challenge",
+			EN: models.TagLangContent{
+				Name: "challenge",
+			},
+			ES: models.TagLangContent{
+				Name: "reto",
+			},
 		},
 		{
-			Name: "licours",
+			EN: models.TagLangContent{
+				Name: "licours",
+			},
+			ES: models.TagLangContent{
+				Name: "licores",
+			},
 		},
 		{
-			Name: "others",
+			EN: models.TagLangContent{
+				Name: "others",
+			},
+			ES: models.TagLangContent{
+				Name: "otros",
+			},
 		},
 		{
-			Name: "rum",
+			EN: models.TagLangContent{
+				Name: "rum",
+			},
+			ES: models.TagLangContent{
+				Name: "ron",
+			},
 		},
 		{
-			Name: "whisky",
+			EN: models.TagLangContent{
+				Name: "whisky",
+			},
+			ES: models.TagLangContent{
+				Name: "whisky",
+			},
 		},
 		{
-			Name: "wine",
+			EN: models.TagLangContent{
+				Name: "wine",
+			},
+			ES: models.TagLangContent{
+				Name: "vino",
+			},
 		},
 	}
 
