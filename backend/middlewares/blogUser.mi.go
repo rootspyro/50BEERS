@@ -12,7 +12,7 @@ import (
 	"github.com/rootspyro/50BEERS/services"
 )
 
-func evalEmail(email string) bool {
+func EvalEmail(email string) bool {
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 	return emailRegex.MatchString(email)
 }
@@ -154,7 +154,7 @@ func PipeNewBlogUserBody(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		if !evalEmail(body.Email) {
+		if !EvalEmail(body.Email) {
 			parser.JSON(w, parser.ErrorResponse{
 				Status: parser.Status.Error,
 				StatusCode: http.StatusBadRequest,

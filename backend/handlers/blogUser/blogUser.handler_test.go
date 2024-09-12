@@ -83,6 +83,9 @@ func TestSignUpFromSite(t *testing.T) {
 	}
 
 	err = json.Unmarshal(b, &result)
+	if err != nil {
+		t.Error(err)
+	}
 
 	if resp.StatusCode != http.StatusCreated {
 		t.Errorf("status code expected %d but got %d", http.StatusCreated, resp.StatusCode)

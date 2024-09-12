@@ -11,3 +11,7 @@ func NewSubscriberSrv(repo *repositories.SubscriberRepo) *SubscriberSrv {
 		repo: repo,
 	}
 }
+
+type SubscriberDTO struct {
+	Email string `json:"email"`
+}

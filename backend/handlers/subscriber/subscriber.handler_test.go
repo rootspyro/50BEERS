@@ -4,15 +4,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
 
 	"github.com/joho/godotenv"
+	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/db"
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/handlers/subscriber"
+	"github.com/rootspyro/50BEERS/middlewares"
 	"github.com/rootspyro/50BEERS/services"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -48,14 +51,78 @@ func TestNewSubscriberSuccess(t *testing.T) {
 
 	database := dbClient.Database(dbName)
 
-	handler := buildHandler(database)	
-	
+	handler := buildHandler(database)
+
 	// build the testing server
-	server := httptest.NewServer(http.HandlerFunc(handler.NewSub))
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeSubscriberBody(handler.NewSub)))
 
 	// build the request
-	body := subscriber.NewSubscriberDTO {
-		Email: "subscriberl@mail.com",
+	body := services.SubscriberDTO{
+		Email: "subscriber@mail.com",
+	}
+
+	bodyJSON, err := json.Marshal(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bodyData := bytes.NewBuffer([]byte(bodyJSON))
+
+	request, err := http.NewRequest(http.MethodPost, server.URL, bodyData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	client := http.Client{}
+
+	resp, err := client.Do(request)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if resp.StatusCode != http.StatusCreated {
+		t.Errorf("status code expected %d but got %d", http.StatusCreated, resp.StatusCode)
+	}
+
+	var result parser.SuccessResponse
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if result.Status != parser.Status.Success {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Success, result.Status)
+	}
+
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+}
+
+func TestNewSubscriberBadEmail(t *testing.T) {
+	connStr, dbName := connString()
+
+	dbClient, err := db.New(connStr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	database := dbClient.Database(dbName)
+
+	handler := buildHandler(database)
+
+	// build the testing server
+	server := httptest.NewServer(http.HandlerFunc(middlewares.PipeSubscriberBody(handler.NewSub)))
+
+	// build the request
+	body := services.SubscriberDTO{
+		Email: "bad.email.format",
 	}
 
 	bodyJSON, err := json.Marshal(body)
@@ -76,7 +143,32 @@ func TestNewSubscriberSuccess(t *testing.T) {
 		t.Error(err)
 	}
 
-	if resp.StatusCode != http.StatusCreated {
-		t.Errorf("status code expected %d but got %d", http.StatusCreated, resp.StatusCode)
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Errorf("status code expected %d but got %d", http.StatusBadRequest, resp.StatusCode)
 	}
+
+	var result parser.ErrorResponse
+
+	b, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = json.Unmarshal(b, &result)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if result.Status != parser.Status.Error {
+		t.Errorf("status expected '%s' but got '%s'", parser.Status.Error, result.Status)
+	}
+
+	if result.StatusCode != resp.StatusCode {
+		t.Errorf("status code from response %d doesn't match with body status code %d", resp.StatusCode, result.StatusCode)
+	}
+
+	if result.Error.Code != parser.Errors.BAD_REQUEST_BODY.Code {
+		t.Errorf("error code expected '%s' but got '%s'", parser.Errors.BAD_REQUEST_BODY.Code, result.Error.Code)
+	}
+
 }

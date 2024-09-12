@@ -53,7 +53,7 @@ func New(
 	router.HandleFunc("POST /api/v1/auth/blog/logout", blogUser.Logout)
 
 	// Subscribers
-	router.HandleFunc("POST /api/v1/newsletter/subscriber", subsHandler.NewSub)
+	router.HandleFunc("POST /api/v1/newsletter/subscriber", mid.PipeSubscriberBody(subsHandler.NewSub))
 
 	// 404 - PATH NOT FOUND
 	router.HandleFunc("/",func(w http.ResponseWriter, r *http.Request) {
