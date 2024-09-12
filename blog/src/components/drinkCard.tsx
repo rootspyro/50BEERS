@@ -1,6 +1,7 @@
 import StarsView from "./starsView";
 
 interface lang {
+  lang: string
   date: string
   country: string
   published: string
@@ -21,13 +22,19 @@ interface drink {
   updatedAt: string;
 }
 
-function formatTimestamp(timestamp: string) :string {
+function formatTimestamp(timestamp: string, lang: string) :string {
+  console.log(lang)
   const dateTime = new Date(timestamp.split(" ")[0]);
   const year = dateTime.getFullYear();
-  const month = dateTime.toLocaleString('default', { month: 'long' });
+  const month = dateTime.toLocaleString(lang, { month: 'long' });
   const day = dateTime.getDate();
 
-  return `${year}, ${month} ${day + 1}`;
+  if (lang == "es") {
+    return `${day + 1} de ${month}, ${year}`;
+  } else {
+    return `${year}, ${month} ${day + 1}`;
+  }
+
 }
 
 export default function DrinkCard({drink, lang}: {drink:drink, lang: lang}) {
@@ -57,7 +64,7 @@ export default function DrinkCard({drink, lang}: {drink:drink, lang: lang}) {
       </div>
       <div className="p-4 sm:p-2 border-t border-dark flex justify-center sm:justify-end items-center">
         <div className="text-nowrap">
-          <p className="text-xs"><span className="font-bold">{lang.published}</span> {formatTimestamp(drink.updatedAt)}</p>
+          <p className="text-xs"><span className="font-bold">{lang.published}</span> {formatTimestamp(drink.updatedAt, lang.lang)}</p>
         </div> 
       </div>
     </div>

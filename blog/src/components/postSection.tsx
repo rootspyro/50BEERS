@@ -4,7 +4,9 @@ import DrinkCard from "./drinkCard";
 import PaginationMenu from "./paginationMenu";
 
 interface lang {
+  lang: string
   card: {
+    lang: string
     date: string 
     country: string
     published: string
@@ -142,7 +144,11 @@ function PostSection({countries, locations, tags, lang} : {countries: country[],
 
       try {
 
-        fetch(endpoint)
+        fetch(endpoint, {
+          headers: {
+            "Accept-Language": lang.lang
+          }
+        })
           .then(result => result.json())
           .then(drinks => {
               if (drinks.status == "success") {
