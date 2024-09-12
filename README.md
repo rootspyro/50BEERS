@@ -10,9 +10,8 @@ Likewise in this repository I document how I build this blog.
 
 ## Project Parts
 
-This project is divided on three parts:
+This project is divided on two parts:
 
 - [The Blog Site](./blog)
-- [The Admin Dashboard]()
 - [The API Restful](./backend)
 
