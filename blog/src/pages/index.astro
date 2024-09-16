@@ -5,9 +5,21 @@ import ContactForm from "../components/forms/contactForm.tsx"
 import { ui } from '../i18n/ui';
 
 const contactLang = {
-  name: ui.en['contact.name'],
-  email: ui.en['contact.email'],
-  message: ui.en['contact.message'],
+  name: {
+    placeholder: ui.en['contact.name'],
+    required: ui.en['contact.name.required'],
+  },
+  email: {
+    placeholder: ui.en['contact.email'],
+    required: ui.en['contact.email.required'],
+    invalid: ui.en['contact.email.invalid'],
+  },
+  message: {
+    placeholder: ui.en['contact.message'],
+    required: ui.en['contact.message.required'],
+    minLength: ui.en['contact.message.minLength'],
+    maxLength: ui.en['contact.message.maxLength']
+  },
   send: ui.en['contact.send']
 }
 

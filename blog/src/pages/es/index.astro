@@ -1,14 +1,26 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PostSection from "../../components/postSection.tsx"
-import ContactForm from "../../components/contactForm.tsx"
+import ContactForm from "../../components/forms/contactForm.tsx"
 
 import { ui } from '../../i18n/ui';
 
 const contactLang = {
-  name: ui.es['contact.name'],
-  email: ui.es['contact.email'],
-  message: ui.es['contact.message'],
+  name: {
+    placeholder: ui.es['contact.name'],
+    required: ui.es['contact.name.required'],
+  },
+  email: {
+    placeholder: ui.es['contact.email'],
+    required: ui.es['contact.email.required'],
+    invalid: ui.es['contact.email.invalid'],
+  },
+  message: {
+    placeholder: ui.es['contact.message'],
+    required: ui.es['contact.message.required'],
+    minLength: ui.es['contact.message.minLength'],
+    maxLength: ui.es['contact.message.maxLength']
+  },
   send: ui.es['contact.send']
 }
 

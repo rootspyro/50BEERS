@@ -7,6 +7,7 @@ import (
 
 	"github.com/rootspyro/50BEERS/config/parser"
 	bloguser "github.com/rootspyro/50BEERS/handlers/blogUser"
+	"github.com/rootspyro/50BEERS/handlers/contact"
 	"github.com/rootspyro/50BEERS/handlers/country"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
@@ -24,6 +25,7 @@ func New(
 	drinkHandler *drinks.DrinkHandler,
 	blogUser *bloguser.BlogUserHandler,
 	subsHandler *subscriber.SubscriberHandler,
+	contactHandler *contact.ContactHadler,
 ) *http.ServeMux{
 
 	router := http.ServeMux{}
@@ -55,6 +57,9 @@ func New(
 	// Subscribers
 	router.HandleFunc("POST /api/v1/newsletter/subscriber", mid.PipeSubscriberBody(subsHandler.NewSub))
 	router.HandleFunc("DELETE /api/v1/newsletter/subscriber", mid.PipeSubscriberBody(subsHandler.RemoveSubscriber))
+
+	// Contact
+	router.HandleFunc("POST /api/v1/contact/blog", mid.PipeContactBody(contactHandler.EmailFromBlog))
 
 	// 404 - PATH NOT FOUND
 	router.HandleFunc("/",func(w http.ResponseWriter, r *http.Request) {

@@ -61,19 +61,7 @@ func PipeLoginBody(next http.HandlerFunc) http.HandlerFunc {
 	
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
-			parser.JSON(w, parser.ErrorResponse{
-				Status: parser.Status.Error,
-				StatusCode: http.StatusBadRequest,
-				Error: parser.Error{
-					Code: parser.Errors.BAD_REQUEST_BODY.Code,
-					Message: parser.Errors.BAD_REQUEST_BODY.Message,
-					Details: "body of the request is missing",
-					Suggestion: "add the body on json format",
-					Path: r.RequestURI,
-					Timestamp: parser.Timestamp(),
-				},
-			})
-
+			parser.MISSING_BODY(w, r.RequestURI)
 			return
 		}
 

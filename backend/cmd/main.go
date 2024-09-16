@@ -16,6 +16,7 @@ import (
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/db/seeders"
 	bloguser "github.com/rootspyro/50BEERS/handlers/blogUser"
+	"github.com/rootspyro/50BEERS/handlers/contact"
 	"github.com/rootspyro/50BEERS/handlers/country"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
@@ -87,6 +88,7 @@ func main() {
 	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 	blogUserSrv := services.NewBlogUserSrv(blogUserRepo)
 	subscriberSrv := services.NewSubscriberSrv(subscriberRepo)
+	contactSrv := services.NewContactSrv()
 
 	// handlers
 	healthHandler := health.NewHealthHandler()
@@ -96,6 +98,7 @@ func main() {
 	drinkHandler := drinks.NewDrinkHandler(drinkSrv)
 	blogUserHandler := bloguser.NewBlogUserHandler(blogUserSrv)
 	subscriberHandler := subscriber.NewSubscriberHandler(subscriberSrv)
+	contactHandler := contact.NewContactHandler(contactSrv)
 
 	// routes
 	routes := routes.New(
@@ -106,6 +109,7 @@ func main() {
 		drinkHandler,
 		blogUserHandler,
 		subscriberHandler,
+		contactHandler,
 	)
 
 	// Configurate server
