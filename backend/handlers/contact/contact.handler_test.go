@@ -6,8 +6,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
+	"github.com/joho/godotenv"
+	"github.com/rootspyro/50BEERS/SDKs/mailtrap"
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/handlers/contact"
 	"github.com/rootspyro/50BEERS/middlewares"
@@ -16,7 +19,17 @@ import (
 
 func TestEmailFromBlogSuccess(t *testing.T) {
 
-	handler := contact.NewContactHandler(services.NewContactSrv())
+	godotenv.Load("../../.env")
+
+	sdk := mailtrap.New(
+		os.Getenv("MAILTRAP_HOST"),
+		os.Getenv("MAILTRAP_API_TOKEN"),
+	)
+
+	handler := contact.NewContactHandler(services.NewContactSrv(
+		os.Getenv("AUTHOR_EMAIL"),
+		sdk,
+	))
 
 	// build the testing server
 	server := httptest.NewServer(
@@ -24,7 +37,7 @@ func TestEmailFromBlogSuccess(t *testing.T) {
 	)
 
 	// build the request
-	body := services.EmailDTO{
+	body := services.ContactDTO{
 		Name: "rootspyro",
 		Email: "rootspyro@gmail.com",
 		Message: "I love bock beers",
@@ -79,7 +92,17 @@ func TestEmailFromBlogSuccess(t *testing.T) {
 
 func TestEmailFromBlogBadEmail(t *testing.T) {
 
-	handler := contact.NewContactHandler(services.NewContactSrv())
+	godotenv.Load("../../.env")
+
+	sdk := mailtrap.New(
+		os.Getenv("MAILTRAP_HOST"),
+		os.Getenv("MAILTRAP_API_TOKEN"),
+	)
+
+	handler := contact.NewContactHandler(services.NewContactSrv(
+		os.Getenv("AUTHOR_EMAIL"),
+		sdk,
+	))
 
 	// build the testing server
 	server := httptest.NewServer(
@@ -87,7 +110,7 @@ func TestEmailFromBlogBadEmail(t *testing.T) {
 	)
 
 	// build the request
-	body := services.EmailDTO{
+	body := services.ContactDTO{
 		Name: "rootspyro",
 		Email: "rootspyro@gmail", // bad format for email
 		Message: "I love bock beers",
@@ -150,7 +173,17 @@ func TestEmailFromBlogBadEmail(t *testing.T) {
 
 func TestEmailFromBlogMessageMinLength(t *testing.T) {
 
-	handler := contact.NewContactHandler(services.NewContactSrv())
+	godotenv.Load("../../.env")
+
+	sdk := mailtrap.New(
+		os.Getenv("MAILTRAP_HOST"),
+		os.Getenv("MAILTRAP_API_TOKEN"),
+	)
+
+	handler := contact.NewContactHandler(services.NewContactSrv(
+		os.Getenv("AUTHOR_EMAIL"),
+		sdk,
+	))
 
 	// build the testing server
 	server := httptest.NewServer(
@@ -158,7 +191,7 @@ func TestEmailFromBlogMessageMinLength(t *testing.T) {
 	)
 
 	// build the request
-	body := services.EmailDTO{
+	body := services.ContactDTO{
 		Name: "rootspyro",
 		Email: "rootspyro@gmail.com", 
 		Message: "I lo", // message is too small
@@ -221,7 +254,17 @@ func TestEmailFromBlogMessageMinLength(t *testing.T) {
 
 func TestEmailFromBlogMessageMaxLength(t *testing.T) {
 
-	handler := contact.NewContactHandler(services.NewContactSrv())
+	godotenv.Load("../../.env")
+
+	sdk := mailtrap.New(
+		os.Getenv("MAILTRAP_HOST"),
+		os.Getenv("MAILTRAP_API_TOKEN"),
+	)
+
+	handler := contact.NewContactHandler(services.NewContactSrv(
+		os.Getenv("AUTHOR_EMAIL"),
+		sdk,
+	))
 
 	// build the testing server
 	server := httptest.NewServer(
@@ -229,7 +272,7 @@ func TestEmailFromBlogMessageMaxLength(t *testing.T) {
 	)
 
 	// build the request
-	body := services.EmailDTO{
+	body := services.ContactDTO{
 		Name: "rootspyro",
 		Email: "rootspyro@gmail.com", 
 		// message is to large

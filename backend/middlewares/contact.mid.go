@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -11,7 +12,7 @@ import (
 func PipeContactBody(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		var body services.EmailDTO
+		var body services.ContactDTO
 
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
@@ -69,6 +70,8 @@ func PipeContactBody(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		next.ServeHTTP(w,r)
+		ctx := context.WithValue(r.Context(), "body", body)
+
+		next.ServeHTTP(w,r.WithContext(ctx))
 	}
 }

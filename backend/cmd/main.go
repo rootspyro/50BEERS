@@ -9,6 +9,7 @@ import (
 
 	"github.com/rs/cors"
 
+	"github.com/rootspyro/50BEERS/SDKs/mailtrap"
 	"github.com/rootspyro/50BEERS/config"
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db"
@@ -81,6 +82,12 @@ func main() {
 		return
 	}
 
+	// SDKs
+	mailtrapSDK := mailtrap.New(
+		config.App.SDKs.Mailtrap.Host,
+		config.App.SDKs.Mailtrap.APIToken,
+	)
+
 	// services
 	tagSrv := services.NewTagSrv(tagRepo)
 	countrySrv := services.NewCountrySrv(countriesRepo)
@@ -88,7 +95,7 @@ func main() {
 	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 	blogUserSrv := services.NewBlogUserSrv(blogUserRepo)
 	subscriberSrv := services.NewSubscriberSrv(subscriberRepo)
-	contactSrv := services.NewContactSrv()
+	contactSrv := services.NewContactSrv(config.App.Author.Email, mailtrapSDK)
 
 	// handlers
 	healthHandler := health.NewHealthHandler()

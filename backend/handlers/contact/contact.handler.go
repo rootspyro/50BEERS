@@ -3,6 +3,7 @@ package contact
 import (
 	"net/http"
 
+	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/config/parser"
 	"github.com/rootspyro/50BEERS/services"
 )
@@ -19,7 +20,10 @@ func NewContactHandler(srv *services.ContactSrv) *ContactHadler {
 
 func(h *ContactHadler) EmailFromBlog(w http.ResponseWriter, r *http.Request) {
 
-	if err := h.srv.SendEmail(); err != nil {
+	body := r.Context().Value("body").(services.ContactDTO)
+
+	if err := h.srv.SendContactEmail(body); err != nil {
+		log.Error(err.Error())
 		parser.SERVER_ERROR(w, "error trying to send email", r.RequestURI)
 		return
 	}
