@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 
 import Signatures from "../assets/signatures.png"
-import SubscriptionForm from '../components/subscriptionForm';
+import SubscriptionForm from '../components/forms/subscriptionForm.tsx';
 
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url)

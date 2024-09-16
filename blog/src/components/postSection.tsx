@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react"
-import StarsView from "./starsView"
-import DrinkCard from "./drinkCard";
+import StarsView from "./cards/starsView"
+import DrinkCard from "./cards/drinkCard";
 import PaginationMenu from "./paginationMenu";
 
 interface lang {

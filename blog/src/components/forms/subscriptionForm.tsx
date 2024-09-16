@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {useForm, type SubmitHandler} from "react-hook-form";
-import Notification from "./notification";
-import Notify from "../utils/notify";
+import Notification from "../notification";
+import Notify from "../../utils/notify";
 
 type lang = {
   text: string
