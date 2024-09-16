@@ -1,4 +1,7 @@
+import {useState} from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import Notification from "../notification";
+import Notify from "../../utils/notify";
 
 type langData = {
   'name': {
@@ -17,28 +20,76 @@ type langData = {
     'maxLength': string
   } 
   'send': string
+  'response': {
+    'success': string
+    'error': string
+  }
 }
 
-export default function ContactForm({content}: {content: langData}) {
+export default function ContactForm({content, endpoint}: {content: langData, endpoint: string}) {
+
+  const [notificationView, SetNotificationView] = useState(false)
+  const [notificationLabel, SetNotificationLabel] = useState("")
+  const [notificationMessage, SetNotificationMessage] = useState("")
+
+  type response = {
+    status: string;
+    statusCode: number
+    data: any
+    error: {
+      code: string
+      message: string
+      details: string
+    }
+  }
 
   type Inputs = {
     name: string;
     email: string;
-    content: string;
+    message: string;
   }
 
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
     formState: { errors },
   } = useForm<Inputs>()
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+
+    try {
+      const resp = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+
+      const respBody : response = await resp.json()
+      
+      if (respBody.status == "success") {
+        SetNotificationLabel("Info") 
+        SetNotificationMessage(content.response.success)
+        reset()
+      } else {
+        SetNotificationLabel("Error") 
+        SetNotificationMessage(content.response.error)
+      }
+
+      Notify(SetNotificationView)
+
+    } catch {
+      SetNotificationLabel("Error")
+      SetNotificationMessage(content.response.error)
+      Notify(SetNotificationView)
+    }
+
   }
 
   return(
+  <>
     <form onSubmit={handleSubmit(onSubmit)} className="w-full shadow-lg max-w-md text-sm bg-light text-dark font-content rounded-sm border border-dark p-5 flex flex-col gap-5">
       <input 
         type="text" 
@@ -80,7 +131,7 @@ export default function ContactForm({content}: {content: langData}) {
         placeholder={content.message.placeholder}
         className="resize-none h-28 outline-none border border-dark border-dashed focus:border-solid p-2 rounded-sm" 
         {
-        ...register("content", 
+        ...register("message", 
           {
             required: {
               value: true,
@@ -97,10 +148,12 @@ export default function ContactForm({content}: {content: langData}) {
           })
         }
       ></textarea>
-      <p className={errors.content ? "text-xs" : "hidden"}>{errors?.content?.message}</p>
+      <p className={errors.message ? "text-xs" : "hidden"}>{errors?.message?.message}</p>
 
       <button className="py-3 text-main bg-dark rounded-sm border border-dark hover:border-dashed hover:bg-light hover:text-dark">{content.send}</button>
 
     </form>
+    <Notification view={notificationView} label={notificationLabel} message={notificationMessage} />
+</>
   )
 }

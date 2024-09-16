@@ -12,7 +12,7 @@ var App app = app{}
 
 type app struct {
 	Author struct {
-		Name string
+		Name  string
 		Email string
 	}
 	Server struct {
@@ -32,8 +32,9 @@ type app struct {
 	}
 	SDKs struct {
 		Mailtrap struct {
-			Host     string
-			APIToken string
+			Host       string
+			APIToken   string
+			DomainEmail string
 		}
 	}
 }
@@ -88,6 +89,7 @@ func init() {
 	// SDKs
 	App.SDKs.Mailtrap.Host = os.Getenv("MAILTRAP_HOST")
 	App.SDKs.Mailtrap.APIToken = os.Getenv("MAILTRAP_API_TOKEN")
+	App.SDKs.Mailtrap.DomainEmail = os.Getenv("MAILTRAP_DOMAIN_EMAIL")
 }
 
 func parseAllowedOrigins(data string) []string {

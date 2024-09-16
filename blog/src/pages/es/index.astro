@@ -5,6 +5,7 @@ import ContactForm from "../../components/forms/contactForm.tsx"
 
 import { ui } from '../../i18n/ui';
 
+const contactEndpoint = import.meta.env.PUBLIC_API_HOST + "/contact/blog"
 const contactLang = {
   name: {
     placeholder: ui.es['contact.name'],
@@ -21,7 +22,11 @@ const contactLang = {
     minLength: ui.es['contact.message.minLength'],
     maxLength: ui.es['contact.message.maxLength']
   },
-  send: ui.es['contact.send']
+  send: ui.es['contact.send'],
+  response: {
+    success: ui.es['contact.response.success'],
+    error: ui.es['contact.error.success'],
+  }
 }
 
 const postsLang = {
@@ -241,7 +246,7 @@ try {
       <p class="text-3xl sm:text-4xl mt-12">¡Sientete libre de contactarme!</p>
     </div>
     <div class="w-full flex justify-center items-center">
-      <ContactForm content={contactLang}  client:load/>
+      <ContactForm content={contactLang} endpoint={contactEndpoint}  client:load/>
     </div>
   </section>
 </Layout>

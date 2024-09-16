@@ -22,13 +22,13 @@ func (srv *ContactSrv) SendContactEmail(data ContactDTO) error {
 
 	var email mailtrap.Email
 
-	email.From.Name = data.Name
-	email.From.Email = data.Email
+	email.From.Name = "Blog"
+	email.From.Email = srv.sdk.DomainEmail
 	email.To = append(email.To, struct{Email string "json:\"email\""}{
 		Email: srv.email,
 	})
 	email.Subject = fmt.Sprintf("Contact from blog - %s", data.Name)
-	email.Text = data.Message
+	email.Text = fmt.Sprintf("Issuer: %s - %s\n\n%s",data.Name, data.Email, data.Message)
 
 	return srv.sdk.SendEmail(email)
 }

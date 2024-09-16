@@ -86,6 +86,7 @@ func main() {
 	mailtrapSDK := mailtrap.New(
 		config.App.SDKs.Mailtrap.Host,
 		config.App.SDKs.Mailtrap.APIToken,
+		config.App.SDKs.Mailtrap.DomainEmail,
 	)
 
 	// services

@@ -8,18 +8,20 @@ import (
 )
 
 type MailtrapSDK struct {
-	Host     string
-	APIToken string
+	Host        string
+	APIToken    string
+	DomainEmail string
 }
 
-func New(host, token string) *MailtrapSDK {
+func New(host, token, email string) *MailtrapSDK {
 	return &MailtrapSDK{
-		Host:     host,
-		APIToken: token,
+		Host:        host,
+		APIToken:    token,
+		DomainEmail: email,
 	}
 }
 
-func(m *MailtrapSDK) SendEmail(data Email) error {
+func (m *MailtrapSDK) SendEmail(data Email) error {
 	body, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -50,9 +52,9 @@ type Email struct {
 		Name  string `json:"name"`
 		Email string `json:"email"`
 	} `json:"from"`
-	To      []struct{
+	To []struct {
 		Email string `json:"email"`
 	} `json:"to"`
 	Subject string `json:"subject"`
-	Text string `json:"text"`
+	Text    string `json:"text"`
 }
