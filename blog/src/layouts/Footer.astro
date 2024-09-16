@@ -2,10 +2,22 @@
 import { Image } from 'astro:assets';
 
 import Signatures from "../assets/signatures.png"
+import SubscriptionForm from '../components/forms/subscriptionForm.tsx';
 
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
+
+const footerLang = {
+  text: t('footer.newsletter.text'),
+  placeholder: t('footer.newsletter.placeholder'),
+  cta: t('footer.newsletter.cta'),
+  invalid: t('footer.newsletter.invalidEmail'),
+  required: t('footer.newsletter.required'),
+  successResponse: t('footer.newsletter.successResponse'),
+  alreadySubscribed: t('footer.newsletter.alreadySubscribed'),
+  errorResponse: t('footer.newsletter.errorResponse'),
+}
 ---
 
 <footer class="bg-dark w-full p-12 font-content text-light">
@@ -15,13 +27,7 @@ const t = useTranslations(lang)
   <p class="text-center">{t('footer.subtitle.1')} <span class="line-through">{t('footer.subtitle.2')}</span> {t('footer.subtitle.3')}</p>
 
   <div class="mt-10 w-full flex justify-center">
-    <div class="w-full py-7 max-w-md border-y border-light border-dashed flex flex-col items-center">
-      <p class="text-light font-bold text-center">{t('footer.newsletter.text')}</p>
-      <form class="flex bg-light rounded-sm w-full p-2 flex-between mt-5 text-dark">
-        <input placeholder={t('footer.newsletter.placeholder')} class="outline-none w-full text-sm" />
-        <button class="bg-dark text-main rounded text-sm p-2">{t('footer.newsletter.cta')}</button>
-      </form>
-    </div>
+    <SubscriptionForm lang={footerLang} api={import.meta.env.PUBLIC_API_HOST} client:load/>
   </div>
   <div class="flex justify-center mt-10">
     <Image src={Signatures}  alt="signatures" class="max-w-64 sm:max-w-80" />

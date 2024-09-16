@@ -49,6 +49,7 @@ type errorList struct {
 	UNAUTHORIZED            CommonError
 	BAD_REQUEST_BODY        CommonError
 	BAD_REQUEST_QUERY       CommonError
+	NOT_FOUND               CommonError
 	PATH_NOT_FOUND          CommonError
 	CONFLICT                CommonError
 	INTERNAL_SERVER_ERROR   CommonError
@@ -67,6 +68,10 @@ var Errors errorList = errorList{
 		Code:    "BAD_REQUEST",
 		Message: "invalid format for request query",
 	},
+	NOT_FOUND: CommonError{
+		Code: "NOT_FOUND",
+		Message: "resource was not found",
+	},
 	PATH_NOT_FOUND: CommonError{
 		Code:    "NOT_FOUND",
 		Message: "path was not found",
@@ -74,8 +79,7 @@ var Errors errorList = errorList{
 	CONFLICT: CommonError{
 		Code:    "CONFLICT",
 		Message: "resource already exists",
-	},
-	INTERNAL_SERVER_ERROR: CommonError{
+	}, INTERNAL_SERVER_ERROR: CommonError{
 		Code:       "INTERNAL_SERVER_ERROR",
 		Message:    "error from the data layer",
 		Suggestion: "check server status at GET:/api/v1/health",
@@ -84,6 +88,21 @@ var Errors errorList = errorList{
 
 func Timestamp() time.Time {
 	return time.Now().Local()
+}
+
+func MISSING_BODY(w http.ResponseWriter, path string) {
+	JSON(w, ErrorResponse{
+		Status: Status.Error,
+		StatusCode: http.StatusBadRequest,
+		Error: Error{
+			Code: Errors.BAD_REQUEST_BODY.Code,
+			Message: Errors.BAD_REQUEST_BODY.Message,
+			Details: "body of the request is missing",
+			Suggestion: "add the body on json format",
+			Path: path,
+			Timestamp: Timestamp(),
+		},
+	})
 }
 
 func SERVER_ERROR(w http.ResponseWriter, detail, path string) {

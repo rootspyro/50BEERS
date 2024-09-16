@@ -31,15 +31,17 @@ $ go mod tidy
 $ cp .env.copy 
 ```
 
-3 - Insert the required data on the new .env file. MongoDB credentials are required for step 2.4 and 2.5.
+3 - Insert the required data on the new .env file(server configuration, mongodb credentials, mailtrap api).
 ```shell
 # AUTHOR
 AUTHOR_NAME=rootpsyro
+AUTHOR_EMAIL=spyro@gmail.com
 
 # SERVER
 PORT=3000
 HOST=localhost
 SECRET=Your-secret-key-here
+ORIGINS='http://localhost:4321;http://0.0.0.0:4321'
 
 # MONGODB
 DB_HOST=localhost
@@ -47,6 +49,11 @@ DB_PORT=27017
 DB_USER=mongodb
 DB_PASSWORD=p4ssw0rd
 DB_NAME=50BEERS
+
+# MAILTRAP 
+MAILTRAP_HOST=https://send.api.mailtrap.io/api/send
+MAILTRAP_API_TOKEN=apitoken
+MAILTRAP_DOMAIN_MAIL=your-email@mailtrapdomain.com
 ```
 
 __Important__: You can generate a new Secret key running the command `openssl rand -base64 32`

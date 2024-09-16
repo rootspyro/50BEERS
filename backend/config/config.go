@@ -12,7 +12,8 @@ var App app = app{}
 
 type app struct {
 	Author struct {
-		Name string
+		Name  string
+		Email string
 	}
 	Server struct {
 		Secret  string
@@ -29,6 +30,13 @@ type app struct {
 		Password string
 		URL      string
 	}
+	SDKs struct {
+		Mailtrap struct {
+			Host       string
+			APIToken   string
+			DomainEmail string
+		}
+	}
 }
 
 func init() {
@@ -39,6 +47,8 @@ func init() {
 	if App.Author.Name == "" {
 		App.Author.Name = "anonymous"
 	}
+
+	App.Author.Email = os.Getenv("AUTHOR_EMAIL")
 
 	// SERVER
 	App.Server.Host = "localhost"
@@ -75,6 +85,11 @@ func init() {
 		App.Database.Port,
 		App.Database.Name,
 	)
+
+	// SDKs
+	App.SDKs.Mailtrap.Host = os.Getenv("MAILTRAP_HOST")
+	App.SDKs.Mailtrap.APIToken = os.Getenv("MAILTRAP_API_TOKEN")
+	App.SDKs.Mailtrap.DomainEmail = os.Getenv("MAILTRAP_DOMAIN_EMAIL")
 }
 
 func parseAllowedOrigins(data string) []string {

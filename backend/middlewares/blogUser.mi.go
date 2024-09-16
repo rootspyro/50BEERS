@@ -12,7 +12,7 @@ import (
 	"github.com/rootspyro/50BEERS/services"
 )
 
-func evalEmail(email string) bool {
+func EvalEmail(email string) bool {
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 	return emailRegex.MatchString(email)
 }
@@ -61,19 +61,7 @@ func PipeLoginBody(next http.HandlerFunc) http.HandlerFunc {
 	
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
-			parser.JSON(w, parser.ErrorResponse{
-				Status: parser.Status.Error,
-				StatusCode: http.StatusBadRequest,
-				Error: parser.Error{
-					Code: parser.Errors.BAD_REQUEST_BODY.Code,
-					Message: parser.Errors.BAD_REQUEST_BODY.Message,
-					Details: "body of the request is missing",
-					Suggestion: "add the body on json format",
-					Path: r.RequestURI,
-					Timestamp: parser.Timestamp(),
-				},
-			})
-
+			parser.MISSING_BODY(w, r.RequestURI)
 			return
 		}
 
@@ -154,7 +142,7 @@ func PipeNewBlogUserBody(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		if !evalEmail(body.Email) {
+		if !EvalEmail(body.Email) {
 			parser.JSON(w, parser.ErrorResponse{
 				Status: parser.Status.Error,
 				StatusCode: http.StatusBadRequest,

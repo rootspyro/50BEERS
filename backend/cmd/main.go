@@ -9,6 +9,7 @@ import (
 
 	"github.com/rs/cors"
 
+	"github.com/rootspyro/50BEERS/SDKs/mailtrap"
 	"github.com/rootspyro/50BEERS/config"
 	"github.com/rootspyro/50BEERS/config/log"
 	"github.com/rootspyro/50BEERS/db"
@@ -16,10 +17,12 @@ import (
 	"github.com/rootspyro/50BEERS/db/repositories"
 	"github.com/rootspyro/50BEERS/db/seeders"
 	bloguser "github.com/rootspyro/50BEERS/handlers/blogUser"
+	"github.com/rootspyro/50BEERS/handlers/contact"
 	"github.com/rootspyro/50BEERS/handlers/country"
 	"github.com/rootspyro/50BEERS/handlers/drinks"
 	"github.com/rootspyro/50BEERS/handlers/health"
 	"github.com/rootspyro/50BEERS/handlers/location"
+	"github.com/rootspyro/50BEERS/handlers/subscriber"
 	"github.com/rootspyro/50BEERS/handlers/tag"
 	"github.com/rootspyro/50BEERS/middlewares"
 	"github.com/rootspyro/50BEERS/routes"
@@ -53,6 +56,7 @@ func main() {
 	drinksRepo := repositories.NewDrinksRepo(database.Collection("drink"))
 	tagRepo := repositories.NewTagRepo(database.Collection("tag"))
 	blogUserRepo := repositories.NewBlogUserRepo(database.Collection("blogUser"))
+	subscriberRepo := repositories.NewSubscriberRepo(database.Collection("subscriber"))
 
 	if migrate {
 
@@ -78,12 +82,21 @@ func main() {
 		return
 	}
 
+	// SDKs
+	mailtrapSDK := mailtrap.New(
+		config.App.SDKs.Mailtrap.Host,
+		config.App.SDKs.Mailtrap.APIToken,
+		config.App.SDKs.Mailtrap.DomainEmail,
+	)
+
 	// services
 	tagSrv := services.NewTagSrv(tagRepo)
 	countrySrv := services.NewCountrySrv(countriesRepo)
 	locationSrv := services.NewLocationSrv(locationRepo)
 	drinkSrv := services.NewDrinkSrv(countriesRepo, locationRepo, drinksRepo)
 	blogUserSrv := services.NewBlogUserSrv(blogUserRepo)
+	subscriberSrv := services.NewSubscriberSrv(subscriberRepo)
+	contactSrv := services.NewContactSrv(config.App.Author.Email, mailtrapSDK)
 
 	// handlers
 	healthHandler := health.NewHealthHandler()
@@ -92,6 +105,8 @@ func main() {
 	locationHandler := location.NewLocationHandler(locationSrv)
 	drinkHandler := drinks.NewDrinkHandler(drinkSrv)
 	blogUserHandler := bloguser.NewBlogUserHandler(blogUserSrv)
+	subscriberHandler := subscriber.NewSubscriberHandler(subscriberSrv)
+	contactHandler := contact.NewContactHandler(contactSrv)
 
 	// routes
 	routes := routes.New(
@@ -101,6 +116,8 @@ func main() {
 		locationHandler,
 		drinkHandler,
 		blogUserHandler,
+		subscriberHandler,
+		contactHandler,
 	)
 
 	// Configurate server
