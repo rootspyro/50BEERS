@@ -24,6 +24,7 @@ func TestEmailFromBlogSuccess(t *testing.T) {
 	sdk := mailtrap.New(
 		os.Getenv("MAILTRAP_HOST"),
 		os.Getenv("MAILTRAP_API_TOKEN"),
+		os.Getenv("MAILTRAP_DOMAIN_EMAIL"),
 	)
 
 	handler := contact.NewContactHandler(services.NewContactSrv(
@@ -97,6 +98,7 @@ func TestEmailFromBlogBadEmail(t *testing.T) {
 	sdk := mailtrap.New(
 		os.Getenv("MAILTRAP_HOST"),
 		os.Getenv("MAILTRAP_API_TOKEN"),
+		os.Getenv("MAILTRAP_DOMAIN_EMAIL"),
 	)
 
 	handler := contact.NewContactHandler(services.NewContactSrv(
@@ -178,6 +180,7 @@ func TestEmailFromBlogMessageMinLength(t *testing.T) {
 	sdk := mailtrap.New(
 		os.Getenv("MAILTRAP_HOST"),
 		os.Getenv("MAILTRAP_API_TOKEN"),
+		os.Getenv("MAILTRAP_DOMAIN_EMAIL"),
 	)
 
 	handler := contact.NewContactHandler(services.NewContactSrv(
@@ -259,6 +262,7 @@ func TestEmailFromBlogMessageMaxLength(t *testing.T) {
 	sdk := mailtrap.New(
 		os.Getenv("MAILTRAP_HOST"),
 		os.Getenv("MAILTRAP_API_TOKEN"),
+		os.Getenv("MAILTRAP_DOMAIN_EMAIL"),
 	)
 
 	handler := contact.NewContactHandler(services.NewContactSrv(
