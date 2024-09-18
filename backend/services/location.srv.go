@@ -20,12 +20,11 @@ func NewLocationSrv(repo *repositories.LocationRepo) *LocationSrv {
 func (s *LocationSrv) GetAllLocations(lang string) ([]Location, error) {
 	data, err := s.repo.GetAllLocations()
 	if err != nil {
-		return nil, err 
+		return nil, err
 	}
 
 	var locations []Location
 	for _, location := range data {
-
 		locations = append(locations, parseLocation(location, lang))
 	}
 
@@ -33,7 +32,6 @@ func (s *LocationSrv) GetAllLocations(lang string) ([]Location, error) {
 }
 
 func parseLocation(data models.Location, lang string) Location {
-
 	var name string = data.EN.Name
 	var comments string = data.EN.Comments
 
@@ -43,20 +41,20 @@ func parseLocation(data models.Location, lang string) Location {
 	}
 
 	return Location{
-		ID: ParsePublicId(data.EN.Name),
-		Name: cases.Title(language.Und).String(name),
-		URL: data.URL,
-		Comments: comments,
-		CreatedAt: data.CreatedAt,
-		UpdatedAt: data.UpdatedAt,
+		ID:          ParsePublicId(data.EN.Name),
+		Name:        cases.Title(language.Und).String(name),
+		Coordinates: data.Coordinates,
+		Comments:    comments,
+		CreatedAt:   data.CreatedAt,
+		UpdatedAt:   data.UpdatedAt,
 	}
 }
 
 type Location struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	URL       string `json:"url"`
-	Comments  string `json:"comments"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
+	ID          string   `json:"id"`
+	Name        string   `json:"name"`
+	Coordinates []string `json:"coordinates"`
+	Comments    string   `json:"comments"`
+	CreatedAt   string   `json:"createdAt"`
+	UpdatedAt   string   `json:"updatedAt"`
 }
