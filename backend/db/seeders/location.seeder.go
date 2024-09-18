@@ -32,9 +32,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "arenas de barcelona",
 				Comments: "Vine aquí con mi hermana y mi cuñado después de visitar el museo nacional de arte de Cataluña.",
 			},
-			Coordinates: []string{
-				"41.3763031",
-				"2.1468106",
+			Coordinates: []float64{
+				41.37638357877451, 2.149396224287633,
 			},
 		},
 		{
@@ -46,9 +45,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "bibo ristorante",
 				Comments: "Mi hermana y yo comimos en este restaurante el segundo día de nuestro viaje a Roma. Este día visitamos el coliseo y el foro romano, finalmente visitamos el castillo de San Angelo.",
 			},
-			Coordinates: []string{
-				"41.8975955",
-				"12.4806834",
+			Coordinates: []float64{
+				41.897835047702934, 12.48330121083143,
 			},
 		},
 		{
@@ -60,9 +58,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "2d2dspuma",	
 				Comments: "Este es uno de los bares que más disfruté y visité varias veces, ya que tiene una gran variedad de cervezas, hidromieles y sidras. Aquí también tuve una experiencia de degustación donde aprendí más sobre cervezas. Vine a este lugar en busca de probar hidromiel por primera vez, este viaje me llevó a visitar el Recinto Modernista de Sant Pau.",
 			},
-			Coordinates: []string{
-				"41.422424",
-				"2.1768266",
+			Coordinates: []float64{
+				41.42250808981387, 2.179415157013355,
 			},
 		},
 		{
@@ -74,9 +71,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "camprodon",
 				Comments: "Una ciudad preciosa que visité en mi primera semana de viaje, perfecta para pasear y admirar el paisaje.",
 			},
-			Coordinates: []string{
-				"42.3142829",
-				"2.3501665",
+			Coordinates: []float64{
+				42.31307694080313, 2.3651868714328423,
 			},
 		},
 		{
@@ -88,9 +84,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "diagonal mar",
 				Comments: "Visité este centro comercial varias veces debido a la facilidad de llegar en metro. Mi primera visita fue porque celebramos el cumpleaños de Sathya, un amigo del grupo, fuimos a los recreativos, aún conservo las entradas.",
 			},
-			Coordinates: []string{
-				"41.4098468",
-				"2.2139348",
+			Coordinates: []float64{
+				41.409975516754365, 2.2165204242899597,
 			},
 		},
 		{
@@ -102,9 +97,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "five guys",
 				Comments: "Visité este centro comercial varias veces debido a la facilidad de llegar en metro. Mi primera visita fue porque celebramos el cumpleaños de Sathya, un amigo del grupo, fuimos a los recreativos, aún conservo las entradas.",
 			},
-			Coordinates: []string{
-				"41.3904229",
-				"2.1521781",
+			Coordinates: []float64{
+				41.38613864599469, 2.1692097178629677,
 			},
 		},
 		{
@@ -116,9 +110,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "garage beer",
 				Comments: "Visité este lugar en uno de tantos paseos nocturnos por las calles de Barcelona, realmente una visita recomendada, tiene una buena cerveza hecha por ellos y una pizza bastante buena para maridar.",
 			},
-			Coordinates: []string{
-				"41.3987698",
-				"2.2046217",
+			Coordinates: []float64{
+				41.398793915206475, 2.2071965954533397,
 			},
 		},
 		{
@@ -130,9 +123,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "homo sibaris pub",
 				Comments: "Una de las experiencias más divertidas, buen lugar, este día salí con mi hermana, mi cuñado, sathya y marcos (el dulce). Un buen pub de cerveza artesanal, aquí probé mi primera Imperial Stout y admito que es una de las mejores que he probado.",
 			},
-			Coordinates: []string{
-				"41.376284",
-				"2.1381637",
+			Coordinates: []float64{
+				41.37627592054608, 2.1387991377800906,
 			},
 		},
 		{
@@ -144,9 +136,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "kasa japo",
 				Comments: "Este día salimos en busca de regalos para las compras navideñas, nos detuvimos a comer en este restaurante, recuerdo que probé por primera vez una cerveza de sapporo, lamentablemente ya no recuerdo lo que comí.",
 			},
-			Coordinates: []string{
-				"41.3860838",
-				"2.1649889",
+			Coordinates: []float64{
+				41.386059622670814, 2.167553066616632,
 			},
 		},
 		{
@@ -158,9 +149,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "la salumeria",
 				Comments: "El primer día en Roma mi hermana y yo paseamos por las calles, encontramos este lugar, allí probé una buena IPA y mi hermana se comió un bocadillo, uno de mis lugares favoritos del viaje.",
 			},
-			Coordinates: []string{
-				"41.9000114",
-				"12.4641987",
+			Coordinates: []float64{
+				41.89999540004734, 12.466741408980683,
 			},
 		},
 		{
@@ -172,9 +162,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "las tres mentiras",
 				Comments: "Mientras tomábamos cerveza en el Pub Homo Sibaris, decidimos comer algo y cerca estaba este restaurante mexicano, comimos unos tacos y había una excelente variedad de salsas picantes, muy buen lugar para ir a comer.",
 			},
-			Coordinates: []string{
-				"41.3762338",
-				"2.1365172",
+			Coordinates: []float64{
+				41.37622572053996, 2.1390920954518062,
 			},
 		},
 		{
@@ -186,9 +175,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "la whiskeria",
 				Comments: "Un lugar elegante y confortable en Barcelona donde recomiendo ir a todo aquel que sea amante del whisky al menos una vez. Tiene una enorme variedad de whiskies de todo el mundo.",
 			},
-			Coordinates: []string{
-				"41.3918113",
-				"2.1710414",
+			Coordinates: []float64{
+				41.39179517363235, 2.173605566617036,
 			},
 		},
 		{
@@ -200,9 +188,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "lennox the pub",
 				Comments: "Vine aquí en mi segunda semana en barcelona, vagando sin rumbo, explorando, vine aquí porque tenía un cartel de cerveza Guinness en la entrada, ese mismo día probé unas buenas patatas fritas y fui al museo del chocolate.",
 			},
-			Coordinates: []string{
-				"41.38343",
-				"2.1803991",
+			Coordinates: []float64{
+				41.38342192142973, 2.1829632666164307,
 			},
 		},
 		{
@@ -214,9 +201,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "lidl",
 				Comments: "Los mejores donuts de Barcelona, no acepto comentarios ni argumentos en contra. Ah y recomiendo comprar las cervezas Steambrew.",
 			},
-			Coordinates: []string{
-				"41.4127812",
-				"2.1611792",
+			Coordinates: []float64{
+				41.41888596508152, 2.1989990024875166,
 			},
 		},
 		{
@@ -228,9 +214,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "l'insalata rica",
 				Comments: "La segunda noche de nuestro viaje a Roma mi hermana y yo visitamos este lugar para descansar un rato. Bonito lugar, por primera vez me bebí un litro de cerveza servida en una jarra.",
 			},
-			Coordinates: []string{
-				"41.8976808",
-				"12.4696035",
+			Coordinates: []float64{
+				41.89767877476797, 12.472175713279132,
 			},
 		},
 		{
@@ -242,9 +227,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "llanero bodegón",
 				Comments: "Una bodega de mi ciudad, donde compro la mayoría de mis bebidas, tiene algo de variedad, aunque mucha menos de la que me gustaría.",
 			},
-			Coordinates: []string{
-				"10.0650264",
-				"-69.3667746",
+			Coordinates: []float64{
+				10.06502710585951, -69.29467370287848,
 			},
 		},
 		{
@@ -256,9 +240,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "mercadona",
 				Comments: "Me encantaba ir al Mercadona a comprar aperitivos para la casa, sobre todo el cóctel de frutos secos salados y ahumados. Aquí compraba muchas cervezas comerciales.",
 			},
-			Coordinates: []string{
-				"41.4244879",
-				"2.2028493",
+			Coordinates: []float64{
+				41.42448789144058, 2.207333967001515,
 			},
 		},
 		{
@@ -270,8 +253,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "museu nacional d'art de catalunya",
 				Comments: "Este día fue bastante divertido, realmente no llegamos a ver mucho del museo ya que lo visitamos durante la hora de acceso libre, pero pude comprar algunos detalles para mi novia.",
 			},
-			Coordinates: []string{
-
+			Coordinates: []float64{
+				41.36843987130215, 2.1535592666154066,
 			},
 		},
 		{
@@ -283,9 +266,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "ogham cervecería",
 				Comments: "Encontré este sitio uno de esos días en que vagaba sin rumbo por las calles, buscaba librerías y por casualidad entré. Más tarde me encontré con mi hermana y mi cuñado en un restaurante cercano.",
 			},
-			Coordinates: []string{
-				"41.3684399",
-				"2.1509951",
+			Coordinates: []float64{
+				41.38685214657274, 2.1653452954639167,
 			},
 		},
 		{
@@ -297,9 +279,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "plaça de catalunya",
 				Comments: "Caminé por aquí muchas veces durante esos 3 meses, aquí probé la primera cerveza en todo el viaje, fue en un evento de carritos de comida.",
 			},
-			Coordinates: []string{
-				"41.386935",
-				"2.1673661",
+			Coordinates: []float64{
+				41.38702923415893, 2.170044525637977,
 			},
 		},
 		{
@@ -311,9 +292,8 @@ func(s *LocationSeeder) Seed() error {
 				Name: "setcases",
 				Comments: "Tras visitar camprodon el viaje continuó hacia setcases, un pequeño pueblo con historia que puede sorprenderte con su paisaje si tienes espíritu aventurero.",
 			},
-			Coordinates: []string{
-				"42.3762474",
-				"2.2962941",
+			Coordinates: []float64{
+				42.375359692857536, 2.30120794780043,
 			},
 		},
 	}

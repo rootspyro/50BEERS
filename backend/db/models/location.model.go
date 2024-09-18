@@ -6,7 +6,7 @@ type Location struct {
 	ID          primitive.ObjectID `bson:"_id"`
 	EN          LocationLang       `bson:"en"`
 	ES          LocationLang       `bson:"es"`
-	Coordinates []string           `bson:"coordinates"`
+	Coordinates []float64          `bson:"coordinates"`
 	CreatedAt   string             `bson:"created_at"`
 	UpdatedAt   string             `bson:"updated_at"`
 }
@@ -14,7 +14,7 @@ type Location struct {
 type NewLocation struct {
 	EN          LocationLang `bson:"en"`
 	ES          LocationLang `bson:"es"`
-	Coordinates []string     `bson:"coordinates"`
+	Coordinates []float64    `bson:"coordinates"`
 	CreatedAt   string       `bson:"created_at"`
 	UpdatedAt   string       `bson:"updated_at"`
 }

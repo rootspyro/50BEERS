@@ -82,7 +82,7 @@ interface country {
 interface location {
   id: string;
   name: string;
-  url: string;
+  coordinates: number[];
   comments: string;
   createdAt: string;
   updatedAt: string;
@@ -123,6 +123,14 @@ try {
 }
 
 let locations: location[] = []
+let defaultLocation : location = {
+  id: "",
+  name: ui.en["map.location.title"],
+  coordinates: [41.3766,2.1465],
+  comments: ui.en["map.location.comments"],
+  createdAt: "",
+  updatedAt: ""
+}
 
 try {
 
@@ -231,7 +239,7 @@ try {
     </p>
   </section>
   <section>
-    <Map client:only/>
+    <Map locations={locations} defaultLocation={defaultLocation} client:only/>
   </section>
   <section class="w-full text-dark px-10 py-16 flex flex-col md:flex-row md:justify-center gap-10">
     <div class="w-full font-title flex flex-col items-center md:items-start">

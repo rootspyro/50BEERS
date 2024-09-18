@@ -51,10 +51,10 @@ func parseLocation(data models.Location, lang string) Location {
 }
 
 type Location struct {
-	ID          string   `json:"id"`
-	Name        string   `json:"name"`
-	Coordinates []string `json:"coordinates"`
-	Comments    string   `json:"comments"`
-	CreatedAt   string   `json:"createdAt"`
-	UpdatedAt   string   `json:"updatedAt"`
+	ID          string    `json:"id"`
+	Name        string    `json:"name"`
+	Coordinates []float64 `json:"coordinates"`
+	Comments    string    `json:"comments"`
+	CreatedAt   string    `json:"createdAt"`
+	UpdatedAt   string    `json:"updatedAt"`
 }

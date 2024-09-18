@@ -60,7 +60,7 @@ interface tag {
 interface location {
   id: string;
   name: string;
-  url: string;
+  coordinates: string[];
   comments: string;
   createdAt: string;
   updatedAt: string;

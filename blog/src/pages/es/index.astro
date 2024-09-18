@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Map from '../../components/map';
 import PostSection from "../../components/postSection.tsx"
 import ContactForm from "../../components/forms/contactForm.tsx"
 
@@ -82,7 +83,7 @@ interface country {
 interface location {
   id: string;
   name: string;
-  url: string;
+  coordinates: string[];
   comments: string;
   createdAt: string;
   updatedAt: string;
@@ -127,6 +128,14 @@ try {
 }
 
 let locations: location[] = []
+let defaultLocation : location = {
+  id: "",
+  name: ui.es["map.location.title"],
+  coordinates: [41.3766,2.1465],
+  comments: ui.es["map.location.comments"],
+  createdAt: "",
+  updatedAt: ""
+}
 
 try {
 
@@ -237,6 +246,9 @@ try {
     <p class="text-center">
       Todas ellas documentadas aquí.
     </p>
+  </section>
+  <section>
+    <Map locations={locations} defaultLocation={defaultLocation} client:only/>
   </section>
   <section class="w-full text-dark px-10 py-16 flex flex-col md:flex-row md:justify-center gap-10">
     <div class="w-full font-title flex flex-col items-center md:items-start">
