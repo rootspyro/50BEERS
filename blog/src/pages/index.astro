@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Map from '../components/map';
 import PostSection from "../components/postSection.tsx"
 import ContactForm from "../components/forms/contactForm.tsx"
 import { ui } from '../i18n/ui';
@@ -228,6 +229,9 @@ try {
     <p class="text-center">
       All of them documented here.
     </p>
+  </section>
+  <section>
+    <Map client:only/>
   </section>
   <section class="w-full text-dark px-10 py-16 flex flex-col md:flex-row md:justify-center gap-10">
     <div class="w-full font-title flex flex-col items-center md:items-start">
